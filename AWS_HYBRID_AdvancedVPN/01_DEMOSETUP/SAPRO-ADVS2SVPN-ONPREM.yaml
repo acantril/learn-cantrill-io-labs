@@ -227,9 +227,10 @@ Resources:
             apt-get update && apt-get install -y strongswan wget
             mkdir /home/ubuntu/demo_assets
             cd /home/ubuntu/demo_assets
-            wget http://cl-sharedmedia.s3-website-us-east-1.amazonaws.com/sapro-advancedvpn/ipsec-vti.sh
-            wget http://cl-sharedmedia.s3-website-us-east-1.amazonaws.com/sapro-advancedvpn/ipsec.conf
-            wget http://cl-sharedmedia.s3-website-us-east-1.amazonaws.com/sapro-advancedvpn/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec-vti.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.conf
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/51-eth1.yaml
             chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
   ENIAttachmentRouter21:
     Type: AWS::EC2::NetworkInterfaceAttachment
