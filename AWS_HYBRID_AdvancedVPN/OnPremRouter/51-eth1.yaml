@@ -1,0 +1,7 @@
+network:
+    version: 2
+    ethernets:
+        ens6:
+            dhcp4: true
+        ens7:
+            dhcp4: true
