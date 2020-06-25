@@ -14,7 +14,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: A4L-PRIVATEVPC
+          Value: A4L-AWS
   SubnetPrivateA:
     Type: AWS::EC2::Subnet
     Properties:
@@ -39,7 +39,14 @@ Resources:
       VpcId: !Ref VPC
       Tags:
       - Key: Name
-        Value: A4L-PRIVATEVPC-RT
+        Value: A4L-AWS-RT
+  TGWDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: "TGWVPC"
+    Properties:
+      TransitGatewayId: !Ref TGW
+      RouteTableId: !Ref CustomRT
+      DestinationCidrBlock: "0.0.0.0/0"
   RTAssociationPrivateA:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
@@ -91,7 +98,7 @@ Resources:
         - !Ref InstanceSG
       Tags:
         - Key: Name
-          Value: A4L-EC2-A
+          Value: AWS-EC2-A
   EC2B:
     Type: AWS::EC2::Instance
     DependsOn: 
@@ -107,7 +114,7 @@ Resources:
         - !Ref InstanceSG
       Tags:
         - Key: Name
-          Value: A4L-EC2-B
+          Value: AWS-EC2-B
   EC2Role:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -210,3 +217,22 @@ Resources:
         - !Ref InstanceSG
       ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
       VpcId: !Ref VPC
+  TGW:
+    Type: "AWS::EC2::TransitGateway"
+    Properties:
+      AmazonSideAsn: 64512
+      Description: "A4LTGW"
+      DefaultRouteTableAssociation: "enable"
+      DnsSupport: "enable"
+      VpnEcmpSupport: "enable"
+  TGWVPC:
+    Type: AWS::EC2::TransitGatewayAttachment
+    Properties: 
+      SubnetIds: 
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+      Tags: 
+        - Key: Name
+          Value: A4LTGWATTACHMENT
+      TransitGatewayId: !Ref TGW
+      VpcId: !Ref VPC    

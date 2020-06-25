@@ -3,5 +3,11 @@ network:
     ethernets:
         ens6:
             dhcp4: true
+            dhcp4-overrides:
+              route-metric: 200
+              use-routes: false
         ens7:
             dhcp4: true
+            dhcp4-overrides:
+              route-metric: 200
+              use-routes: false

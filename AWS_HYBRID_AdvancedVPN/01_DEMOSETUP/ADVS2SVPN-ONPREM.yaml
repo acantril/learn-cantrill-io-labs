@@ -17,7 +17,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: A4L-ONPREMSIMULATION
+          Value: A4L-ONPREM
   InternetGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -164,7 +164,10 @@ Resources:
             wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.conf
             wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.secrets
             wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ffrouting-install.sh
             chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
+            cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
+            netplan --debug apply
   ENIAttachmentRouter11:
     Type: AWS::EC2::NetworkInterfaceAttachment
     Properties:
@@ -231,7 +234,10 @@ Resources:
             wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.conf
             wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.secrets
             wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ffrouting-install.sh
             chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
+            cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
+            netplan --debug apply
   ENIAttachmentRouter21:
     Type: AWS::EC2::NetworkInterfaceAttachment
     Properties:
@@ -263,7 +269,7 @@ Resources:
         - !Ref InstanceSG
       Tags:
         - Key: Name
-          Value: ONPREM1
+          Value: ONPREM-SERVER1
   ONPREM2:
     Type: AWS::EC2::Instance
     DependsOn: 
@@ -279,7 +285,7 @@ Resources:
         - !Ref InstanceSG
       Tags:
         - Key: Name
-          Value: ONPREM2
+          Value: ONPREM-SERVER2
   EC2Role:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -411,3 +417,16 @@ Resources:
         - !Ref PrivateRT
       ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
       VpcId: !Ref VPC
+Outputs:
+  Router1PubIP:
+    Description: ONPREM Router 1 Public IP
+    Value: !GetAtt Router1.PublicIp
+  Router1PrivIP:
+    Description: ONPREM Router 1 Private IP
+    Value: !GetAtt Router1.PrivateIp
+  Router2PubIP:
+    Description: ONPREM Router 2 Public IP
+    Value: !GetAtt Router2.PublicIp
+  Router2PrivIP:
+    Description: ONPREM Router 2 Private IP
+    Value: !GetAtt Router2.PrivateIp
