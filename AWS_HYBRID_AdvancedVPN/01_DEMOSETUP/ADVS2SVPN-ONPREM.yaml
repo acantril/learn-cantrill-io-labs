@@ -149,7 +149,7 @@ Resources:
         InstanceId:
           Ref: Router1
         NetworkInterfaceId:
-          Ref: ENIR1PIVATE
+          Ref: ENIR1PRIVATE
         DeviceIndex: 1
   Router2:
     Type: AWS::EC2::Instance
@@ -199,7 +199,7 @@ Resources:
         InstanceId:
           Ref: Router2
         NetworkInterfaceId:
-          Ref: ENIRouter2Priv
+          Ref: ENIR2PRIVATE
         DeviceIndex: 1
   ONPREMSERVER1:
     Type: AWS::EC2::Instance
