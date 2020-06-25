@@ -324,7 +324,7 @@ Resources:
       VpcEndpointType: "Interface"
       PrivateDnsEnabled: "True"
       SubnetIds:
-        - !Ref Pub1
+        - !Ref Pub
       SecurityGroupIds:
         - !Ref InstanceSG
       ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
@@ -335,7 +335,7 @@ Resources:
       VpcEndpointType: "Interface"
       PrivateDnsEnabled: "True"
       SubnetIds:
-        - !Ref Pub1
+        - !Ref Pub
       SecurityGroupIds:
         - !Ref InstanceSG
       ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
@@ -346,7 +346,7 @@ Resources:
       VpcEndpointType: "Interface"
       PrivateDnsEnabled: "True"
       SubnetIds:
-        - !Ref Pub1
+        - !Ref Pub
       SecurityGroupIds:
         - !Ref InstanceSG
       ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
@@ -356,6 +356,7 @@ Resources:
     Properties:
       RouteTableIds:
         - !Ref PublicRT
-        - !Ref PrivateRT
+        - !Ref PrivateRT1
+        - !Ref PrivateRT2
       ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
       VpcId: !Ref VPC
