@@ -44,6 +44,8 @@ Rename this file to `CONNECTION2CONFIG.TXT`
 
 # STAGE 2B - POPULATE DEMO VALUE TEMPLATE WITH ALL CONFIG VALUES
 
+Review Tunnel Anatomy graphic  
+
 There is a document in this folder called `DemoValueTemplate.md` - it contains instructions on how to extract all of the configuration variables you will need  
 You will extract these from three locations  
 

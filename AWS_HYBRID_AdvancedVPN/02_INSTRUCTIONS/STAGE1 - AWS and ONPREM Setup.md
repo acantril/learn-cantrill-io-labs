@@ -43,6 +43,19 @@ Set BGP ASN to `65016`
 Set IP Address to Router2PubIP  
 Click `create Customer gateway`  
 
+# CONFIRM NO CONNECTIVITY
+
+Move to EC2 Console  
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState  
+Click `Instances` on the left menu  
+Locate and select `ONPREM-SERVER2`  
+Right Click => `Connect`  
+Select `Session Manager`  
+Click `Connect`  
+
+run `ping IP_ADDRESS_OF_EC2-B`  
+It doesn't work ... because there's no connectivity.
+
 
 # FINISH
 
