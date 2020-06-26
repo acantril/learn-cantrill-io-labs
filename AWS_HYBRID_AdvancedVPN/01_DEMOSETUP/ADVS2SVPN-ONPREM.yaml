@@ -114,6 +114,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref InstanceSG
       IamInstanceProfile: !Ref EC2InstanceProfile
+      SourceDestCheck: "false"
       Tags:
         - Key: Name
           Value: ONPREM-ROUTER1
@@ -123,11 +124,11 @@ Resources:
             apt-get update && apt-get install -y strongswan wget
             mkdir /home/ubuntu/demo_assets
             cd /home/ubuntu/demo_assets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec-vti.sh
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.conf
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.secrets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/51-eth1.yaml
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ffrouting-install.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ipsec-vti.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ipsec.conf
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ffrouting-install.sh
             chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
             cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
             netplan --debug apply
@@ -164,6 +165,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref InstanceSG
       IamInstanceProfile: !Ref EC2InstanceProfile
+      SourceDestCheck: "false"
       Tags:
         - Key: Name
           Value: ONPREM-ROUTER2
@@ -173,11 +175,11 @@ Resources:
             apt-get update && apt-get install -y strongswan wget
             mkdir /home/ubuntu/demo_assets
             cd /home/ubuntu/demo_assets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec-vti.sh
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.conf
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ipsec.secrets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/51-eth1.yaml
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter/ffrouting-install.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ipsec-vti.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ipsec.conf
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ffrouting-install.sh
             chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
             cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
             netplan --debug apply
@@ -314,9 +316,7 @@ Resources:
     Type: "AWS::EC2::SecurityGroupIngress"
     Properties:
       GroupId: !Ref InstanceSG
-      IpProtocol: 'tcp'
-      FromPort: '0'
-      ToPort: '65535'
+      IpProtocol: '-1'
       SourceSecurityGroupId: !Ref InstanceSG
   ssmVPCe:
     Type: AWS::EC2::VPCEndpoint
@@ -360,3 +360,16 @@ Resources:
         - !Ref PrivateRT2
       ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
       VpcId: !Ref VPC
+Outputs:
+  Router1Public:
+    Description: Public IP of Router1
+    Value: !GetAtt Router1.PublicIp
+  Router2Public:
+    Description: Public IP of Router2
+    Value: !GetAtt Router2.PublicIp
+  Router1Private:
+    Description: Private IP of Router1
+    Value: !GetAtt Router1.PrivateIp
+  Router2Private:
+    Description: Private IP of Router2
+    Value: !GetAtt Router2.PrivateIp
