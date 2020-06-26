@@ -70,18 +70,14 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: '0.0.0.0/0'
-        - Description: 'Allow HTTP IPv4 IN'
-          IpProtocol: tcp
-          FromPort: '80'
-          ToPort: '80'
-          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow ALL from ONPREM Networks'
+          IpProtocol: "-1"
+          CidrIp: '192.168.8.0/21'
   InstanceSGSelfReferenceRule:
     Type: "AWS::EC2::SecurityGroupIngress"
     Properties:
       GroupId: !Ref InstanceSG
-      IpProtocol: 'tcp'
-      FromPort: '0'
-      ToPort: '65535'
+      IpProtocol: '-1'
       SourceSecurityGroupId: !Ref InstanceSG
   EC2A:
     Type: AWS::EC2::Instance
