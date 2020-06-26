@@ -1,6 +1,11 @@
 # Advanced Highly-Available Dynamic Site-to-Site VPN
 
-# STAGE 4A - CONFIGURE BGP ROUTING FOR ONPREMISES-ROUTER1 AND TEST
+In this stage you will use the IPSEC tunnels created in stage 3 .. adding BGP sessions over all the tunnels.
+These sessions will allow the ONPREM Routers to exchange routers with the Transit Gateway running in AWS
+Once routes are exchanged, the connections will allow data to flow between AWS and ONPREMISES
+BGP capability is added using `FRR` and that will be installed as part of this stage of the demo.
+
+# STAGE 4A - INSTALL FRR ON ROUTER 1 (BGP CAPABILITY)
 
 Move to EC2 Console
 https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState
@@ -10,8 +15,26 @@ Right Click => `Connect`
 Select `Session Manager`
 Click `Connect`
 
+First we will make the `FRR` script executable and run it to install BGP capability.
 `chmod +x ffrouting-install.sh`
 `./ffrouting-install.sh`
+** This will take some time - 10-15 minutes **
+** We can allow this to run, and start the same process on the other Router **
+
+# STAGE 4B - INSTALL FRR ON ROUTER 2 (BGP CAPABILITY)
+
+Move to EC2 Console
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState
+Click `Instances` on the left menu
+Locate and select `ONPREM-ROUTER2`
+Right Click => `Connect`
+Select `Session Manager`
+Click `Connect`
+
+`chmod +x ffrouting-install.sh`
+`./ffrouting-install.sh`
+
+# STAGE 4C - CONFIGURE BGP ROUTING FOR ONPREMISES-ROUTER1 AND TEST
 
 `vtysh`
 `conf t`
@@ -54,20 +77,7 @@ Click `Connect`
 run `ping IP_ADDRESS_OF_ONPREM-SERVER1`
 
 
-
-
-# STAGE 4B - CONFIGURE BGP ROUTING FOR ONPREMISES-ROUTER2 AND TEST
-
-Move to EC2 Console
-https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState
-Click `Instances` on the left menu
-Locate and select `ONPREM-ROUTER2`
-Right Click => `Connect`
-Select `Session Manager`
-Click `Connect`
-
-`chmod +x ffrouting-install.sh`
-`./ffrouting-install.sh`
+# STAGE 4D - CONFIGURE BGP ROUTING FOR ONPREMISES-ROUTER2 AND TEST
 
 `vtysh`
 `conf t`
