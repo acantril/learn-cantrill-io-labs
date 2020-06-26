@@ -83,6 +83,20 @@ Resources:
       DestinationCidrBlock: '0.0.0.0/0'
       GatewayId:
         Ref: InternetGateway
+  Route1AWSIPv4:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRT1
+      DestinationCidrBlock: '10.16.0.0/16'
+      NetworkInterfaceId: !Ref ENIR1PRIVATE
+  Route2AWSIPv4:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRT2
+      DestinationCidrBlock: '10.16.0.0/16'
+      NetworkInterfaceId: !Ref ENIR2PRIVATE
   RTOnPremPriv1:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
@@ -307,11 +321,9 @@ Resources:
       VpcId: !Ref VPC
       GroupDescription: Default ONPREM SG
       SecurityGroupIngress: 
-        - Description: 'Allow SSH IPv4 IN'
-          IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
-          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow All from AWS Environment'
+          IpProtocol: '-1'
+          CidrIp: '10.16.0.0/16'
   InstanceSGSelfReferenceRule:
     Type: "AWS::EC2::SecurityGroupIngress"
     Properties:
