@@ -1,0 +1,156 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: https://learn.cantrill.io - Advanced Demo - Hybrid Active Directory ONPREM NESTED COMPUTE
+Parameters:
+  PrivateSubnet1ID:
+    Description: ID of the private subnet A in the ONPREM SIMULATED NETWORK
+    Type: AWS::EC2::Subnet::Id
+  PrivateSubnet2ID:
+    Description: ID of the private subnet B in the ONPREM SIMULATED NETWORK
+    Type: AWS::EC2::Subnet::Id
+  PublicSubnetID:
+    Description: ID of the private subnet B in the ONPREM SIMULATED NETWORK
+    Type: AWS::EC2::Subnet::Id
+  ADAdminPassword:
+    AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    Description: Password for the ONPREM AD Domain Admin User
+    MaxLength: '32'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String
+  ADAdminUser:
+    AllowedPattern: '[a-zA-Z0-9]*'
+    Default: Admin
+    Description: User name for the account that will be added as Domain Administrator. This is separate from the default "Administrator" account
+    MaxLength: '25'
+    MinLength: '5'
+    Type: String
+  DomainDNSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+\..+'
+    Default: ad.animals4life.org
+    Description: Fully qualified domain name (FQDN) of the domain
+    MaxLength: '255'
+    MinLength: '2'
+    Type: String
+  DomainNetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: A4L
+    Description: NetBIOS name of the domain (up to 15 characters)
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String
+  InstanceSGID:
+    Description: Default ONPREM Instance Security Group
+    Type: String
+  EC2InstanceProfile:
+    Description: Profile with permissions on SSM and others.
+    Type: String
+  WINFULLBASE:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-windows-latest/Windows_Server-2019-English-Full-Base'
+  KeyPairName:
+    Description: KeyPair for ONPREMISES INSTANCES
+    Type: AWS::EC2::KeyPair::KeyName
+Resources:
+  JumpBox:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'WINFULLBASE'
+      IamInstanceProfile: !Ref 'EC2InstanceProfile'
+      InstanceType: 't3.medium'
+      SubnetId: !Ref 'PublicSubnetID'
+      Tags:
+        - Key: Name
+          Value: 'Jumpbox'
+      SecurityGroupIds:
+        - !Ref InstanceSGID
+      KeyName: !Ref 'KeyPairName'
+  FileServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'WINFULLBASE'
+      IamInstanceProfile: !Ref 'EC2InstanceProfile'
+      InstanceType: 't3.medium'
+      SubnetId: !Ref 'PrivateSubnet1ID'
+      Tags:
+        - Key: Name
+          Value: 'FileServer'
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 100
+            VolumeType: gp2
+      SecurityGroupIds:
+        - !Ref InstanceSGID
+      KeyName: !Ref 'KeyPairName'
+      UserData:
+        'Fn::Base64': !Sub |
+          <powershell>
+          $instanceID = "null"
+          while ($instanceID -NotLike "i-*") {
+          Start-Sleep -s 3
+          $InstanceId = Invoke-RestMethod -uri http://169.254.169.254/latest/meta-data/instance-id
+          }
+
+          Install-WindowsFeature -IncludeAllSubFeature RSAT
+          New-Item -Path 'C:\a4lfiles' -ItemType Directory
+          New-SmbShare -Name "a4lfiles" -Path "C:\a4lfiles" -FullAccess "Users"
+          $AdDomain = "${DomainDNSName}"
+          $Password = ConvertTo-SecureString '${ADAdminPassword}' -AsPlainText -Force  
+          $Username = "${ADAdminUser}"
+          $Credential = New-Object System.Management.Automation.PSCredential($Username,$Password)
+
+          Try {
+          Rename-Computer -NewName FileServer -Force
+          Start-Sleep -s 5
+          Add-Computer -DomainName $AdDomain -Options JoinWithNewName,AccountCreate -Credential $Credential -Force -erroraction 'stop'
+          }
+          Catch{
+          echo $_.Exception | Out-File c:\temperror-joindomain.txt -Append
+          }
+
+          
+          Restart-Computer -Force
+          </powershell>
+  Client:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'WINFULLBASE'
+      IamInstanceProfile: !Ref 'EC2InstanceProfile'
+      InstanceType: 't3.medium'
+      SubnetId: !Ref 'PrivateSubnet2ID'
+      Tags:
+        - Key: Name
+          Value: 'Client'
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 100
+            VolumeType: gp2
+      SecurityGroupIds:
+        - !Ref InstanceSGID
+      KeyName: !Ref 'KeyPairName'
+      UserData:
+        'Fn::Base64': !Sub |
+          <powershell>
+          $instanceID = "null"
+          while ($instanceID -NotLike "i-*") {
+          Start-Sleep -s 3
+          $InstanceId = Invoke-RestMethod -uri http://169.254.169.254/latest/meta-data/instance-id
+          }
+
+          $AdDomain = "${DomainDNSName}"
+          $Password = ConvertTo-SecureString '${ADAdminPassword}' -AsPlainText -Force  
+          $Username = "${ADAdminUser}"
+          $Credential = New-Object System.Management.Automation.PSCredential($Username,$Password)
+
+          Try {
+          Rename-Computer -NewName Client -Force
+          Start-Sleep -s 5
+          Add-Computer -DomainName $AdDomain -Options JoinWithNewName,AccountCreate -Credential $Credential -Force -erroraction 'stop'
+          }
+          Catch{
+          echo $_.Exception | Out-File c:\temperror-joindomain.txt -Append
+          }
+          Install-WindowsFeature -IncludeAllSubFeature RSAT
+          Restart-Computer -Force
+          </powershell>

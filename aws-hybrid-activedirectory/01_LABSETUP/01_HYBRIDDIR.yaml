@@ -1,0 +1,260 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: https://learn.cantrill.io - Advanced Demo - Hybrid Active Directory Master Template
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Networking Configuration (Simulated On-Premises)
+        Parameters:
+          - ONPREMVPCCIDR
+          - ONPREMPublicSubnetACIDR
+          - ONPREMPrivateSubnetACIDR
+          - ONPREMPrivateSubnetBCIDR
+      - Label:
+          default: Networking Configuration (AWS)
+        Parameters:
+          - AWSVPCCIDR
+          - AWSPublicSubnetCIDR
+          - AWSPrivateSubnetACIDR
+          - AWSPrivateSubnetBCIDR
+          - AWSPrivateSubnetCCIDR
+          - AWSPrivateSubnetDCIDR
+      - Label:
+          default: Microsoft Active Directory configuration (Simulated On-Premises)
+        Parameters:
+          - ADInstanceType
+          - DC1NetBIOSName
+          - DC2NetBIOSName
+          - DC1PRIVATEIP
+          - DC2PRIVATEIP
+          - ADAdminUser
+          - ADAdminPassword
+          - DomainDNSName
+          - DomainNetBIOSName
+          - DomainAdminPassword
+      - Label:
+          default: Template General
+        Parameters:
+          - QSS3BucketName
+          - QSS3BucketRegion
+          - QSS3KeyPrefix
+          - KeyPairName
+Parameters:
+  ADInstanceType:
+    Type: String
+    Default: t3.large
+    Description: Amazon EC2 instance type for the AD Domain controllers
+  DC1NetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: DC1
+    Description: NetBIOS name of the Active Directory server in ONPREM PRIVATE A(up to 15 characters)
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String  
+  DC2NetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: DC2
+    Description: NetBIOS name of the Active Directory server in ONPREM PRIVATE B(up to 15 characters)
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String 
+  DC1PRIVATEIP:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$
+    Default: 192.168.10.100
+    Description: Fixed private IP for the DC1 located in AZA
+    Type: String
+  DC2PRIVATEIP:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$
+    Default: 192.168.11.100
+    Description: Fixed private IP for the DC2 located in AZB
+    Type: String
+  ADAdminPassword:
+    AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    Description: Password for the ONPREM AD Domain Admin User
+    MaxLength: '32'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String
+  ADAdminUser:
+    AllowedPattern: '[a-zA-Z0-9]*'
+    Default: Admin
+    Description: User name for the account that will be added as Domain Administrator. This is separate from the default "Administrator" account
+    MaxLength: '25'
+    MinLength: '5'
+    Type: String
+  DomainDNSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+\..+'
+    Default: ad.animals4life.org
+    Description: Fully qualified domain name (FQDN) of the domain
+    MaxLength: '255'
+    MinLength: '2'
+    Type: String
+  DomainNetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: A4L
+    Description: NetBIOS name of the domain (up to 15 characters)
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String
+  KeyPairName:
+    Description: KeyPair for ONPREMISES INSTANCES
+    Type: AWS::EC2::KeyPair::KeyName
+  ONPREMPrivateSubnetACIDR:
+    Default: 192.168.10.0/24
+    Description: Network Range of the Private On-Premises Subnet in AZA
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  ONPREMPrivateSubnetBCIDR:
+    Description: Network Range of the Private On-Premises Subnet in AZB
+    Default: 192.168.11.0/24
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  ONPREMPublicSubnetACIDR:
+    Default: 192.168.12.0/24
+    Description: Network Range of the Public On-Premises Subnet
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  AWSPublicSubnetCIDR:
+    Default: 10.16.48.0/20
+    Description: Network Range of the Public AWS Subnet
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  AWSPrivateSubnetACIDR:
+    Default: 10.16.32.0/20
+    Description: Network Range of the Private AWS Subnet in AZA
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  AWSPrivateSubnetBCIDR:
+    Default: 10.16.96.0/20
+    Description: Network Range of the Private AWS Subnet in AZB
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  AWSPrivateSubnetCCIDR:
+    Default: 10.16.160.0/20
+    Description: Network Range of the Private AWS Subnet in AZC
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  AWSPrivateSubnetDCIDR:
+    Default: 10.16.224.0/20
+    Description: Network Range of the Private AWS Subnet in AZD
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  AWSVPCCIDR:
+    Description: Virtual Private Cloud (VPC) CIDR For AWS Network
+    Default: 10.16.0.0/16
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: VPC CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  ONPREMVPCCIDR:
+    Description: Virtual Private Cloud (VPC) CIDR For On-Premises Network
+    Default: 192.168.8.0/21
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: VPC CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Default: aws-quickstart
+    Description: Specify the S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+    Default: quickstart-fsx-windows-file-server/
+    Description: Specify the S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+    Type: String
+  KeyPairName:
+    Description: KeyPair for INSTANCES
+    Type: AWS::EC2::KeyPair::KeyName
+Resources:
+  ONPREMVPC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/02_HYBRIDDIR-NESTED-ONPREM-VPC.yaml
+      Parameters:
+        VPCCIDR: !Ref ONPREMVPCCIDR
+        PublicSubnetACIDR: !Ref ONPREMPublicSubnetACIDR
+        PrivateSubnetACIDR: !Ref ONPREMPrivateSubnetACIDR
+        PrivateSubnetBCIDR: !Ref ONPREMPrivateSubnetBCIDR
+  ONPREMAD:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: ONPREMVPC
+    Properties:
+      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/03_HYBRIDDIR-NESTED-ONPREM-AD.yaml
+      Parameters:
+        ADInstanceType: !Ref ADInstanceType
+        ADServer1NetBIOSName: !Ref DC1NetBIOSName
+        ADServer2NetBIOSName: !Ref DC2NetBIOSName
+        ADServer1PrivateIP: !Ref DC1PRIVATEIP
+        ADServer2PrivateIP: !Ref DC2PRIVATEIP
+        ADAdminPassword: !Ref ADAdminPassword
+        ADAdminUser: !Ref ADAdminUser
+        DomainDNSName: !Ref DomainDNSName
+        DomainNetBIOSName: !Ref DomainNetBIOSName
+        KeyPairName: !Ref KeyPairName
+        PrivateSubnet1ID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetAID'
+        PrivateSubnet2ID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetBID'
+        VPCCIDR: !Ref ONPREMVPCCIDR
+        VPCID: !GetAtt 'ONPREMVPC.Outputs.VPCID'
+        InstanceSGID: !GetAtt 'ONPREMVPC.Outputs.InstanceSGID'
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3KeyPrefix: !Sub '${QSS3KeyPrefix}submodules/quickstart-microsoft-activedirectory/'
+        KeyPairName: !Ref KeyPairName
+  ONPREMCOMPUTE:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: ONPREMAD
+    Properties:
+      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/04_HYBRIDDIR-NESTED-ONPREM-COMPUTE.yaml
+      Parameters:
+        PrivateSubnet1ID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetAID'
+        PrivateSubnet2ID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetBID'
+        PublicSubnetID: !GetAtt 'ONPREMVPC.Outputs.PublicSubnetAID'
+        ADAdminPassword: !Ref ADAdminPassword
+        ADAdminUser: !Ref ADAdminUser
+        DomainDNSName: !Ref DomainDNSName
+        DomainNetBIOSName: !Ref DomainNetBIOSName
+        InstanceSGID: !GetAtt 'ONPREMVPC.Outputs.InstanceSGID'
+        EC2InstanceProfile: !GetAtt 'ONPREMVPC.Outputs.EC2InstanceProfile'
+        KeyPairName: !Ref KeyPairName
+  AWSVPC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/05_HYBRIDDIR-NESTED-AWS-VPC.yaml  
+      Parameters:
+        ONPREMPrivateSubnetAID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetAID'
+        ONPREMPrivateSubnetBID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetBID'
+        ONPREMInstanceSGID: !GetAtt 'ONPREMVPC.Outputs.InstanceSGID'
+        EC2InstanceProfile: !GetAtt 'ONPREMVPC.Outputs.EC2InstanceProfile'
+        ONPREMPublicRT: !GetAtt 'ONPREMVPC.Outputs.PublicRT'
+        ONPREMPrivateRTA: !GetAtt 'ONPREMVPC.Outputs.PrivateRTA'
+        ONPREMPrivateRTB: !GetAtt 'ONPREMVPC.Outputs.PrivateRTB'
+        ONPREMVPCID: !GetAtt 'ONPREMVPC.Outputs.VPCID'
+        ONPREMVPCCIDR: !Ref ONPREMVPCCIDR
+        VPCCIDR: !Ref AWSVPCCIDR
+        PublicSubnetCIDR: !Ref AWSPublicSubnetCIDR
+        PrivateSubnetACIDR: !Ref AWSPrivateSubnetACIDR
+        PrivateSubnetBCIDR: !Ref AWSPrivateSubnetBCIDR
+        PrivateSubnetCCIDR: !Ref AWSPrivateSubnetCCIDR
+        PrivateSubnetDCIDR: !Ref AWSPrivateSubnetDCIDR
+        
+  

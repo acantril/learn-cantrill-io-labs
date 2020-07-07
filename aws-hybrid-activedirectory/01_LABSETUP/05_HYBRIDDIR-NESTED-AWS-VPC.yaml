@@ -1,0 +1,333 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: https://learn.cantrill.io - Advanced Demo - Hybrid Active Directory AWS NESTED VPC
+Parameters:
+  ONPREMPrivateSubnetAID:
+    Description: ID of the private subnet A in the ONPREM SIMULATED NETWORK
+    Type: AWS::EC2::Subnet::Id
+  ONPREMPrivateSubnetBID:
+    Description: ID of the private subnet B in the ONPREM SIMULATED NETWORK
+    Type: AWS::EC2::Subnet::Id
+  ONPREMInstanceSGID:
+    Description: Default ONPREM Instance Security Group
+    Type: AWS::EC2::SecurityGroup::Id
+  EC2InstanceProfile:
+    Description: Profile with permissions on SSM and others.
+    Type: String
+  ONPREMPublicRT:
+    Description: Public RT for ONPREM Network
+    Type: String
+  ONPREMPrivateRTA:
+    Description: PrivateA RT for ONPREM Network
+    Type: String
+  ONPREMPrivateRTB:
+    Description: PrivateB RT for ONPREM Network
+    Type: String
+  ONPREMVPCID:
+    Type: AWS::EC2::VPC::Id
+    Description: VPCID of Simulated On-Premises VPC
+  ONPREMVPCCIDR:
+    Default: 192.168.8.0/21
+    Description: ONPREM VPC CIDR
+    Type: String
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: VPC CIDR block parameter must be in the form x.x.x.x/16-28
+  VPCCIDR:
+    Default: 10.16.0.0/16
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: VPC CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+    Description: AWS VPC CIDR
+  PublicSubnetCIDR:
+    Default: 10.16.48.0/20
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  PrivateSubnetACIDR:
+    Default: 10.16.32.0/20
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  PrivateSubnetBCIDR:
+    Default: 10.16.96.0/20
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  PrivateSubnetCCIDR:
+    Default: 10.16.160.0/20
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  PrivateSubnetDCIDR:
+    Default: 10.16.224.0/20
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: AWS-VPC
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: IGW-AWS
+  InternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  EIP:
+    Type: 'AWS::EC2::EIP'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+  SubnetPublic:
+    Type: AWS::EC2::Subnet
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref PublicSubnetCIDR
+      Tags:
+        - Key: Name
+          Value: AWS-PUBLIC
+  NatGateway:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt EIP.AllocationId
+      SubnetId: !Ref SubnetPublic
+      Tags:
+        - Key: Name
+          Value: AWS-NATGW
+  SubnetPrivateA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref PrivateSubnetACIDR
+      Tags:
+        - Key: Name
+          Value: AWS-PRIVATE-A
+  SubnetPrivateB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref PrivateSubnetBCIDR
+      Tags:
+        - Key: Name
+          Value: AWS-PRIVATE-B
+  SubnetPrivateC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 2, !GetAZs '' ]
+      CidrBlock: !Ref PrivateSubnetCCIDR
+      Tags:
+        - Key: Name
+          Value: AWS-PRIVATE-C
+  SubnetPrivateD:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 3, !GetAZs '' ]
+      CidrBlock: !Ref PrivateSubnetDCIDR
+      Tags:
+        - Key: Name
+          Value: AWS-PRIVATE-D
+  PublicRT: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: AWS-RT-PUBLIC
+  PrivateRT: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: AWS-RT-PRIVATE
+  RTAssociationPublic:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPublic
+      RouteTableId:
+        Ref: PublicRT
+  RTAssociationPrivateA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPrivateA
+      RouteTableId:
+        Ref: PrivateRT
+  RTAssociationPrivateB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPrivateB
+      RouteTableId:
+        Ref: PrivateRT
+  RTAssociationPrivateC:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPrivateC
+      RouteTableId:
+        Ref: PrivateRT
+  RTAssociationPrivateD:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPrivateD
+      RouteTableId:
+        Ref: PrivateRT
+  RouteDefaultIPV4Pub: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: PublicRT
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: InternetGateway
+  RoutePrivAIPV4Pub: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRT
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId:
+        Ref: NatGateway
+  InstanceSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Default A4L AWS SG
+      SecurityGroupIngress: 
+        - Description: 'Allow SSH IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow RDP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow ALL from ONPREM Networks'
+          IpProtocol: "-1"
+          CidrIp: !Ref ONPREMVPCCIDR
+  InstanceSGSelfReferenceRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: VPCPeeringConnection
+    Properties:
+      GroupId: !Ref InstanceSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref InstanceSG
+  InstanceSGFromONPREMRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: VPCPeeringConnection
+    Properties:
+      GroupId: !Ref InstanceSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref ONPREMInstanceSGID
+  ONPREMFromAWSRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: VPCPeeringConnection
+    Properties:
+      GroupId: !Ref ONPREMInstanceSGID
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref InstanceSG
+  ssminterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+        - !Ref SubnetPrivateC
+        - !Ref SubnetPrivateD
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !Ref VPC
+  ssmec2messagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+        - !Ref SubnetPrivateC
+        - !Ref SubnetPrivateD
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !Ref VPC
+  ssmmessagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+        - !Ref SubnetPrivateC
+        - !Ref SubnetPrivateD
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !Ref VPC
+  VPCPeeringConnection:
+    Type: 'AWS::EC2::VPCPeeringConnection'
+    Properties:
+      VpcId: !Ref VPC
+      PeerVpcId: !Ref ONPREMVPCID
+  ONPREMPublicRTtoAWSRoute: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: ONPREMPublicRT
+      DestinationCidrBlock: !Ref VPCCIDR
+      VpcPeeringConnectionId:
+        Ref: VPCPeeringConnection
+  ONPREMPrivateRTAtoAWSRoute: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: ONPREMPrivateRTA
+      DestinationCidrBlock: !Ref VPCCIDR
+      VpcPeeringConnectionId:
+        Ref: VPCPeeringConnection
+  ONPREMPrivateRTBtoAWSRoute: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: ONPREMPrivateRTB
+      DestinationCidrBlock: !Ref VPCCIDR
+      VpcPeeringConnectionId:
+        Ref: VPCPeeringConnection
+  AWSPublictoONPREMRoute: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PublicRT
+      DestinationCidrBlock: !Ref ONPREMVPCCIDR
+      VpcPeeringConnectionId:
+        Ref: VPCPeeringConnection
+  AWSPrivatetoONPREMRoute: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRT
+      DestinationCidrBlock: !Ref ONPREMVPCCIDR
+      VpcPeeringConnectionId:
+        Ref: VPCPeeringConnection
+

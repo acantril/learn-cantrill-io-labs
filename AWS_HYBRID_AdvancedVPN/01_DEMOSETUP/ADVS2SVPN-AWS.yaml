@@ -1,4 +1,4 @@
-
+AWSTemplateFormatVersion: '2010-09-09'
 Description:  Advanced Demo - Highly-Available Dynamic Accelerated Site-to-Site VPN
 Parameters:
   LatestAmiId:

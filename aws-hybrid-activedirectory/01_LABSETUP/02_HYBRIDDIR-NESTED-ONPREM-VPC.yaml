@@ -1,0 +1,325 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: https://learn.cantrill.io - Advanced Demo - Hybrid Active Directory ONPREM NESTED VPC
+Parameters:
+  PrivateSubnetACIDR:
+    Default: 192.168.10.0/24
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  PrivateSubnetBCIDR:
+    Default: 192.168.11.0/24
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  PublicSubnetACIDR:
+    Default: 192.168.12.0/24
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+  VPCCIDR:
+    Default: 192.168.8.0/21
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: VPC CIDR block parameter must be in the form x.x.x.x/16-28
+    Type: String
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: ONPREM-VPC
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: IGW-ONPREM
+  InternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  EIP:
+    Type: 'AWS::EC2::EIP'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+  NatGateway:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt EIP.AllocationId
+      SubnetId: !Ref Pub
+      Tags:
+        - Key: Name
+          Value: ONPREM-NATGW
+  Pub:
+    Type: AWS::EC2::Subnet
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref PublicSubnetACIDR
+      Tags:
+        - Key: Name
+          Value: ONPREM-PUBLIC
+  PrivA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref PrivateSubnetACIDR
+      Tags:
+        - Key: Name
+          Value: ONPREM-PRIVATE-A
+  PrivB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref PrivateSubnetBCIDR
+      Tags:
+        - Key: Name
+          Value: ONPREM-PRIVATE-B
+  PrivateRTA: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-PRIVATE-RTA
+  PrivateRTB: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-PRIVATE-RTB
+  PublicRT: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-PUBLIC-RT
+  RTOnPremPrivA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PrivA
+      RouteTableId:
+        Ref: PrivateRTA
+  RTOnPremPrivB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PrivB
+      RouteTableId:
+        Ref: PrivateRTB
+  RTOnPremPub:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Pub
+      RouteTableId:
+        Ref: PublicRT
+  RouteDefaultIPV4Pub: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: PublicRT
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: InternetGateway
+  RoutePrivAIPV4Pub: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRTA
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId:
+        Ref: NatGateway
+  RoutePrivBIPV4Pub: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRTB
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId:
+        Ref: NatGateway
+  EC2Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ssm:DescribeAssociation'
+                  - 'ssm:GetDeployablePatchSnapshotForInstance'
+                  - 'ssm:GetDocument'
+                  - 'ssm:DescribeDocument'
+                  - 'ssm:GetManifest'
+                  - 'ssm:GetParameter'
+                  - 'ssm:GetParameters'
+                  - 'ssm:ListAssociations'
+                  - 'ssm:ListInstanceAssociations'
+                  - 'ssm:PutInventory'
+                  - 'ssm:PutComplianceItems'
+                  - 'ssm:PutConfigurePackageResult'
+                  - 'ssm:UpdateAssociationStatus'
+                  - 'ssm:UpdateInstanceAssociationStatus'
+                  - 'ssm:UpdateInstanceInformation'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'ssmmessages:CreateControlChannel'
+                  - 'ssmmessages:CreateDataChannel'
+                  - 'ssmmessages:OpenControlChannel'
+                  - 'ssmmessages:OpenDataChannel' 
+                Resource: '*'
+              - Effect: Allow
+                Action: 
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:DeleteMessage'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:SendReply'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 's3:*'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'sns:*'
+                Resource: '*'
+  EC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2Role
+  InstanceSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Default ONPREM SG
+      SecurityGroupIngress: 
+        - Description: 'Allow All from AWS Environment'
+          IpProtocol: '-1'
+          CidrIp: '10.16.0.0/16'
+  InstanceSGSelfReferenceRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref InstanceSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref InstanceSG
+  InstanceSGRDPRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref InstanceSG
+      IpProtocol: tcp
+      FromPort: 3389
+      ToPort: 3389
+      CidrIp: '0.0.0.0/0'
+  ssmVPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref PrivA
+        - !Ref PrivB
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !Ref VPC
+  ssmec2messagesVPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref PrivA
+        - !Ref PrivB
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !Ref VPC
+  ssmmessagesVPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref PrivA
+        - !Ref PrivB
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !Ref VPC
+  s3VPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds:
+        - !Ref PublicRT
+        - !Ref PrivateRTA
+        - !Ref PrivateRTB
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcId: !Ref VPC
+Outputs:
+  VPCID:
+    Description: VPC ID of ONPREM VPC
+    Value: !Ref VPC
+  VPCCIDR:
+    Description: ONPREM VPC CIDR
+    Value: !Ref VPCCIDR
+  PrivateSubnetACIDR:
+    Description: Private SubnetA CIDR 
+    Value: !Ref PrivateSubnetACIDR
+  PrivateSubnetBCIDR:
+    Description: Private SubnetB CIDR 
+    Value: !Ref PrivateSubnetBCIDR
+  PrivateSubnetAID:
+    Description: Private SubnetA Resource ID
+    Value: !Ref PrivA
+  PrivateSubnetBID:
+    Description: Private SubnetB Resource ID
+    Value: !Ref PrivB
+  PublicSubnetAID:
+    Description: Public Subnet Resource ID
+    Value: !Ref Pub
+  InstanceSGID:
+    Description: ONPREM Default Security Group ID
+    Value: !Ref InstanceSG
+  EC2InstanceProfile:
+    Description: EC2 Role with permissions on SSM and other stuff
+    Value: !Ref EC2InstanceProfile
+  PublicRT:
+    Description: OnPrem Public RT ID
+    Value: !Ref PublicRT
+  PrivateRTA:
+    Description: OnPrem PrivateA RT ID
+    Value: !Ref PrivateRTA
+  PrivateRTB:
+    Description: OnPrem PrivateB RT ID
+    Value: !Ref PrivateRTB
+
+  
