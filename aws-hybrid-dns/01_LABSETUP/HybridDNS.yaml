@@ -1,0 +1,504 @@
+Description:  Animals4Life Hybrid DNS Demo
+Parameters:
+  LatestAmiId:
+    Description: AMI for EC2 instances (default = AmaLinux Latest)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+Resources:
+  ONPREMVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 192.168.10.0/24
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: a4l-onprem
+  ONPREMSubnetPRIVATEA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ONPREMVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.10.0/25
+      Tags:
+        - Key: Name
+          Value: sn-onprem-A
+  ONPREMRouteTablePrivate: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref ONPREMVPC
+      Tags:
+      - Key: Name
+        Value: A4L-ONPREM-RT
+  ONPREMSubnetPRIVATEB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ONPREMVPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 192.168.10.128/25
+      Tags:
+        - Key: Name
+          Value: sn-onprem-B
+  ONPREMRouteTableAssociationPrivateA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref ONPREMSubnetPRIVATEA
+      RouteTableId: !Ref ONPREMRouteTablePrivate
+  ONPREMRouteTableAssociationPrivateB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref ONPREMSubnetPRIVATEB
+      RouteTableId: !Ref ONPREMRouteTablePrivate
+  ONPREMSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref ONPREMVPC
+      GroupDescription: Enable SSH and DNS
+      SecurityGroupIngress: 
+        - Description: 'Allow SSH IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow DNS IN'
+          IpProtocol: -1
+          FromPort: '53'
+          ToPort: '53'
+          CidrIp: '0.0.0.0/0'
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: '0.0.0.0/0'
+  ONPREMDefaultInstanceSecurityGroupSelfReferenceRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref ONPREMSecurityGroup
+      IpProtocol: 'tcp'
+      FromPort: '0'
+      ToPort: '65535'
+      SourceSecurityGroupId: !Ref ONPREMSecurityGroup
+  ONPREMDNSA:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - onpremssminterfaceendpoint
+      - onpremssmec2messagesinterfaceendpoint
+      - onpremssmmessagesinterfaceendpoint
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref ONPREMSubnetPRIVATEA
+      SecurityGroupIds: 
+        - !Ref ONPREMSecurityGroup
+      Tags:
+        - Key: Name
+          Value: A4L-ONPREM-DNSA
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum update -y
+          yum install bind bind-utils -y
+          cat <<EOF > /etc/named.conf
+          options {
+            directory	"/var/named";
+            dump-file	"/var/named/data/cache_dump.db";
+            statistics-file "/var/named/data/named_stats.txt";
+            memstatistics-file "/var/named/data/named_mem_stats.txt";
+            allow-query { any; };
+            allow-transfer     { localhost; ${ONPREMDNSB.PrivateIp}; };
+            recursion yes;
+            forward first;
+            forwarders {
+              192.168.10.2;
+            };
+            dnssec-enable yes;
+            dnssec-validation yes;
+            dnssec-lookaside auto;
+            /* Path to ISC DLV key */
+            bindkeys-file "/etc/named.iscdlv.key";
+            managed-keys-directory "/var/named/dynamic";
+          };
+          zone "corp.animals4life.org" IN {
+              type master;
+              file "corp.animals4life.org.zone";
+              allow-update { none; };
+          };
+          EOF
+          cat <<EOF > /var/named/corp.animals4life.org.zone
+          \$TTL 86400
+          @   IN  SOA     ns1.mydomain.com. root.mydomain.com. (
+                  2013042201  ;Serial
+                  3600        ;Refresh
+                  1800        ;Retry
+                  604800      ;Expire
+                  86400       ;Minimum TTL
+          )
+          ; Specify our two nameservers
+              IN	NS		dnsA.corp.animals4life.org.
+              IN	NS		dnsB.corp.animals4life.org.
+          ; Resolve nameserver hostnames to IP, replace with your two droplet IP addresses.
+          dnsA		IN	A		1.1.1.1
+          dnsB	  IN	A		8.8.8.8
+
+          ; Define hostname -> IP pairs which you wish to resolve
+          @		  IN	A		${ONPREMAPP.PrivateIp}
+          app		IN	A	  ${ONPREMAPP.PrivateIp}
+          EOF
+          service named restart
+          chkconfig named on
+  ONPREMDNSB:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - onpremssminterfaceendpoint
+      - onpremssmec2messagesinterfaceendpoint
+      - onpremssmmessagesinterfaceendpoint
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref ONPREMSubnetPRIVATEB
+      SecurityGroupIds: 
+        - !Ref ONPREMSecurityGroup
+      Tags:
+        - Key: Name
+          Value: A4L-ONPREM-DNSB
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum update -y
+          yum install bind bind-utils -y
+          cat <<EOF > /etc/named.conf
+          options {
+            directory	"/var/named";
+            dump-file	"/var/named/data/cache_dump.db";
+            statistics-file "/var/named/data/named_stats.txt";
+            memstatistics-file "/var/named/data/named_mem_stats.txt";
+            allow-query { any; };
+            recursion yes;
+            forward first;
+            forwarders {
+              192.168.10.2;
+            };
+            dnssec-enable yes;
+            dnssec-validation yes;
+            dnssec-lookaside auto;
+            /* Path to ISC DLV key */
+            bindkeys-file "/etc/named.iscdlv.key";
+            managed-keys-directory "/var/named/dynamic";
+          };
+          zone "corp.animals4life.org" IN {
+              type master;
+              file "corp.animals4life.org.zone";
+              allow-update { none; };
+          };
+          EOF
+          cat <<EOF > /var/named/corp.animals4life.org.zone
+          \$TTL 86400
+          @   IN  SOA     ns1.mydomain.com. root.mydomain.com. (
+                  2013042201  ;Serial
+                  3600        ;Refresh
+                  1800        ;Retry
+                  604800      ;Expire
+                  86400       ;Minimum TTL
+          )
+          ; Specify our two nameservers
+              IN	NS		dnsA.corp.animals4life.org.
+              IN	NS		dnsB.corp.animals4life.org.
+          ; Resolve nameserver hostnames to IP, replace with your two droplet IP addresses.
+          dnsA		IN	A		1.1.1.1
+          dnsB	  IN	A		8.8.8.8
+
+          ; Define hostname -> IP pairs which you wish to resolve
+          @		  IN	A		${ONPREMAPP.PrivateIp}
+          app		IN	A	  ${ONPREMAPP.PrivateIp}
+          EOF
+          service named restart
+          chkconfig named on
+  ONPREMAPP:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - onpremssminterfaceendpoint
+      - onpremssmec2messagesinterfaceendpoint
+      - onpremssmmessagesinterfaceendpoint
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref ONPREMSubnetPRIVATEB
+      SecurityGroupIds: 
+        - !Ref ONPREMSecurityGroup
+      Tags:
+        - Key: Name
+          Value: A4L-ONPREM-APP
+  EC2Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ssm:DescribeAssociation'
+                  - 'ssm:GetDeployablePatchSnapshotForInstance'
+                  - 'ssm:GetDocument'
+                  - 'ssm:DescribeDocument'
+                  - 'ssm:GetManifest'
+                  - 'ssm:GetParameter'
+                  - 'ssm:GetParameters'
+                  - 'ssm:ListAssociations'
+                  - 'ssm:ListInstanceAssociations'
+                  - 'ssm:PutInventory'
+                  - 'ssm:PutComplianceItems'
+                  - 'ssm:PutConfigurePackageResult'
+                  - 'ssm:UpdateAssociationStatus'
+                  - 'ssm:UpdateInstanceAssociationStatus'
+                  - 'ssm:UpdateInstanceInformation'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'ssmmessages:CreateControlChannel'
+                  - 'ssmmessages:CreateDataChannel'
+                  - 'ssmmessages:OpenControlChannel'
+                  - 'ssmmessages:OpenDataChannel' 
+                Resource: '*'
+              - Effect: Allow
+                Action: 
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:DeleteMessage'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:SendReply'
+                Resource: '*'
+              - Effect: Allow
+                Action: 
+                  - 's3:*'
+                Resource: '*'
+  EC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2Role
+  onpremssminterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref ONPREMSubnetPRIVATEA
+        - !Ref ONPREMSubnetPRIVATEB
+      SecurityGroupIds:
+        - !Ref ONPREMSecurityGroup
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !Ref ONPREMVPC
+  onpremssmec2messagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref ONPREMSubnetPRIVATEA
+        - !Ref ONPREMSubnetPRIVATEB
+      SecurityGroupIds:
+        - !Ref ONPREMSecurityGroup
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !Ref ONPREMVPC
+  onpremssmmessagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref ONPREMSubnetPRIVATEA
+        - !Ref ONPREMSubnetPRIVATEB
+      SecurityGroupIds:
+        - !Ref ONPREMSecurityGroup
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !Ref ONPREMVPC
+  onprems3endpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds:
+        - !Ref ONPREMRouteTablePrivate
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcId: !Ref ONPREMVPC
+  AWSDNSA4LCOM:
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      Name: 'aws.animals4life.org'
+      VPCs:
+        - VPCId: !Ref AWSVPC
+          VPCRegion: !Ref AWS::Region
+  AWSDNSA4LCOMWEB:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref AWSDNSA4LCOM
+      Name: web.aws.animals4life.org
+      Type: A
+      TTL: '60'
+      ResourceRecords:
+        - !GetAtt AWSEC2A.PrivateIp
+        - !GetAtt AWSEC2B.PrivateIp
+  AWSVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.16.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: a4l-aws
+  AWSSubnetPRIVATEA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref AWSVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.32.0/20
+      Tags:
+        - Key: Name
+          Value: sn-private-A
+  AWSRouteTablePrivate: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref AWSVPC
+      Tags:
+      - Key: Name
+        Value: A4L-AWS-RT
+  AWSSubnetPRIVATEB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref AWSVPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.96.0/20
+      Tags:
+        - Key: Name
+          Value: sn-private-B
+  AWSRouteTableAssociationPrivateA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref AWSSubnetPRIVATEA
+      RouteTableId: !Ref AWSRouteTablePrivate
+  AWSRouteTableAssociationPrivateB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref AWSSubnetPRIVATEB
+      RouteTableId: !Ref AWSRouteTablePrivate
+  AWSSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref AWSVPC
+      GroupDescription: Enable SSH and DNS
+      SecurityGroupIngress: 
+        - Description: 'Allow SSH IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow DNS IN'
+          IpProtocol: -1
+          FromPort: '53'
+          ToPort: '53'
+          CidrIp: '0.0.0.0/0'
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: '0.0.0.0/0'
+  AWSDefaultInstanceSecurityGroupSelfReferenceRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref AWSSecurityGroup
+      IpProtocol: 'tcp'
+      FromPort: '0'
+      ToPort: '65535'
+      SourceSecurityGroupId: !Ref AWSSecurityGroup
+  AWSEC2A:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - awsssminterfaceendpoint
+      - awsssmec2messagesinterfaceendpoint
+      - awsssmmessagesinterfaceendpoint
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref AWSSubnetPRIVATEA
+      SecurityGroupIds: 
+        - !Ref AWSSecurityGroup
+      Tags:
+        - Key: Name
+          Value: A4L-AWS-EC2-A
+  AWSEC2B:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - awsssminterfaceendpoint
+      - awsssmec2messagesinterfaceendpoint
+      - awsssmmessagesinterfaceendpoint
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref AWSSubnetPRIVATEB
+      SecurityGroupIds: 
+        - !Ref AWSSecurityGroup
+      Tags:
+        - Key: Name
+          Value: A4L-AWS-EC2-B
+  awsssminterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref AWSSubnetPRIVATEA
+        - !Ref AWSSubnetPRIVATEB
+      SecurityGroupIds:
+        - !Ref AWSSecurityGroup
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !Ref AWSVPC
+  awsssmec2messagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref AWSSubnetPRIVATEA
+        - !Ref AWSSubnetPRIVATEB
+      SecurityGroupIds:
+        - !Ref AWSSecurityGroup
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !Ref AWSVPC
+  awsssmmessagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref AWSSubnetPRIVATEA
+        - !Ref AWSSubnetPRIVATEB
+      SecurityGroupIds:
+        - !Ref AWSSecurityGroup
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !Ref AWSVPC
