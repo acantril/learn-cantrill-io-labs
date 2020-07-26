@@ -103,7 +103,7 @@ Initializing new seelog logger
 New Seelog Logger Creation Complete  
 2020-07-25 23:40:33 ERROR error while loading server info%!(EXTRA *errors.errorString=Failed to load instance info from vault. RegistrationKey does not exist.)  
 
-# Stage 3F - Install the agent on the A4L-UBUNTU server  
+# Stage 3F - Install the agent on the A4L-WINDOWS server  
 
 ** this is a pretty complex part ... it does work but ONLY if you have done all the steps above **  
 if any of this fails ... join https://techstudyslack.com and message `Adrian`  
