@@ -1,0 +1,74 @@
+Description:  Advanced Demo - AWS Systems Manager, this template MUST be used in us-east-1 and requires the PatchManagerBase template to be applied. Imports VPC, Subnet and AWSInstanceSG from the base template.
+Resources:
+  AWSVPCESSM:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !ImportValue AWSSNPRIVATE
+      SecurityGroupIds:
+        - !ImportValue AWSINSTANCESG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !ImportValue AWSVPC
+  AWSVPCEEC2Messages:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !ImportValue AWSSNPRIVATE
+      SecurityGroupIds:
+        - !ImportValue AWSINSTANCESG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !ImportValue AWSVPC
+  AWSVPCESSMMessages:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !ImportValue AWSSNPRIVATE
+      SecurityGroupIds:
+        - !ImportValue AWSINSTANCESG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !ImportValue AWSVPC
+  AWSVPCESEC2:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !ImportValue AWSSNPRIVATE
+      SecurityGroupIds:
+        - !ImportValue AWSINSTANCESG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2
+      VpcId: !ImportValue AWSVPC
+  AWSVPCES3:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds:
+        - !ImportValue AWSRTPRIVATE
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcId: !ImportValue AWSVPC
+  SSMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  SSMInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref SSMRole
