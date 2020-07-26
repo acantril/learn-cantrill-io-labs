@@ -11,4 +11,4 @@ The demo consists of 5 stages, each implementing additional components of the ar
 - Stage 4 - Configure Systems Manager Inventory & Patching
 - Stage 5 - Verify and Demo Teardown
 
-![end state architecture] (https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-patch-manager/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE4.png)
+![end state architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-patch-manager/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE4.png)
