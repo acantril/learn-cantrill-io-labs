@@ -2,7 +2,12 @@
 
 ![DEMOGRID](https://github.com/acantril/learn-cantrill-io-labs/raw/master/demogrid.png)
 
-Standard and Advanced Demos for http://learn.cantrill.io courses
+Welcome .. this repo stores a collection of freely available demos and advanced demos for AWS (and in the future other cloud platforms)
+These demos are avialable in two ways
+- here in text only form for free
+- as part of [LC](https://learn.cantrill.io) courses - including theory lessons and guided videos.
+
+The free versions here are fully functional, with instructions & architecture diagrams and are maintained by me.
 
 All demos have a structure ...
 - `01_LABSETUP` contains assets required for the DEMO
