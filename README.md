@@ -4,7 +4,7 @@
 
 Welcome .. this repo stores a collection of freely available demos and advanced demos for AWS (and in the future other cloud platforms)
 These demos are avialable in two ways
-- here in text only form for free
+- here in instruction & architecture diagram form for free
 - as part of [https://learn.cantrill.io](https://learn.cantrill.io) courses - including theory lessons and guided videos.
 
 The free versions here are fully functional, with instructions & architecture diagrams and are maintained by me.
