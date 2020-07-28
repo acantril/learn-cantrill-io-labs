@@ -1,4 +1,7 @@
 # learn-cantrill-io-labs
+
+![DEMOGRID](https://github.com/acantril/learn-cantrill-io-labs/raw/master/demogrid.png)
+
 Standard and Advanced Demos for http://learn.cantrill.io courses
 
 All demos have a structure ...
