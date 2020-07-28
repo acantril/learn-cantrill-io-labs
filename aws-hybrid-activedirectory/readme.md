@@ -19,7 +19,7 @@ The demo consists of 5 stages, each implementing additional components of the ar
 
 ## Instructions
 
-- [Stage1](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-activedirectory/02_LABINSTRUCTIONS/STAGE1%20-%20AWS%20and%20ONPREM%20Setup.md
+- [Stage1](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-activedirectory/02_LABINSTRUCTIONS/STAGE1%20-%20AWS%20and%20ONPREM%20Setup.md)
 - [Stage2](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-activedirectory/02_LABINSTRUCTIONS/STAGE2%20-%20Connect%20to%20the%20ONPREMISES%20Jumpbox.md)
 - [Stage3](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-activedirectory/02_LABINSTRUCTIONS/STAGE3%20-%20Create%20Managed%20Microsoft%20AD%20within%20AWS.md)
 - [Stage4](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-activedirectory/02_LABINSTRUCTIONS/STAGE4%20-%20Create%20Trust.md)
