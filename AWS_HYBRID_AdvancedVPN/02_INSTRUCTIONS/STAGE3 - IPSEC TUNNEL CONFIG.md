@@ -85,7 +85,7 @@ You can also check the connection in the AWS VPC Console ...the tunnels should b
 Move to EC2 Console  
 https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState  
 Click `Instances` on the left menu  
-Locate and select `ONPREM-ROUTER1`  
+Locate and select `ONPREM-ROUTER2`  
 Right Click => `Connect`  
 Select `Session Manager`  
 Click `Connect`  
