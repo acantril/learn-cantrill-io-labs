@@ -16,6 +16,7 @@ Select `Session Manager`
 Click `Connect`  
 
 First we will make the `FRR` script executable and run it to install BGP capability.  
+`cd /home/ubuntu/demo_assets` 
 `chmod +x ffrouting-install.sh`  
 `./ffrouting-install.sh`  
 ** This will take some time - 10-15 minutes **  
@@ -31,7 +32,8 @@ Right Click => `Connect`
 Select `Session Manager`  
 Click `Connect`  
 
-`chmod +x ffrouting-install.sh`  
+`cd /home/ubuntu/demo_assets`  
+`chmod +x ffrouting-install.sh`    
 `./ffrouting-install.sh`  
 
 # STAGE 4C - CONFIGURE BGP ROUTING FOR ONPREMISES-ROUTER1 AND TEST
