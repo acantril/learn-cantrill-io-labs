@@ -35,8 +35,8 @@ Click the Subnet dropdown and pick `sn-private-A`
 Leave the IP assignment as `Use an IP address that is selected automatically`  
 
 Scroll Down and find `IP address #2`
-Click `Availability Zone` dropdown and select `us-east-1a`  
-Click the Subnet dropdown and pick `sn-private-A`  
+Click `Availability Zone` dropdown and select `us-east-1b`  
+Click the Subnet dropdown and pick `sn-private-B`  
 Leave the IP assignment as `Use an IP address that is selected automatically`  
 
 Scroll down to the bottom  
