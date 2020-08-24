@@ -3,7 +3,7 @@
 ![Stage1 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE1%20-%20SINGLE%20SERVER%20MANUAL.png)
 
 In stage 1 of this advanced demo you will:
-- Setup the environment which wordpress will run from. 
+- Setup the environment which WordPress will run from. 
 - Configure some SSM Parameters which the manual and automatic stages of this advanced demo series will use
 - and perform a manual install of wordpress and a database on the same EC2 instance. 
 
@@ -11,9 +11,9 @@ This is the starting point .. the common wordpress configuration which you will 
 
 # STAGE 1A - Login to an AWS Account  
 
-Login to an AWS account using a user with admin privilages and ensure your region is set to `us-east-1` `N. Virginia`
+Login to an AWS account using a user with admin privileges and ensure your region is set to `us-east-1` `N. Virginia`
 
-Click [HERE](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-elastic-wordpress-evolution/A4LVPC.yaml&stackName=A4LVPC) to auto configure the VPC which wordpress will run from
+Click [HERE](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-elastic-wordpress-evolution/A4LVPC.yaml&stackName=A4LVPC) to auto configure the VPC which WordPress will run from
 
 Wait for the STACK to move into the `CREATE_COMPLETE` state before continuing.
 
@@ -93,7 +93,7 @@ Set Description to `Wordpress DB Password`
 Set Tier to `Standard`  
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
-Leacve `KMS Key ID` as default
+Leave `KMS Key ID` as default
 Set `Value` to your chosen database password (make sure its complex) Password1234!!
 Click `Create parameter`  
 
@@ -104,7 +104,7 @@ Set Description to `Wordpress DBRoot Password`
 Set Tier to `Standard`  
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
-Leacve `KMS Key ID` as default
+Leave `KMS Key ID` as default
 Set `Value` to your chosen database password (make sure its complex)
 Click `Create parameter`  
 
@@ -227,7 +227,7 @@ in `Site Title` enter `Catagram`
 in `Username` enter `admin`
 in `Password` it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own - regardless, write it down somewhere safe.  
 in `Your Email` enter your email address  
-Click `Install WOrdpress`
+Click `Install WordPress`
 Click `Log In`  
 In `Username or Email Address` enter `admin`  
 in `Password` enter the previously noted down strong password  
@@ -253,7 +253,7 @@ This is your working, manually installed and configured wordpress
 
 # STAGE 1 - FINISH  
 
-This configuration has several limitations whic you will resolve one by one within this lesson :-
+This configuration has several limitations which you will resolve one by one within this lesson :-
 
 - The application and database are built manually, taking time and not allowing automation
 - ^^ it was slow and annoying ... that was the intention.

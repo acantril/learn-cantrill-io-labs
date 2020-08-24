@@ -1,10 +1,10 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
-![Stage2 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE2%20-%20SINGLE%20SERVER%20LT.png)
+[Stage2 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE2%20-%20SINGLE%20SERVER%20LT.png)
 
-In stage 2 of this advanced demo lesson you are going to create a launch template which can automate the build of wordpress.  
-The architecture will still use the single instance for both the wordpress application and database, the only change will be an automatic build rather than manual.  
-Any level of automation/self-healing or scaling archieture will need a bootstrapped or AMI-baked build to function effectively.
+In stage 2 of this advanced demo lesson you are going to create a launch template which can automate the build of WordPress.  
+The architecture will still use the single instance for both the WordPress application and database, the only change will be an automatic build rather than manual.  
+Any level of automation/self-healing or scaling architecture will need a bootstrapped or AMI-baked build to function effectively.
 
 # STAGE 2A - Create the Launch Template
 
@@ -112,7 +112,7 @@ Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1
 Select the `Wordpress-LT` instance  
 copy the `IPv4 Public IP` into your clipboard  
 Open that IP in a new tab  
-You should see the wordpress welcome page  
+You should see the WordPress welcome page  
 
 ## Perform Initial COnfiguration and make a post
 
@@ -120,7 +120,7 @@ in `Site Title` enter `Catagram`
 in `Username` enter `admin`
 in `Password` it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own - regardless, write it down somewhere safe. 
 in `Your Email` enter your email address  
-Click `Install WOrdpress`
+Click `Install WordPress`
 Click `Log In`  
 In `Username or Email Address` enter `admin`  
 in `Password` enter the previously noted down strong password 
@@ -136,14 +136,14 @@ If you see any popups close them down
 For title `The Best Animal(s)!`  
 Click the `+` under the title, select  `Gallery` 
 Click `Upload`  
-Select some animal pictures.... if you dont have any use google images to download some  
+Select some animal pictures.... if you don't have any use google images to download some  
 Upload them  
 Click `Publish`  
 Click `Publish`
 Click `view Post`  
 
-This is your working, auto built wordpress instance
-** dont terminate the instance this time - we're going to migrate the database in stage 3**
+This is your working, auto built WordPress instance
+** don't terminate the instance this time - we're going to migrate the database in stage 3**
 
 # STAGE 2 - FINISH  
 
