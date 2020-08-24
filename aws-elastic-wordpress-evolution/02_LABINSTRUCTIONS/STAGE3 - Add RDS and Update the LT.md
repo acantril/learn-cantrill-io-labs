@@ -2,7 +2,8 @@
 
 ![Stage3 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE3%20-%20SPLIT%20OUT%20RDS.png)
 
-In stage 3
+In stage 3 you will be splitting out the database functionality from the EC2 instance .. running MariaDB to an RDS instance running the MySQL Engine.  
+This will allow the DB and Instance to scale independantly, and will allow the data to be secure past the lifetime of the EC2 instance.  
 
 # STAGE 3A - Create RDS Subnet Group
 
