@@ -57,7 +57,7 @@ Click `windows start button`
 Type `mstsc` or `remote desktop`  
 Open the application  
 connect to `Client` by entering the PrivateIP for `Client` you noted down above in the `computer` box  
-Username `Admin@ad.animals4life.com`  
+Username `Admin@ad.animals4life.org`  
 Password `YOUR_DOMAIN_ADMIN_PASSWORD`  
 Click `OK`  
 Answer `Yes` to ID/Certificate warning  
