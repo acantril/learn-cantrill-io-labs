@@ -14,7 +14,7 @@ The demo consists of 7 stages, each implementing additional components of the ar
 - Stage 6a - Optional .. move to Aurora and DB HA  
 - Stage 7 - Cleanup  
 
-![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-elastic-wordpress-evolution/ArchitectureEvolution.png)
+![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-elastic-wordpress-evolution/ArchitectureEvolutionAll.png)
 
 ## Instructions
 
