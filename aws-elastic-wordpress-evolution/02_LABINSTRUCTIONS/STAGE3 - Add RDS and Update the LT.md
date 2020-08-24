@@ -1,5 +1,7 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
+![Stage3 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE3%20-%20SPLIT%20OUT%20RDS.png)
+
 In stage 3
 
 # STAGE 3A - Create RDS Subnet Group

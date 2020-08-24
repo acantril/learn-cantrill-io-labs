@@ -1,5 +1,7 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
+![Stage5 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE5%20-%20ASG%20%26%20ALB.png)
+
 In stage 5 of this advanced demo lesson, you will be adding an auto scaling group to provision and terminate instances automatically based on load on the system.  
 
 You have already performed all of the preperation steps required, my moving data storage onto RDS, media storage onto EFS and created a launch template to automatically build the wordpress application servers.  

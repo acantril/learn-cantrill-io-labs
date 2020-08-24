@@ -1,5 +1,7 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
+![Stage2 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE2%20-%20SINGLE%20SERVER%20LT.png)
+
 In stage 2 of this advanced demo lesson you are going to create a launch template which can automate the build of wordpress.  
 The architecture will still use the single instance for both the wordpress application and database, the only change will be an automatic build rather than manual.  
 Any level of automation/self-healing or scaling archieture will need a bootstrapped or AMI-baked build to function effectively.

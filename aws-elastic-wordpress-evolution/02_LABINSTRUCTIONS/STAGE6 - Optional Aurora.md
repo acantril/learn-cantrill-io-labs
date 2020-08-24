@@ -1,5 +1,7 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
+![Stage6 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-elastic-wordpress-evolution/02_LABINSTRUCTIONS/STAGE6%20-%203AZ%20Aurora%20Cluster.png)
+
 In stage 6 of this advanced demo lesson, you can optionally move to a 3AZ aurora cluster to provide high levels of resilience for the wordpress application. This is entirely optional and will **NOT** be covered under the free tier.
 
 # STAGE 6A - SNAPSHOT THE RDS INSTANCE
