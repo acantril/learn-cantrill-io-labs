@@ -43,8 +43,8 @@ Scroll down and select `Free Tier` under templates
 _this ensures there will be no costs for the database but it will be single AZ only_
 
 under `Db instance identifier` enter `a4lWordPress`
-under `Master Username` enter enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/WordPress/DBUser/description?region=us-east-1&tab=Table  
-under `Master Password` and `Confirm Password` enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/WordPress/DBPassword/description?region=us-east-1&tab=Table  
+under `Master Username` enter enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBUser/description?region=us-east-1&tab=Table  
+under `Master Password` and `Confirm Password` enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBPassword/description?region=us-east-1&tab=Table  
 
 Under `DB Instance size`, then `DB instance class`, then `Burstable classes (includes t classes)` make sure db.t2.micro is selected  
 Scroll down, under `Connectivity`, `Virtual private cloud (VPC)` select `A4LVPC`  
@@ -54,7 +54,7 @@ Make sure `Publicly accessible` is set to `No`
 Under `Existing VPC security groups` add `A4LVPC-SG-Database` and remove `Default`  
 Under `Availability Zone` set `us-east-1a`  
 Scroll down and expand `Additional configuration`  
-in the `Initial database name` box enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/WordPress/DBName/description?region=us-east-1&tab=Table  
+in the `Initial database name` box enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBName/description?region=us-east-1&tab=Table  
 Scroll to the bottom and click `create Database`  
 
 ** this will take anywhere up to 30 minutes to create ... it will need to be fully ready before you move to the next step - coffee time !!!! **
@@ -74,19 +74,19 @@ You're going to do an export of the SQL database running on the local ec2 instan
 
 First run these commands to populate variables with the data from Parameter store, it avoids having to keep locating passwords  
 ```
-DBPassword=$(aws ssm get-parameters --region us-east-1 --names /A4L/WordPress/DBPassword --with-decryption --query Parameters[0].Value)
+DBPassword=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
 DBPassword=`echo $DBPassword | sed -e 's/^"//' -e 's/"$//'`
 
-DBRootPassword=$(aws ssm get-parameters --region us-east-1 --names /A4L/WordPress/DBRootPassword --with-decryption --query Parameters[0].Value)
+DBRootPassword=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBRootPassword --with-decryption --query Parameters[0].Value)
 DBRootPassword=`echo $DBRootPassword | sed -e 's/^"//' -e 's/"$//'`
 
-DBUser=$(aws ssm get-parameters --region us-east-1 --names /A4L/WordPress/DBUser --query Parameters[0].Value)
+DBUser=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBUser --query Parameters[0].Value)
 DBUser=`echo $DBUser | sed -e 's/^"//' -e 's/"$//'`
 
-DBName=$(aws ssm get-parameters --region us-east-1 --names /A4L/WordPress/DBName --query Parameters[0].Value)
+DBName=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBName --query Parameters[0].Value)
 DBName=`echo $DBName | sed -e 's/^"//' -e 's/"$//'`
 
-DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/WordPress/DBEndpoint --query Parameters[0].Value)
+DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBEndpoint --query Parameters[0].Value)
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 
 ```
@@ -106,10 +106,10 @@ Move to the RDS Console https://console.aws.amazon.com/rds/home?region=us-east-1
 Click the `a4lWordPressdb` instance  
 Copy the `endpoint` into your clipboard  
 Move to the Parameter store https://console.aws.amazon.com/systems-manager/parameters?region=us-east-1  
-Check the box next to `/A4L/WordPress/DBEndpoint` and click `Delete`
+Check the box next to `/A4L/Wordpress/DBEndpoint` and click `Delete`
 Click `Create Parameter`  
 
-Under `Name` enter `/A4L/WordPress/DBEndpoint`  
+Under `Name` enter `/A4L/Wordpress/DBEndpoint`  
 Under `Descripton` enter `WordPress Endpoint Name`  
 Under `Tier` select `Standard`    
 Under `Type` select `String`  
@@ -120,7 +120,7 @@ Click `Create Parameter`
 Update the DbEndpoint environment variable with 
 
 ```
-DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/WordPress/DBEndpoint --query Parameters[0].Value)
+DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBEndpoint --query Parameters[0].Value)
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 ```
 
