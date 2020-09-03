@@ -1,0 +1,238 @@
+
+AWSTemplateFormatVersion: 2010-09-09
+Description:  VPC + EFS + Lambda Demo (https://learn.cantrill.io courses)
+Metadata:
+  LICENSE: Apache License Version 2.0
+Parameters:
+  LatestAmiId:
+    Description: AMI for Instance (default is latest AmaLinux2)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.16.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: A4LVPC
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: A4L-IGW
+  EIPA:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+  EIPB:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+  InternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  NatGatewayA:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt EIPA.AllocationId
+      SubnetId: !Ref SNPUBA
+  NatGatewayB:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt EIPB.AllocationId
+      SubnetId: !Ref SNPUBB
+  RTPub: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: A4L-vpc-rt-pub
+  RTPrivA: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: A4L-vpc-rt-privA
+  RTPrivB: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: A4L-vpc-rt-privB
+  RTPubDefaultIPv4: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: RTPub
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: InternetGateway
+  RTPrivADefaultIPv4: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref RTPrivA
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId: !Ref NatGatewayA
+  RTPrivBDefaultIPv4: 
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref RTPrivB
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId: !Ref NatGatewayB
+  RTAssociationPubA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SNPUBA
+      RouteTableId:
+        Ref: RTPub
+  RTAssociationPubB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SNPUBB
+      RouteTableId:
+        Ref: RTPub
+  RTAssociationPrivA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SNAPPA
+      RouteTableId:
+        Ref: RTPrivA
+  RTAssociationPrivB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SNAPPB
+      RouteTableId:
+        Ref: RTPrivB
+  SNAPPA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.32.0/20
+      Tags:
+        - Key: Name
+          Value: sn-app-A
+  SNAPPB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.96.0/20
+      Tags:
+        - Key: Name
+          Value: sn-app-B
+  SNPUBA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.48.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sn-pub-A
+  SNPUBB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.112.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sn-pub-B
+  SGEC2:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Control access to EC2 Instance
+      SecurityGroupIngress: 
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+  SGEFS:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Control access to EFS
+      SecurityGroupIngress: 
+        - Description: 'Allow NFS/EFS IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '2049'
+          ToPort: '2049'
+          SourceSecurityGroupId: !Ref SGEC2
+  EC2EFSRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/AmazonElasticFileSystemClientFullAccess
+  EFSInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2EFSRole
+  LambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EFSInstanceProfile
+      SubnetId: !Ref SNPUBA
+      SecurityGroupIds: 
+        - !Ref SGEC2
+      Tags:
+        - Key: Name
+          Value: A4L-EFSInstance
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum -y update
+          yum -y install wget cowsay amazon-efs-utils
+          echo "#!/bin/sh" > /etc/update-motd.d/40-cow
+          echo 'cowsay "Amazon Linux 2 AMI - Animals4Life"' > /etc/update-motd.d/40-cow
+          chmod 755 /etc/update-motd.d/40-cow
+          rm /etc/update-motd.d/30-banner
+          update-motd
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource EC2Instance --region ${AWS::Region}
