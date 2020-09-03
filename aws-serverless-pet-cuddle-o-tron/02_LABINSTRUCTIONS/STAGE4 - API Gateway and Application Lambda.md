@@ -49,7 +49,7 @@ You need to locate the `YOUR_STATEMACHINE_ARN` placeholder and replace this with
 Click `Save` to save the lambda function and configuration.  
 At the top of the screen, click the `copy` icon to copy the `api_lambda` ARN down, and store it somewhere safe.  
 
-# STAGE 4B - CREATE API
+# STAGE 4C - CREATE API
 
 Now we have the api_lambda function created, the next step is to create the API Gateway, API and Method which the front end part of the serverless application will communicate with.  
 Move to the API Gateway console https://console.aws.amazon.com/apigateway/main/apis?region=us-east-1  
@@ -63,7 +63,7 @@ For `API name*` enter `petcuddleotron`
 for `Endpoint Type` pick `Regional` 
 Click `create API`  
 
-# STAGE 4C - CREATE RESOURCE
+# STAGE 4D - CREATE RESOURCE
 
 Click the `Actions` dropdown and Click `Create Resource`  
 Under resource name enter `petcuddleotron`  
@@ -73,7 +73,7 @@ This relaxes the restrictions on things calling on our API with a different DNS 
 **if you DONT check this box, the API will fail**  
 Click `Create Resource`  
 
-# STAGE 4D - CREATE METHOD
+# STAGE 4E - CREATE METHOD
 
 Ensure you have the `/petcuddleotron` resource selected, click `Actions` dropdown and click `create method`  
 In the small dropdown box which appears below `/petcuddleotron` select `POST` and click the `tick` symbol next to it.  
@@ -91,7 +91,7 @@ Click `Save`
 You may see a dialogue stating `You are about to give API Gateway permission to invoke your Lambda function:`. AWS is asking for your OK to adjust the `resource policy` on the lambda function to allow API Gateway to invoke it.  This is a different policy to the `execution role policy` which controls the permissions lambda gets.  
 
 
-# STAGE 4E - DEPLOY API  
+# STAGE 4F - DEPLOY API  
 
 Now the API, Resource and Method are configured - you now need to deploy the API out to API gateway, specifically an API Gateway STAGE.  
 Click `Actions` Dropdown and `Deploy API`  
