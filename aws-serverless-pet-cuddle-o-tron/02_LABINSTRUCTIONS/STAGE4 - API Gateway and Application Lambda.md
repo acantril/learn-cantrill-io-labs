@@ -67,10 +67,10 @@ Click `create API`
 
 Click the `Actions` dropdown and Click `Create Resource`  
 Under resource name enter `petcuddleotron`  
-make sure that `Configure as proxy resource` is **NOT** ticked - this forwards everything as is, through to a lambda function, becuase we want some control, we **DONT** want this ticked.  
+make sure that `Configure as proxy resource` is **NOT** ticked - this forwards everything as is, through to a lambda function, because we want some control, we **DONT** want this ticked.  
 Towards the bottom **MAKE SURE TO TICK** `Enable API Gateway CORS`.  
-This relaxes the restrictions on things calling on our API with a different DNS name, it allows the code loaded from the S3 bucket to call the API gateway endpoint.
-**if you DONT check this box, the API will fail**  
+This relaxes the restrictions on things calling on our API with a different DNS name, it allows the code loaded from the S3 bucket to call the API gateway endpoint.  
+**if you DONT check this box, the API will fail**   
 Click `Create Resource`  
 
 # STAGE 4E - CREATE METHOD
@@ -80,12 +80,12 @@ In the small dropdown box which appears below `/petcuddleotron` select `POST` an
 this method is what the front end part of the application will make calls to.  
 Its what the api_lambda will provide services for.  
 
-Ensure for `Integration Type` that `Lambda Function` is selected.
+Ensure for `Integration Type` that `Lambda Function` is selected.  
 Make sure `us-east-1` is selected for `Lambda Region`  
 In the `Lambda Function` box.. start typing `api_lambda` and it should autocomplete, click this auto complete (**Make sure you pick api_lambda and not email reminder lambda**)  
 
 Make sure that `Use Default Timeout` box **IS** ticked.  
-Make sure that `Use Lambda Proxy integration` box **IS** ticked, this makes sure that all of the information provided to this API is sent on to lambda for processing in the `event` data structure.
+Make sure that `Use Lambda Proxy integration` box **IS** ticked, this makes sure that all of the information provided to this API is sent on to lambda for processing in the `event` data structure.  
 **if you don't tick this box, the API will fail**  
 Click `Save`  
 You may see a dialogue stating `You are about to give API Gateway permission to invoke your Lambda function:`. AWS is asking for your OK to adjust the `resource policy` on the lambda function to allow API Gateway to invoke it.  This is a different policy to the `execution role policy` which controls the permissions lambda gets.  
@@ -99,13 +99,13 @@ For `Deployment Stage` select `New Stage`
 for stage name and stage description enter `prod`  
 Click `Deploy`  
 
-At the top of the screen will be an `Invoke URL` .. note this down somewhere safe, you will need it in the next STAGE.
+At the top of the screen will be an `Invoke URL` .. note this down somewhere safe, you will need it in the next STAGE.  
 This URL will be used by the client side component of the serverless application and this will be unique to you.    
 
 
 # STAGE 4 - FINISH
 
-At this point you have configured the last part of the AWS side of the serveless application.  
+At this point you have configured the last part of the AWS side of the serveless application.   
 You now have :-
 
 - SES Configured
