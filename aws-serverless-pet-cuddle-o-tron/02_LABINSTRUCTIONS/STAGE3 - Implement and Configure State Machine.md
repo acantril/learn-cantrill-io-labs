@@ -16,7 +16,7 @@ This advanced demo consists of 6 stages :-
 # STAGE 3A - CREATE STATE MACHINE ROLE
 In this stage of the demo you need to create an IAM role which the state machine will use to interact with other AWS services.  
 You could create this manually, but its easier to do this step using cloudformation to speed things up.  
-Click https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-serverless-pet-cuddle-o-tron/statemachinerole.yaml&stackName=SMROLE 
+Click https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-serverless-pet-cuddle-o-tron/statemachinerole.yaml&stackName=StateMachineRole 
 Check the `I acknowledge that AWS CloudFormation might create IAM resources.` box and then click `Create Stack`  
 
 Wait for the Stack to move into the `CREATE_COMPLETE` state before moving into the next 

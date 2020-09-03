@@ -19,13 +19,13 @@ This advanced demo consists of 6 stages :-
 In this stage of the demo you need to create an IAM role which the email_reminder_lambda will use to interact with other AWS services.  
 You could create this manually, but its easier to do this step using cloudformation to speed things up.  
 Click https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-serverless-pet-cuddle-o-tron/lambdarolecfn.yaml&stackName=LAMBDAROLE 
-Check the `I acknowledge that AWS CloudFormation might create IAM resources.` box and then click `Create Stack`  
+Check the `I acknowledge that AWS CloudFormation might create IAM resources.` box and then click `Create Stack`    
 
-Wait for the Stack to move into the `CREATE_COMPLETE` state before moving into the next 
+Wait for the Stack to move into the `CREATE_COMPLETE` state before moving into the next  
 
-Move to the IAM Console https://console.aws.amazon.com/iam/home?#/roles and review the execution role
-Notice that it provides SES, SNS and Logging permissions to whatever assumes this role.  
-This is what gives lambda the permissions to interact with those services  
+Move to the IAM Console https://console.aws.amazon.com/iam/home?#/roles and review the execution role  
+Notice that it provides SES, SNS and Logging permissions to whatever assumes this role.    
+This is what gives lambda the permissions to interact with those services    
 
 
 # STAGE 2B - Create the email_reminder_lambda function
@@ -69,13 +69,13 @@ def lambda_handler(event, context):
   
 ```
 
-This function will send an email to an address it's supplied with (by step functions) and it will be FROM the email address we specify.  
-Select `REPLACE_ME` and replace with the `PetCuddleOTron Sending Address` which you noted down in `STAGE1`  
-Click `Save` to configure the lambda function  
-Scroll all the way to the top, and click the `copy` icon next to the lambda function ARN.
-Note this ARN down somewhere same as the `email_reminder_lambda` ARN  
+This function will send an email to an address it's supplied with (by step functions) and it will be FROM the email address we specify.    
+Select `REPLACE_ME` and replace with the `PetCuddleOTron Sending Address` which you noted down in `STAGE1`    
+Click `Save` to configure the lambda function    
+Scroll all the way to the top, and click the `copy` icon next to the lambda function ARN.  
+Note this ARN down somewhere same as the `email_reminder_lambda` ARN    
 
 # STAGE 2 - FINISH   
 
-At this point you have configured the lambda function which will be used eventually to send emails on behalf of the serverless application.  
-You can go ahead and move onto stage 3 of the advanced demo.  
+At this point you have configured the lambda function which will be used eventually to send emails on behalf of the serverless application.    
+You can go ahead and move onto stage 3 of the advanced demo.   
