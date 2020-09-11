@@ -1,0 +1,270 @@
+Description:  ALB Session Stickiness Demo
+Parameters:
+  LatestAmiId:
+    Description: AMI for Instance (default is latest AmaLinux2)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  WebAsgMax:
+    AllowedPattern: ^([0-0]?[0-9]|10)$
+    ConstraintDescription: Must be a number between 1 and 30.
+    Default: 10
+    Description: Specifies the maximum number of EC2 instances in the Web Autoscaling Group.
+    Type: String
+  WebAsgMin:
+    AllowedPattern: ^([0-0]?[0-9]|10)$
+    ConstraintDescription: Must be a number between 0 and 10.
+    Default: 0
+    Description: Specifies the minimum number of EC2 instances in the Web Autoscaling Group.
+    Type: String
+  WebAsgDesired:
+    AllowedPattern: ^([0-0]?[0-9]|10)$
+    ConstraintDescription: Must be a number between 0 and 10.
+    Default: 6
+    Description: Specifies the Desired of EC2 instances in the Web Autoscaling Group.
+    Type: String    
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.16.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: vpc1
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: vpc1-igw
+  InternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  RouteTableWeb: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: vpc1-rt-web
+  RouteTableWebDefaultIPv4: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: RouteTableWeb
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: InternetGateway
+  SubnetPUBLICA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.48.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sn-public-A
+  SubnetPUBLICB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.112.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sn-public-B
+  SubnetPUBLICC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 2, !GetAZs '' ]
+      CidrBlock: 10.16.176.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sn-public-C
+  RouteTableAssociationPublicA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPUBLICA
+      RouteTableId:
+        Ref: RouteTableWeb
+  RouteTableAssociationPublicB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPUBLICB
+      RouteTableId:
+        Ref: RouteTableWeb
+  RouteTableAssociationPublicC:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPUBLICC
+      RouteTableId:
+        Ref: RouteTableWeb
+  SGWEB:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Control access to WEB Instance(s)
+      SecurityGroupIngress: 
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow WWW IN FROM ALB'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupId: !Ref SGLoadBalancer
+  SGLoadBalancer:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Control access to Load Balancer
+      SecurityGroupIngress: 
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+  WEBRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  WEBInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref WEBRole
+  WEBLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties: 
+      LaunchTemplateData: 
+        InstanceType: "t2.micro"
+        CreditSpecification:
+          CpuCredits: unlimited
+        ImageId: !Ref LatestAmiId
+        IamInstanceProfile: 
+          Name: !Ref WEBInstanceProfile
+        SecurityGroupIds: 
+          - !Ref SGWEB
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash -xe
+
+            # STEP 1 - Updates
+            yum -y update
+            
+            # STEP 2 - Begin Configuration
+            yum -y install httpd wget cowsay curl python3 pip3
+            amazon-linux-extras install -y php7.2
+            amazon-linux-extras install epel -y
+            yum install stress -y
+            pip3 install random-cat
+            systemctl enable httpd
+            systemctl start httpd
+
+            # STEP 2 - Custom Random Web Page
+            bgcolor=$(printf "%02x%02x%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
+            instanceId=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+            wget -O /var/www/html/cat.gif "http://thecatapi.com/api/images/get?format=src&type=gif&api_key=8f7dc437-0b9b-47b8-a2c0-65925d593acf"
+            echo "<html><head></head><body style=\"background-color:#$bgcolor;\">" >> /var/www/html/index.html
+            echo "<center><h1>Instance ID : $instanceId</h1></center><br>" >> /var/www/html/index.html
+            echo "<center><img src=\"cat.gif\"></center>" >> /var/www/html/index.html
+            echo "</body></html>" >> /var/www/html/index.html
+
+            # Step 4 - permissions 
+            usermod -a -G apache ec2-user   
+            chown -R ec2-user:apache /var/www
+            chmod 2775 /var/www
+            find /var/www -type d -exec chmod 2775 {} \;
+            find /var/www -type f -exec chmod 0664 {} \;
+
+            # STEP 5 COWSAY
+            echo "#!/bin/sh" > /etc/update-motd.d/40-cow
+            echo 'cowsay "Amazon Linux 2 AMI - Animals4Life"' > /etc/update-motd.d/40-cow
+            chmod 755 /etc/update-motd.d/40-cow
+            rm /etc/update-motd.d/30-banner
+            update-motd
+  ASG: 
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties: 
+      VPCZoneIdentifier:
+        - !Ref SubnetPUBLICA
+        - !Ref SubnetPUBLICB
+        - !Ref SubnetPUBLICC
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WEBLaunchTemplate
+        Version: "1"
+      MaxSize: !Ref WebAsgMax
+      MinSize: !Ref WebAsgMin
+      DesiredCapacity: !Ref WebAsgDesired
+      Tags:
+        - Key: "Name"
+          Value: "CATWEB"
+          PropagateAtLaunch: true
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      TargetGroupARNs:
+        - !Ref ALBTG
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: "ipv4"
+      Scheme: "internet-facing"
+      SecurityGroups: 
+        - !Ref SGLoadBalancer
+      Subnets: 
+        - !Ref SubnetPUBLICA
+        - !Ref SubnetPUBLICB
+        - !Ref SubnetPUBLICC
+      Tags: 
+        - Key: Name
+          Value: !Join [ '', [ 'ALB-', !Ref 'AWS::StackName' ] ]
+      Type: "application"
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALBTG
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+  ALBTG:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /index.html
+      HealthCheckTimeoutSeconds: 5
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: !Ref VPC
+      TargetGroupAttributes:
+        - Key: stickiness.enabled 
+          Value: false
+Outputs:
+  ALBURL:
+    Description: The Load Balancer URL
+    Value: !Sub 'http://${ALB.DNSName}' 
+
