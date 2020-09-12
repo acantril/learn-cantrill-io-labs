@@ -41,27 +41,27 @@ Resources:
     Type: 'AWS::EC2::NatGateway'
     Properties:
       AllocationId: !GetAtt EIPA.AllocationId
-      SubnetId: !Ref SNPUBA
+      SubnetId: !Ref SubnetPUBLICA
   NatGatewayB:
     Type: 'AWS::EC2::NatGateway'
     Properties:
       AllocationId: !GetAtt EIPB.AllocationId
-      SubnetId: !Ref SNPUBB
-  RTPub: 
+      SubnetId: !Ref SubnetPUBLICB
+  RTPublic: 
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref VPC
       Tags:
       - Key: Name
         Value: A4L-vpc-rt-pub
-  RTPrivA: 
+  RTPrivateA: 
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref VPC
       Tags:
       - Key: Name
         Value: A4L-vpc-rt-privA
-  RTPrivB: 
+  RTPrivateB: 
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref VPC
@@ -73,65 +73,47 @@ Resources:
     DependsOn: InternetGatewayAttachment
     Properties:
       RouteTableId:
-        Ref: RTPub
+        Ref: RTPublic
       DestinationCidrBlock: '0.0.0.0/0'
       GatewayId:
         Ref: InternetGateway
   RTPrivADefaultIPv4: 
     Type: 'AWS::EC2::Route'
     Properties:
-      RouteTableId: !Ref RTPrivA
+      RouteTableId: !Ref RTPrivateA
       DestinationCidrBlock: '0.0.0.0/0'
       NatGatewayId: !Ref NatGatewayA
   RTPrivBDefaultIPv4: 
     Type: 'AWS::EC2::Route'
     Properties:
-      RouteTableId: !Ref RTPrivB
+      RouteTableId: !Ref RTPrivateB
       DestinationCidrBlock: '0.0.0.0/0'
       NatGatewayId: !Ref NatGatewayB
   RTAssociationPubA:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref SNPUBA
+      SubnetId: !Ref SubnetPUBLICA
       RouteTableId:
-        Ref: RTPub
+        Ref: RTPublic
   RTAssociationPubB:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref SNPUBB
+      SubnetId: !Ref SubnetPUBLICB
       RouteTableId:
-        Ref: RTPub
+        Ref: RTPublic
   RTAssociationPrivA:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref SNAPPA
+      SubnetId: !Ref SubnetPRIVATEA
       RouteTableId:
-        Ref: RTPrivA
+        Ref: RTPrivateA
   RTAssociationPrivB:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref SNAPPB
+      SubnetId: !Ref SubnetPRIVATEB
       RouteTableId:
-        Ref: RTPrivB
-  SNAPPA:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      CidrBlock: 10.16.32.0/20
-      Tags:
-        - Key: Name
-          Value: sn-app-A
-  SNAPPB:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
-      CidrBlock: 10.16.96.0/20
-      Tags:
-        - Key: Name
-          Value: sn-app-B
-  SNPUBA:
+        Ref: RTPrivateB
+  SubnetPUBLICA:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
@@ -140,8 +122,8 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: sn-pub-A
-  SNPUBB:
+          Value: sn-public-A
+  SubnetPUBLICB:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
@@ -150,8 +132,26 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: sn-pub-B
-  SGEC2:
+          Value: sn-public-B
+  SubnetPRIVATEA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.32.0/20
+      Tags:
+        - Key: Name
+          Value: sn-private-A
+  SubnetPRIVATEB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.96.0/20
+      Tags:
+        - Key: Name
+          Value: sn-private-B
+  SGWEB:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       VpcId: !Ref VPC
@@ -172,8 +172,8 @@ Resources:
           IpProtocol: tcp
           FromPort: '2049'
           ToPort: '2049'
-          SourceSecurityGroupId: !Ref SGEC2
-  EC2EFSRole:
+          SourceSecurityGroupId: !Ref SGWEB
+  WEBRole:
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
@@ -189,12 +189,12 @@ Resources:
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
         - arn:aws:iam::aws:policy/AmazonElasticFileSystemClientFullAccess
-  EFSInstanceProfile:
+  WEBInstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
       Path: /
       Roles:
-        - !Ref EC2EFSRole
+        - !Ref WEBRole
   LambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -210,29 +210,196 @@ Resources:
       Path: /
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-  EC2Instance:
+        - arn:aws:iam::aws:policy/AmazonElasticFileSystemClientFullAccess
+  EC2InstanceA:
     Type: AWS::EC2::Instance
+    DependsOn: ["ElasticFileSystemMountTarget0", "ElasticFileSystemMountTarget1"]
     CreationPolicy:
       ResourceSignal:
         Timeout: PT15M
     Properties:
       InstanceType: "t2.micro"
       ImageId: !Ref LatestAmiId
-      IamInstanceProfile: !Ref EFSInstanceProfile
-      SubnetId: !Ref SNPUBA
+      IamInstanceProfile: !Ref WEBInstanceProfile
+      SubnetId: !Ref SubnetPUBLICA
       SecurityGroupIds: 
-        - !Ref SGEC2
+        - !Ref SGWEB
       Tags:
         - Key: Name
-          Value: A4L-EFSInstance
+          Value: WEBA
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
+
+          # STEP 1 - Updates
           yum -y update
-          yum -y install wget cowsay amazon-efs-utils
+          
+          # STEP 2 - Begin Configuration
+          yum -y install httpd wget cowsay curl python3 pip3 amazon-efs-utils
+          amazon-linux-extras install -y php7.2
+          amazon-linux-extras install epel -y
+          yum install stress -y
+          pip3 install random-cat
+          systemctl enable httpd
+          systemctl start httpd
+
+          # STEP 3 - Custom Random Web Page
+          bgcolor=$(printf "%02x%02x%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
+          instanceId=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+          wget -O /var/www/html/cat.gif "http://thecatapi.com/api/images/get?format=src&type=gif&api_key=8f7dc437-0b9b-47b8-a2c0-65925d593acf"
+
+          cat <<'EOF' > /var/www/html/index.php
+          <html>
+          <head>
+          </head><body style="background-color:#1395c0;">
+          <center><h1>The Cat'EFS'est Cat Gallery</h1></center><br>
+          <center><table>
+          <?php
+          $dirname = "images/";
+          $images = glob($dirname."*.png");
+          $i = 0;
+          echo '<tr>';
+          foreach($images as $image) {
+            if ($i < 3) {
+              echo '<td><center><img src="'.$image.'" width="300"  /></td>';
+              $i++;
+            } elseif ($i ==3) {
+              echo '</tr><tr>';
+              $i = 0;
+            }
+          }
+          echo '</tr>';
+          ?>
+          </table></center>
+          </body></html>
+          EOF
+
+          sleep 120
+
+          # STEP 4 - Mount EFS
+          mkdir -p /var/www/html/images
+          chown -R ec2-user:apache /var/www/
+          echo -e "${ElasticFileSystem}:/ /var/www/html/images efs _netdev,tls,iam 0 0" >> /etc/fstab
+          mount -a -t efs defaults
+
+          # Step 5 - permissions 
+          usermod -a -G apache ec2-user   
+          chown -R ec2-user:apache /var/www
+          chmod 2775 /var/www
+          find /var/www -type d -exec chmod 2775 {} \;
+          find /var/www -type f -exec chmod 0664 {} \;
+
+          # STEP 6 COWSAY
           echo "#!/bin/sh" > /etc/update-motd.d/40-cow
           echo 'cowsay "Amazon Linux 2 AMI - Animals4Life"' > /etc/update-motd.d/40-cow
           chmod 755 /etc/update-motd.d/40-cow
           rm /etc/update-motd.d/30-banner
           update-motd
-          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource EC2Instance --region ${AWS::Region}
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource EC2InstanceA --region ${AWS::Region}
+  EC2InstanceB:
+    Type: AWS::EC2::Instance
+    DependsOn: ["ElasticFileSystemMountTarget0", "ElasticFileSystemMountTarget1"]
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref WEBInstanceProfile
+      SubnetId: !Ref SubnetPUBLICB
+      SecurityGroupIds: 
+        - !Ref SGWEB
+      Tags:
+        - Key: Name
+          Value: WEBB
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+
+          # STEP 1 - Updates
+          yum -y update
+          
+          # STEP 2 - Begin Configuration
+          yum -y install httpd wget cowsay curl python3 pip3 amazon-efs-utils
+          amazon-linux-extras install -y php7.2
+          amazon-linux-extras install epel -y
+          yum install stress -y
+          pip3 install random-cat
+          systemctl enable httpd
+          systemctl start httpd
+
+          # STEP 3 - Custom Random Web Page
+          bgcolor=$(printf "%02x%02x%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
+          instanceId=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+          wget -O /var/www/html/cat.gif "http://thecatapi.com/api/images/get?format=src&type=gif&api_key=8f7dc437-0b9b-47b8-a2c0-65925d593acf"
+
+          cat <<'EOF' > /var/www/html/index.php
+          <html>
+          <head>
+          </head><body style="background-color:#1395c0;">
+          <center><h1>The Cat'EFS'est Cat Gallery</h1></center><br>
+          <center><table>
+          <?php
+          $dirname = "images/";
+          $images = glob($dirname."*.png");
+          $i = 0;
+          echo '<tr>';
+          foreach($images as $image) {
+            if ($i < 3) {
+              echo '<td><center><img src="'.$image.'" width="300"  /></td>';
+              $i++;
+            } elseif ($i ==3) {
+              echo '</tr><tr>';
+              $i = 0;
+            }
+          }
+          echo '</tr>';
+          ?>
+          </table></center>
+          </body></html>
+          EOF
+
+
+          sleep 120
+
+          # STEP 4 - Mount EFS
+
+          mkdir -p /var/www/html/images
+          chown -R ec2-user:apache /var/www/
+          echo -e "${ElasticFileSystem}:/ /var/www/html/images efs _netdev,tls,iam 0 0" >> /etc/fstab
+          mount -a -t efs defaults
+
+          # Step 5 - permissions 
+          usermod -a -G apache ec2-user   
+          chown -R ec2-user:apache /var/www
+          chmod 2775 /var/www
+          find /var/www -type d -exec chmod 2775 {} \;
+          find /var/www -type f -exec chmod 0664 {} \;
+
+          # STEP 6 COWSAY
+          echo "#!/bin/sh" > /etc/update-motd.d/40-cow
+          echo 'cowsay "Amazon Linux 2 AMI - Animals4Life"' > /etc/update-motd.d/40-cow
+          chmod 755 /etc/update-motd.d/40-cow
+          rm /etc/update-motd.d/30-banner
+          update-motd
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource EC2InstanceB --region ${AWS::Region}
+  ElasticFileSystem:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      FileSystemTags:
+        - Key: Name
+          Value: !Join [ '', [ 'EFS / ', !Ref 'AWS::StackName' ] ]
+  ElasticFileSystemMountTarget0:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref ElasticFileSystem
+      SecurityGroups:
+        - !Ref SGEFS
+      SubnetId: !Ref SubnetPUBLICA
+  ElasticFileSystemMountTarget1:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref ElasticFileSystem
+      SecurityGroups:
+        - !Ref SGEFS
+      SubnetId: !Ref SubnetPUBLICB
