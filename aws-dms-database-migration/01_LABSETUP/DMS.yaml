@@ -1,0 +1,340 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description:  Migrating a Database with DMS (https://learn.cantrill.io courses)
+Metadata:
+  LICENSE: Apache License Version 2.0
+Parameters:
+  LatestAmiId:
+    Description: AMI for Instance (default is latest AmaLinux2)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  DBName:
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric
+      characters.
+    Default: a4lwordpress
+    Description: The WordPress database name
+    MaxLength: '64'
+    MinLength: '1'
+    Type: String
+  DBPassword:
+    AllowedPattern: '^[A-Za-z][a-zA-Z0-9@%$_-]{8,41}$'
+    ConstraintDescription: must contain only alphanumeric characters.
+    Description: The WordPress database admin account password
+    MaxLength: '41'
+    MinLength: '8'
+    Default: 'cats-dogs-rabbits-chickens'
+    Type: String
+  DBRootPassword:
+    AllowedPattern: '^[A-Za-z][a-zA-Z0-9@%$_-]{8,41}$'
+    ConstraintDescription: must contain only alphanumeric characters.
+    Description: MySQL root password
+    Default: 'cats-dogs-rabbits-chickens'
+    MaxLength: '41'
+    MinLength: '8'
+    Type: String
+  DBUser:
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric
+      characters.
+    Description: The WordPress database admin account username
+    Default: a4lwordpress
+    MaxLength: '16'
+    MinLength: '1'
+    Type: String
+Resources:
+  onpremVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 192.168.10.0/24
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: onpremVPC
+  onpremInternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: onpremIGW
+  onpremInternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref onpremVPC
+      InternetGatewayId: !Ref onpremInternetGateway
+  onpremPublicRouteTable: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref onpremVPC
+      Tags:
+      - Key: Name
+        Value: onpremPublicRT
+  onpremDefaultV4Route: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: onpremInternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: onpremPublicRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: onpremInternetGateway
+  onpremPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref onpremVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.10.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: onprem-public
+  onpremPublicRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref onpremPublicSubnet
+      RouteTableId:
+        Ref: onpremPublicRouteTable
+  onpremSecurityGroupWeb:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref onpremVPC
+      GroupDescription: Control access to the Web EC2 Instance
+      SecurityGroupIngress: 
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+  onpremSecurityGroupDB:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref onpremVPC
+      GroupDescription: Control access to the DB EC2 Instance
+      SecurityGroupIngress: 
+        - Description: 'Allow MySQL IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          CidrIp: '0.0.0.0/0'
+  onpremRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  onpremInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref onpremRole
+  onpremCatWeb:
+    Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: "ami-0bf6ba120443f8e1f"
+      IamInstanceProfile: !Ref onpremInstanceProfile
+      SubnetId: !Ref onpremPublicSubnet
+      SecurityGroupIds: 
+        - !Ref onpremSecurityGroupWeb
+      Tags:
+        - Key: Name
+          Value: CatWeb
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          # Configure Wordpress
+          cd /var/www/html
+          cp ./wp-config-sample.php ./wp-config.php
+          sed -i "s/'localhost'/'${onpremCatDB.PrivateIp}'/g" wp-config.php
+          sed -i "s/'database_name_here'/'${DBName}'/g" wp-config.php
+          sed -i "s/'username_here'/'${DBUser}'/g" wp-config.php
+          sed -i "s/'password_here'/'${DBPassword}'/g" wp-config.php
+
+          /home/ec2-user/update_wp_ip.sh
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource onpremCatWeb --region ${AWS::Region}
+  onpremCatDB:
+    Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: "ami-0319a571f9ff661d7"
+      IamInstanceProfile: !Ref onpremInstanceProfile
+      SubnetId: !Ref onpremPublicSubnet
+      SecurityGroupIds: 
+        - !Ref onpremSecurityGroupDB
+      Tags:
+        - Key: Name
+          Value: CatDB
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource onpremCatDB --region ${AWS::Region}
+  awsVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.16.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: awsVPC
+  awsInternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: awsIGW
+  awsInternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref awsVPC
+      InternetGatewayId: !Ref awsInternetGateway
+  awsPublicRouteTable: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref awsVPC
+      Tags:
+      - Key: Name
+        Value: awsPublicRT
+  awsPrivateRouteTable: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref awsVPC
+      Tags:
+      - Key: Name
+        Value: awsPrivateRT
+  awsDefaultV4Route: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: awsInternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: awsPublicRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: awsInternetGateway
+  awsPublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref awsVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.48.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: aws-publicA
+  awsPublicSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref awsVPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.112.0/20
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: aws-publicB
+  awsPrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref awsVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.32.0/20
+      Tags:
+        - Key: Name
+          Value: aws-privateA
+  awsPrivateSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref awsVPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.96.0/20
+      Tags:
+        - Key: Name
+          Value: aws-privateB
+  awsPublicARouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref awsPublicSubnetA
+      RouteTableId:
+        Ref: awsPublicRouteTable
+  awsPublicBRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref awsPublicSubnetB
+      RouteTableId:
+        Ref: awsPublicRouteTable
+  awsPrivateARouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref awsPrivateSubnetA
+      RouteTableId:
+        Ref: awsPrivateRouteTable
+  awsPrivateBRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref awsPrivateSubnetB
+      RouteTableId:
+        Ref: awsPrivateRouteTable
+  awsSecurityGroupWeb:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref awsVPC
+      GroupDescription: Control access to the Web EC2 Instance
+      SecurityGroupIngress: 
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow SSH IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+  awsSecurityGroupDB:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref awsVPC
+      GroupDescription: Control access to the DB EC2 Instance
+      SecurityGroupIngress: 
+        - Description: 'Allow MySQL IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          CidrIp: '0.0.0.0/0'
+  awsRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  awsInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref awsRole
+  

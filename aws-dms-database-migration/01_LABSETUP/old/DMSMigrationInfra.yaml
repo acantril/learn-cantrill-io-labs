@@ -1,0 +1,234 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description:  Migrating a Database with DMS (https://learn.cantrill.io courses)
+Metadata:
+  LICENSE: Apache License Version 2.0
+Parameters:
+  LatestAmiId:
+    Description: AMI for Instance (default is latest AmaLinux2)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  DBName:
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric
+      characters.
+    Default: a4lwordpress
+    Description: The WordPress database name
+    MaxLength: '64'
+    MinLength: '1'
+    Type: String
+  DBPassword:
+    AllowedPattern: '^[A-Za-z][a-zA-Z0-9@%$_-]{8,41}$'
+    ConstraintDescription: must contain only alphanumeric characters.
+    Description: The WordPress database admin account password
+    MaxLength: '41'
+    MinLength: '8'
+    Default: 'cats-dogs-rabbits-chickens'
+    Type: String
+  DBRootPassword:
+    AllowedPattern: '^[A-Za-z][a-zA-Z0-9@%$_-]{8,41}$'
+    ConstraintDescription: must contain only alphanumeric characters.
+    Description: MySQL root password
+    Default: 'cats-dogs-rabbits-chickens'
+    MaxLength: '41'
+    MinLength: '8'
+    Type: String
+  DBUser:
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric
+      characters.
+    Description: The WordPress database admin account username
+    Default: a4lwordpress
+    MaxLength: '16'
+    MinLength: '1'
+    Type: String
+Resources:
+  onpremVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 192.168.10.0/24
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: onpremVPC
+  onpremInternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: onpremIGW
+  onpremInternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref onpremVPC
+      InternetGatewayId: !Ref onpremInternetGateway
+  onpremPublicRouteTable: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref onpremVPC
+      Tags:
+      - Key: Name
+        Value: onpremPublicRT
+  onpremDefaultV4Route: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: onpremInternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: onpremPublicRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: onpremInternetGateway
+  onpremPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref onpremVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.10.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: onprem-public
+  onpremPublicRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref onpremPublicSubnet
+      RouteTableId:
+        Ref: onpremPublicRouteTable
+  onpremSecurityGroupWeb:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref onpremVPC
+      GroupDescription: Control access to the Web EC2 Instance
+      SecurityGroupIngress: 
+        - Description: 'Allow HTTP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+  onpremSecurityGroupDB:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref onpremVPC
+      GroupDescription: Control access to the DB EC2 Instance
+      SecurityGroupIngress: 
+        - Description: 'Allow MySQL IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          CidrIp: '0.0.0.0/0'
+  onpremRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  onpremInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref onpremRole
+  onpremCatWeb:
+    Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref onpremInstanceProfile
+      SubnetId: !Ref onpremPublicSubnet
+      SecurityGroupIds: 
+        - !Ref onpremSecurityGroupWeb
+      Tags:
+        - Key: Name
+          Value: CatWeb
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          # STEP 1 - Updates
+          yum -y update
+          # STEP 2 - Begin Configuration
+          yum -y install httpd wget cowsay curl python3 pip3 amazon-efs-utils mariadb-server
+          amazon-linux-extras install -y php7.2
+          amazon-linux-extras install epel -y
+          systemctl enable httpd
+          systemctl start httpd
+          # STEP 3 - Download and install wordpress
+          wget http://wordpress.org/latest.tar.gz -P /var/www/html
+          cd /var/www/html
+          tar -zxvf latest.tar.gz
+          cp -rvf wordpress/* .
+          rm -R wordpress
+          rm latest.tar.gz
+          # STEP 4 - Configure Wordpress
+          cp ./wp-config-sample.php ./wp-config.php
+          sed -i "s/'localhost'/'${onpremCatDB.PrivateIp}'/g" wp-config.php
+          sed -i "s/'database_name_here'/'${DBName}'/g" wp-config.php
+          sed -i "s/'username_here'/'${DBUser}'/g" wp-config.php
+          sed -i "s/'password_here'/'${DBPassword}'/g" wp-config.php
+          # Step 5 - permissions 
+          usermod -a -G apache ec2-user   
+          chown -R ec2-user:apache /var/www
+          chmod 2775 /var/www
+          find /var/www -type d -exec chmod 2775 {} \;
+          find /var/www -type f -exec chmod 0664 {} \;
+          # STEP 6 - COWSAY
+          echo "#!/bin/sh" > /etc/update-motd.d/40-cow
+          echo 'cowsay "Animals4life ON-PREMISES WEB"' > /etc/update-motd.d/40-cow
+          chmod 755 /etc/update-motd.d/40-cow
+          rm /etc/update-motd.d/30-banner
+          update-motd
+          # STEP 7 - Create update_wp_id.sh file
+          # STEP 8 - Signal CFN That we're done
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource onpremCatWeb --region ${AWS::Region}
+  onpremCatDB:
+    Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref onpremInstanceProfile
+      SubnetId: !Ref onpremPublicSubnet
+      SecurityGroupIds: 
+        - !Ref onpremSecurityGroupDB
+      Tags:
+        - Key: Name
+          Value: CatDB
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          # STEP 1 - Updates
+          yum -y update
+          # STEP 2 - Begin Configuration
+          yum -y install mariadb-server wget cowsay
+          systemctl enable mariadb
+          systemctl start mariadb
+          # STEP 4 - DB Setup
+          echo "CREATE DATABASE ${DBName};" >> /tmp/db.setup
+          echo "CREATE USER '${DBUser}' IDENTIFIED BY '${DBPassword}';" >> /tmp/db.setup
+          echo "GRANT ALL PRIVILEGES ON *.* TO '${DBUser}'@'%';" >> /tmp/db.setup
+          echo "FLUSH PRIVILEGES;" >> /tmp/db.setup
+          mysqladmin -u root password "${DBRootPassword}"
+          mysql -u root --password="${DBRootPassword}" < /tmp/db.setup
+          rm /tmp/db.setup
+          # STEP 5 - COWSAY
+          echo "#!/bin/sh" > /etc/update-motd.d/40-cow
+          echo 'cowsay "Animals4life ON-PREMISES DB"' > /etc/update-motd.d/40-cow
+          chmod 755 /etc/update-motd.d/40-cow
+          rm /etc/update-motd.d/30-banner
+          update-motd
+          # STEP 6 - Signal CFN That we're done
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource onpremCatDB --region ${AWS::Region}
+  
