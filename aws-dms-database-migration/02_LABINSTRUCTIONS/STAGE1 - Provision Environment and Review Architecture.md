@@ -4,8 +4,6 @@ In this advanced demo you will be migrating a simple web application (wordpress)
 The on-premises environment is a virtual web server (simulated using EC2) and a self-managed mariaDB database server (also simulated via EC2)  
 You will be migrating this into AWS and running the architecture on an EC2 webserver and RDS managed SQL database.  
 
-Architecture Link : INSERT THE LINK HERE
-
 This advanced demo consists of 6 stages :-
 
 - STAGE 1 : Provision the environment and review tasks **<= THIS STAGE**

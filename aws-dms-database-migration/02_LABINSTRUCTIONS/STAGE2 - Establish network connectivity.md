@@ -67,6 +67,8 @@ Click `Close`
 
 # STAGE 2 - FINISH   
 
-
+At this point you have created the peering connection between the VPCs and the gateway objects within each VPC.  
+you have also configured routing from ONPremises -> AWS and vice-versa.  
+In stage 3 you will use this architecture to begin a migration.  
 
 
