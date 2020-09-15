@@ -14,6 +14,8 @@ This advanced demo consists of 6 stages :-
 - STAGE 4 : Migrate Database & Cutover **<= THIS STAGE**
 - STAGE 5 : Cleanup the account
 
+![StageArchitecture](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-dms-database-migration/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE4.png)
+
 # STAGE 4A - CREATE THE DMS SUBNET GROUP
 
 https://console.aws.amazon.com/dms/v2/home?region=us-east-1#subnetGroup  

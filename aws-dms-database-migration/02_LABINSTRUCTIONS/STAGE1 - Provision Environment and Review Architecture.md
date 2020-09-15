@@ -14,6 +14,8 @@ This advanced demo consists of 6 stages :-
 - STAGE 4 : Migrate Database & Cutover
 - STAGE 5 : Cleanup the account
 
+![StageArchitecture](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-dms-database-migration/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE1.png)
+
 # STAGE 1A - Infrastructure Creation
 
 Click https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-dms-database-migration/DMS.yaml&stackName=DMS to apply the base lab infrastructure  

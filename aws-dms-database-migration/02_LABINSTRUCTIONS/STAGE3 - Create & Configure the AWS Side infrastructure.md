@@ -14,6 +14,8 @@ This advanced demo consists of 6 stages :-
 - STAGE 4 : Migrate Database & Cutover
 - STAGE 5 : Cleanup the account
 
+![StageArchitecture](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-dms-database-migration/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE3.png)
+
 # STAGE 3A - CREATE THE RDS INSTANCE
 
 Move to the RDS Console https://console.aws.amazon.com/rds/home?region=us-east-1  

@@ -14,6 +14,8 @@ This advanced demo consists of 6 stages :-
 - STAGE 4 : Migrate Database & Cutover
 - STAGE 5 : Cleanup the account
 
+![StageArchitecture](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-dms-database-migration/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE2.png)
+
 # STAGE 2A - Create a VPC peer between On-Premises and AWS
 
 Move to the VPC Console https://console.aws.amazon.com/vpc/home?region=us-east-1#  
