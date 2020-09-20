@@ -12,15 +12,25 @@ This advanced demo consists of 6 stages :-
 - STAGE 4 : Update App Bucket & Test Application 
 - STAGE 5 : Cleanup the account **<= THIS STAGE**
 
-![Stage1 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-cognito-web-identity-federation/02_LABINSTRUCTIONS/thinghere.png)
-
-
 # STAGE 5A - Delete the Google API Project & Credentials
+https://console.developers.google.com/cloud-resource-manager 
+Select `PetIDF` and click `DELETE`  
+Type `PetIDF` click `Shut Down`  
+
 
 # STAGE 5B - Delete the Cognito ID Pool
 
-# STAGE 5C - Delete the CloudFormation Stack
+# STAGE 5c - Delete the IAM Roles
+Move to the IAM Console https://console.aws.amazon.com/iam/home?region=us-east-1#/home  
+Select `Roles`  
+Select both `Cognito_PetIDF*` roles  
+Click `Delete Role`  
+Click `Yes Delete`  
 
+
+# STAGE 5C - Delete the CloudFormation Stack
+Move to the cloud formation console https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks?filteringText=&filteringStatus=active&viewNested=true&hideStacks=false  
+Select `WEBIDF`, click `Delete` then `Delete Stack`  
 
 # STAGE 5 - FINISH  
 

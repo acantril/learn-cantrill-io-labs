@@ -35,10 +35,10 @@ Replace this with YOUR CLIENT ID
 Save `index.html`  
 
 Open the local copy of `scripts.js` in a code editor.   
-Locate the `AWS.config.region = 'XX-XXXX-X';` placeholder    
-Replace `XX-XXXX-X` with `us-east-1`    
 Locate the IdentityPoolId: `IdentityPoolId: 'XX-XXXX-X:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'` placeholder    
 Replace the `XXXXX` part with your IDENTITY POOL ID you noted down in the previous step  
+Locate the `Bucket: "REPLACE_ME_PRIVATE_PATCHES_BUCKET" ` placeholder.  
+Replace `REPLACE_ME_PRIVATE_PATCHES_BUCKET` with with bucket name of the `webidf-patchesprivatebucket-` bucket
 Save `scripts.js`  
 
 # STAGE 4C - Upload files
