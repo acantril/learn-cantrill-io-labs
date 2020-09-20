@@ -25,7 +25,7 @@ This advanced demo consists of 6 stages :-
 Any application that uses OAuth 2.0 to access Google APIs must have authorization credentials that identify the application to Google's OAuth 2.0 server  
 In this stage we need to create those authorization credentials.  
 
-You will need a valid google login, gmail will do.  
+You will need a valid google login, GMAIL will do.  
 If you don't have one, you will need to create one as part of this process.  
 Move to the Google Credentials page https://console.developers.google.com/apis/credentials    
 Either sign in, or create a google account  

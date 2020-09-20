@@ -42,7 +42,7 @@ Click `Properties Tab`
 Click `Static Website Hosting`  
 Verify this is enabled  
 
-Note down the `Endpoint` you will need later.  
+Note down the `Endpoint` as the `APP BUCKET ENDPOINT` you will need later.  
 
 # STAGE 1C - Verify privatebucket
 Open the bucket starting `webidf-patchesprivatebucket-`  
