@@ -37,7 +37,7 @@ For project name enter `PetIDF`
 Click `Create`    
 
 # STAGE 2B - Configure Consent Screen  
-
+Click `Credentials`  
 Click `CONFIGURE CONSENT SCREEN`    
 because our application will be usable by any google user, we have to select external users  
 Check the box next to `External` and click `CREATE`  
