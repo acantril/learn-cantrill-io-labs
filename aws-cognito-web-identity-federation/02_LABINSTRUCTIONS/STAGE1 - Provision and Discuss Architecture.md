@@ -51,10 +51,12 @@ Verify there is no bucket policy and the bucket is entirely private.
 
 
 # STAGE 1 - FINISH  
+At this stage you have the base infrastructure in place including:-
 
 - front end app bucket
 - privatepatches bucket  
 
+In stage 2 you will create a google API project which will be the `ID Provider` for this serverless application.  
 
 
 
