@@ -1,0 +1,203 @@
+Description: learn.cantrill.io WEBIDF Demo
+Parameters:
+  labss3contentbucket:
+    Description: Bucket for labs s3 content
+    Type: String
+    Default: cl-labs-s3content
+  labss3contentprefix:
+    Description: Bucket for labs s3 content
+    Type: String
+    Default: aws-cognito-web-identity-federation/appbucket
+Resources:
+  patchesprivatebucket:
+    Type: AWS::S3::Bucket
+    Properties:
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ['*']
+              AllowedMethods: ['GET', 'HEAD']
+              AllowedOrigins: ['*']
+  appbucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref appbucket
+                - /*
+      Bucket: !Ref appbucket
+  copyserverlessapp:
+    Type: "Custom::S3Objects"
+    Properties:
+      ServiceToken: !GetAtt CopyS3ObjectsFunction.Arn
+      SourceBucket: "cl-labs-s3content"
+      SourcePrefix: "aws-cognito-web-identity-federation/appbucket"
+      Bucket: !Ref appbucket
+  copypatches:
+    Type: "Custom::S3Objects"
+    Properties:
+      ServiceToken: !GetAtt CopyS3ObjectsFunction.Arn
+      SourceBucket: "cl-labs-s3content"
+      SourcePrefix: "aws-cognito-web-identity-federation/patches"
+      Bucket: !Ref patchesprivatebucket
+  CopyS3ObjectsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Copies objects into buckets
+      Handler: index.handler
+      Runtime: python2.7
+      Role: !GetAtt S3CopyRole.Arn
+      Timeout: 120
+      Code:
+        ZipFile: |
+          import os 
+          import json
+          import cfnresponse
+          import boto3
+          import logging
+
+          from botocore.exceptions import ClientError
+          client = boto3.client('s3')
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          def handler(event, context):
+            logger.info("Received event: %s" % json.dumps(event))
+            source_bucket = event['ResourceProperties']['SourceBucket']
+            source_prefix = event['ResourceProperties'].get('SourcePrefix') or ''
+            bucket = event['ResourceProperties']['Bucket']
+            prefix = event['ResourceProperties'].get('Prefix') or ''
+
+            result = cfnresponse.SUCCESS
+
+            try:
+              if event['RequestType'] == 'Create' or event['RequestType'] == 'Update':
+                result = copy_objects(source_bucket, source_prefix, bucket, prefix)
+              elif event['RequestType'] == 'Delete':
+                result = delete_objects(bucket, prefix)
+            except ClientError as e:
+              logger.error('Error: %s', e)
+              result = cfnresponse.FAILED
+
+            cfnresponse.send(event, context, result, {})
+
+          def copy_objects(source_bucket, source_prefix, bucket, prefix):
+            paginator = client.get_paginator('list_objects_v2')
+            page_iterator = paginator.paginate(Bucket=source_bucket, Prefix=source_prefix)
+            for key in {x['Key'] for page in page_iterator for x in page['Contents']}:
+              dest_key = os.path.join(prefix, os.path.relpath(key, source_prefix))
+              if not key.endswith('/'):
+                print 'copy {} to {}'.format(key, dest_key)
+                client.copy_object(CopySource={'Bucket': source_bucket, 'Key': key}, Bucket=bucket, Key = dest_key)
+            return cfnresponse.SUCCESS
+
+          def delete_objects(bucket, prefix):
+            paginator = client.get_paginator('list_objects_v2')
+            page_iterator = paginator.paginate(Bucket=bucket, Prefix=prefix)
+            objects = [{'Key': x['Key']} for page in page_iterator for x in page['Contents']]
+            client.delete_objects(Bucket=bucket, Delete={'Objects': objects})
+            return cfnresponse.SUCCESS
+  S3CopyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        -
+          PolicyName: S3Access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Sid: AllowLogging
+                Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+              -
+                Sid: ReadFromLCBucket
+                Effect: Allow
+                Action:
+                  - "s3:ListBucket"
+                  - "s3:GetObject"
+                Resource:
+                  - !Sub "arn:aws:s3:::${labss3contentbucket}"
+                  - !Sub "arn:aws:s3:::${labss3contentbucket}/*"
+              -
+                Sid: WriteToStudentBuckets
+                Effect: Allow
+                Action:
+                  - "s3:ListBucket"
+                  - "s3:GetObject"
+                  - "s3:PutObject"
+                  - "s3:PutObjectAcl"
+                  - "s3:PutObjectVersionAcl"
+                  - "s3:DeleteObject"
+                  - "s3:DeleteObjectVersion"
+                  - "s3:CopyObject"
+                Resource:
+                  - !Sub "arn:aws:s3:::${appbucket}"
+                  - !Sub "arn:aws:s3:::${appbucket}/*"
+                  - !Sub "arn:aws:s3:::${patchesprivatebucket}"
+                  - !Sub "arn:aws:s3:::${patchesprivatebucket}/*"
+  privatepatchespolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Permissions to List contents of the privatepatches bucket
+      ManagedPolicyName: "PrivatePatchesPermissions"
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - 
+            Sid: ReadFromLCBucket
+            Effect: Allow
+            Action:
+              - "s3:ListBucket"
+              - "s3:GetObject"
+            Resource:
+              - !Sub "arn:aws:s3:::${patchesprivatebucket}"
+              - !Sub "arn:aws:s3:::${patchesprivatebucket}/*"           
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt 
+      - appbucket
+      - WebsiteURL
+    Description: URL for website hosted on S3
+  S3BucketSecureURL:
+    Value: !Join 
+      - ''
+      - - 'https://'
+        - !GetAtt 
+          - appbucket
+          - DomainName
+    Description: app bucket URL

@@ -105,19 +105,19 @@ You will use this to copy the wordpress data across to the awsCatWeb machine fro
 
 run a `nano /etc/ssh/sshd_config`  
 locate `PasswordAuthentication no` and change to `PasswordAuthentication yes` , then `ctrl+o` to save and `ctrl+x` to exit.  
-the set a password on the ec2-user user
+then set a password on the ec2-user user  
 run a `passwd ec2-user` and enter the `DBPassword` you noted down at the start of the demo.  
 **this is only temporary.. we're using the same password throughout the demo to make things easier and less prone to mistakes**
 
 restart SSHD to make those changes with `service sshd restart`  
 
 
-Return back to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:
+Return back to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:  
 with the `awsCatWeb` instance selected, note down its `Private IPV4 Address` you will need this in a moment.  
 
 Select the `CatWeb` instance, right click, `Connect`  
 Select `Session Manager` and click `Connect`  
-When connected type `sudo bash` to run a privileged bash shell
+When connected type `sudo bash` to run a privileged bash shell  
 
 move to the webroot folder by typing `cd /var/www/`  
 

@@ -1,0 +1,19 @@
+<html lang="en">
+  <title>| COGNITO-IDP-AUTH |</title>
+  <head>
+    <meta name="author" content="sebolabs">
+    <meta name="google-signin-scope" content="profile email">
+    <!-- Google Client ID -->
+    <meta name="google-signin-client_id" content="XXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.2.19.min.js"></script>
+    <script src="scripts.js"></script>
+  </head>
+  <body>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <p />
+    <button onclick="onSignOut()">Sign out</button>
+    <p />
+    <div id="output"></div>
+  </body>
+</html>
