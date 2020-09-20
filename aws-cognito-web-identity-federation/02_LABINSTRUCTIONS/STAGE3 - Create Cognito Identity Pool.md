@@ -1,75 +1,75 @@
 # Advanced Demo - Web Identity Federation
 
-In this advanced demo series you will be implementing a simple serverless application which uses Web Identity Federation.  
-The application runs using the following technologies
+In this advanced demo series you will be implementing a simple serverless application which uses Web Identity Federation.   
+The application runs using the following technologies  
 
-- S3 for front-end application hosting
-- Google API Project as an ID Provider
-- Cognito and IAM Roles to swap Google Token for AWS credentials
+- S3 for front-end application hosting  
+- Google API Project as an ID Provider  
+- Cognito and IAM Roles to swap Google Token for AWS credentials  
 
-The application runs from a browser, gets the user to login using a Google ID and then loads all images from a private S3 bucket into a browser using presignedURLs.
+The application runs from a browser, gets the user to login using a Google ID and then loads all images from a private S3 bucket into a browser using presignedURLs.  
 
-This advanced demo consists of 6 stages :-
+This advanced demo consists of 6 stages :-  
 
-- STAGE 1 : Provision the environment and review tasks 
-- STAGE 2 : Create Google API Project & Client ID
-- STAGE 3 : Create Cognito Identity Pool **<= THIS STAGE**
-- STAGE 4 : Update App Bucket & Test Application
-- STAGE 5 : Cleanup the account
+- STAGE 1 : Provision the environment and review tasks   
+- STAGE 2 : Create Google API Project & Client ID  
+- STAGE 3 : Create Cognito Identity Pool **<= THIS STAGE**  
+- STAGE 4 : Update App Bucket & Test Application  
+- STAGE 5 : Cleanup the account  
 
-![Stage3 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-cognito-web-identity-federation/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE3.png)
+![Stage3 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-cognito-web-identity-federation/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE3.png)  
 
 
-# STAGE 3A - CREATE A COGNITO IDENTITY POOL
+# STAGE 3A - CREATE A COGNITO IDENTITY POOL  
 
-Move to the Cognito Console https://console.aws.amazon.com/cognito/home?region=us-east-1#  
-Click `Manage Identity Pools`  
-Under `Create new identity pool`  
-In `Identity pool name` enter `PetIDFIDPool`  
-Expand `Authentication Providers` and click on `Google+`  
-In the `Google Client ID` box, enter the Google Client ID you noted down in the previous step.
-Click `Create Pool`  
+Move to the Cognito Console https://console.aws.amazon.com/cognito/home?region=us-east-1#    
+Click `Manage Identity Pools`   
+Under `Create new identity pool`   
+In `Identity pool name` enter `PetIDFIDPool`   
+Expand `Authentication Providers` and click on `Google+`   
+In the `Google Client ID` box, enter the Google Client ID you noted down in the previous step.  
+Click `Create Pool`   
 
-# STAGE 3B - Permissions
+# STAGE 3B - Permissions  
 
-Expand `View Details`  
-This is going to create two IAM roles
-One for `Your authenticated identities` and another for your `Your unauthenticated identities`  
-For now, we're just going to click on `Allow` we can review the roles later.  
+Expand `View Details`    
+This is going to create two IAM roles  
+One for `Your authenticated identities` and another for your `Your unauthenticated identities`    
+For now, we're just going to click on `Allow` we can review the roles later.    
 
-You will be presented with your `Identity Pool ID`, note this down, you will need it later. 
+You will be presented with your `Identity Pool ID`, note this down, you will need it later.   
 
-# STAGE 3C - Adjust Permissions
+# STAGE 3C - Adjust Permissions  
 
-The serverless application is going to read images out of a private bucket created by the initial cloudformation template.  
-The bucket is called `patchesprivatebucket`  
-Move to the IAM Console https://console.aws.amazon.com/iam/home?region=us-east-1#/home  
-Click `Roles`  
+The serverless application is going to read images out of a private bucket created by the initial cloudformation template.    
+The bucket is called `patchesprivatebucket`    
+Move to the IAM Console https://console.aws.amazon.com/iam/home?region=us-east-1#/home    
+Click `Roles`   
 Locate and click on `Cognito_PetIDFIDPoolAuth_Role`  
 Click on `Trust Relationships`  
-See how this is assumable by `cognito-identity.amazonaws.com`
-With two conditions
-- `StringEquals` `cognito-identity.amazonaws.com:aud` `your congnito ID pool`
-- `ForAnyValue:StringLike` `cognito-identity.amazonaws.com:amr` `authenticated`
-This means to assume this role - you have to be authenticated by one of the ID providers defined in the cognito ID pool.  
+See how this is assumable by `cognito-identity.amazonaws.com`  
+With two conditions  
+- `StringEquals` `cognito-identity.amazonaws.com:aud` `your congnito ID pool`  
+- `ForAnyValue:StringLike` `cognito-identity.amazonaws.com:amr` `authenticated`  
+This means to assume this role - you have to be authenticated by one of the ID providers defined in the cognito ID pool.    
 
-When you use WEDIDF with congnito, this role is assumed on your behalf by cognito, and its what generates temporary AWS credentials which are used to access AWS resources.  
+When you use WEDIDF with cognito, this role is assumed on your behalf by cognito, and its what generates temporary AWS credentials which are used to access AWS resources.  
 
-Click `permissions` .. this defines what these credentials can do.
+Click `permissions` .. this defines what these credentials can do.  
 
-The cloudformation template created a managed policy which can access the `privatepatches` bucket
-Click `Attach Policies`  
-Type `PrivatePatches` in the search box
-Check the box next to `PrivatePatchesPermissions` and click `Attach Policy`  
+The cloudformation template created a managed policy which can access the `privatepatches` bucket  
+Click `Attach Policies`   
+Type `PrivatePatches` in the search box  
+Check the box next to `PrivatePatchesPermissions` and click `Attach Policy`    
 
 
-# STAGE 3 - FINISH  
+# STAGE 3 - FINISH    
 
-- template front end app bucket
-- Configured Google API Project
-- Credentials to access it
-- Cognito ID Pool
-- IAM Roles for the ID Pool
+- template front end app bucket  
+- Configured Google API Project  
+- Credentials to access it  
+- Cognito ID Pool  
+- IAM Roles for the ID Pool  
 
 
 
