@@ -181,7 +181,7 @@ For `Take the action` choose `Add` `1` Capacity units
 Click `Create`
 
 
-## SCALEIN when CPU usage on averaga ie below 40%
+## SCALEIN when CPU usage on average ie below 40%
 
 Click `Add Policy`  
 For policy `type` select `Simple scaling`  
@@ -198,10 +198,6 @@ Click `Next`
 Enter `WordpressLOWCPU` in `Alarm Name`  
 Click `Next`  
 Click `Create Alarm`  
-Go back to the AutoScalingGroup tab and click the `Refresh SYmbol` next to Cloudwatch Alarm  
-Click the dropdown and select `WordpressLOWCPU`  
-For `Take the action` choose `Add` `1` Capacity units  
-Click `Create`
 Go back to the AutoScalingGroup tab and click the `Refresh SYmbol` next to Cloudwatch Alarm  
 Click the dropdown and select `WordpressLOWCPU`  
 For `Take the action` choose `Remove` `1` Capacity units  
