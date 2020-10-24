@@ -47,6 +47,7 @@ It accepts some information from you, via API Gateway and then it starts a state
 
 You need to locate the `YOUR_STATEMACHINE_ARN` placeholder and replace this with the State Machine ARN you noted down in the previous step.  
 Click `Save` to save the lambda function and configuration.  
+(IF YOU HAVE THE NEW LAMBDA UI, THERE WILL BE A `DEPLOY` BUTTON , CLICK THAT).  
 At the top of the screen, click the `copy` icon to copy the `api_lambda` ARN down, and store it somewhere safe.  
 
 # STAGE 4C - CREATE API
