@@ -93,5 +93,8 @@ sudo sed -i "/net.ipv6.conf.all.forwarding=1/ cnet.ipv6.conf.all.forwarding=1" /
 sudo sed -i "/bgpd=no/ cbgpd=yes" /etc/frr/daemons
 sudo sed -i "/bgpd_options=\"   -A 127.0.0.1\"/ cbgpd_options=\"   -A 127.0.0.1 -M rpki\"" /etc/frr/daemons
 
+# Allow FRR to write PID files
+sudo chmod 740 /var/run/frr
+
 # Start FRR
 sudo systemctl start frr
