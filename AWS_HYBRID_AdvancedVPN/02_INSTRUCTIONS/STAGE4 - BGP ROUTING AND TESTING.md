@@ -57,6 +57,8 @@ Click `Connect`
 
 `sudo reboot`  
 
+`ONPREM-ROUTER1` once back will now be functioning as both an IPSEC endpoint and a BGP endpoint. It will be exchanging routes with the transit gateway in AWS.  
+
 Locate and select `ONPREM-ROUTER1`  
 Right Click => `Connect`  
 Select `Session Manager`  
@@ -109,6 +111,8 @@ run `ping IP_ADDRESS_OF_ONPREM-SERVER1`
 `exit`  
 
 `sudo reboot`  
+
+`ONPREM-ROUTER2` once back will now be functioning as both an IPSEC endpoint and a BGP endpoint. It will be exchanging routes with the transit gateway in AWS.  
 
 
 Locate and select `ONPREM-ROUTER1`  
