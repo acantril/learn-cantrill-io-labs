@@ -17,8 +17,8 @@ Click `Connect`
 
 First we will make the `FRR` script executable and run it to install BGP capability.  
 `sudo bash`  
-`cd /home/ubuntu/demo_assets` 
-`chmod +x ffrouting-install.sh`  
+`cd /home/ubuntu/demo_assets`   
+`chmod +x ffrouting-install.sh`   
 `./ffrouting-install.sh`  
 ** This will take some time - 10-15 minutes **  
 ** We can allow this to run, and start the same process on the other Router **  
@@ -35,7 +35,7 @@ Click `Connect`
 
 `sudo bash`  
 `cd /home/ubuntu/demo_assets`  
-`chmod +x ffrouting-install.sh`    
+`chmod +x ffrouting-install.sh`     
 `./ffrouting-install.sh`  
 
 # STAGE 4C - CONFIGURE BGP ROUTING FOR ONPREMISES-ROUTER1 AND TEST
