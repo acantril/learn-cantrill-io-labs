@@ -62,11 +62,11 @@ Right Click => `Connect`
 Select `Session Manager`  
 Click `Connect`  
 
-`sudo bash`. 
+`sudo bash`  
 `sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a workaround until i fix a bug).   
 
 
-SHOW THE ROUTES VIA THE UI  `route`. 
+SHOW THE ROUTES VIA THE UI `route`   
 SHOW THE ROUTES VIA `vtysh`  
 `show ip route`. 
 
@@ -116,13 +116,13 @@ Right Click => `Connect`
 Select `Session Manager`  
 Click `Connect`  
 
-`sudo bash`. 
-`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a workaround until i fix a bug).   
+`sudo bash`  
+`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a workaround until i fix a bug)     
 
 
-SHOW THE ROUTES VIA THE UI  `route`. 
+SHOW THE ROUTES VIA THE UI  `route`  
 SHOW THE ROUTES VIA `vtysh`  
-`show ip route`. 
+`show ip route`  
 
 
 Move to EC2 Console  
