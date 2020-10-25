@@ -16,7 +16,7 @@ Select `Session Manager`
 Click `Connect`  
 
 First we will make the `FRR` script executable and run it to install BGP capability.  
-`sudo bash`
+`sudo bash`  
 `cd /home/ubuntu/demo_assets` 
 `chmod +x ffrouting-install.sh`  
 `./ffrouting-install.sh`  
@@ -33,7 +33,7 @@ Right Click => `Connect`
 Select `Session Manager`  
 Click `Connect`  
 
-`sudo bash`
+`sudo bash`  
 `cd /home/ubuntu/demo_assets`  
 `chmod +x ffrouting-install.sh`    
 `./ffrouting-install.sh`  
