@@ -24,7 +24,7 @@ Click `create file system`
 
 Wait for the FSx File system to finish creating.  
 
-# STAGE 5B - VERIFY IT WORKS FROM JUMPBOX-AWS 
+# STAGE 5B - VERIFY IT WORKS FROM JUMPBOX-ONPREMISES 
 Once FSx has completed provisioning and the file system is in an 'available' state  
 Open the file system  
 Copy down the `DNS Name` of the file system  
