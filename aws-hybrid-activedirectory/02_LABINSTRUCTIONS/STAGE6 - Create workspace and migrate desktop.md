@@ -1,7 +1,7 @@
 # Advanced Hybrid Directory Demo
 
 # STAGE 6A - CREATE WORKSPACES 
-open https://console.aws.amazon.com/workspaces/home?region=us-east-1#listworkspaces:  
+open [workspaces console](https://console.aws.amazon.com/workspaces/home?region=us-east-1#listworkspaces:)  
 
 Click `Launch Workspaces`  
 Set `Directory` to `aws.animals4life.org`  
