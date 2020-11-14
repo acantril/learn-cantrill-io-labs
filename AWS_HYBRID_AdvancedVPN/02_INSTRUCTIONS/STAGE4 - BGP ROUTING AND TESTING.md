@@ -16,8 +16,9 @@ Select `Session Manager`
 Click `Connect`  
 
 First we will make the `FRR` script executable and run it to install BGP capability.  
-`cd /home/ubuntu/demo_assets` 
-`chmod +x ffrouting-install.sh`  
+`sudo bash`  
+`cd /home/ubuntu/demo_assets`   
+`chmod +x ffrouting-install.sh`   
 `./ffrouting-install.sh`  
 ** This will take some time - 10-15 minutes **  
 ** We can allow this to run, and start the same process on the other Router **  
@@ -32,8 +33,9 @@ Right Click => `Connect`
 Select `Session Manager`  
 Click `Connect`  
 
+`sudo bash`  
 `cd /home/ubuntu/demo_assets`  
-`chmod +x ffrouting-install.sh`    
+`chmod +x ffrouting-install.sh`     
 `./ffrouting-install.sh`  
 
 # STAGE 4C - CONFIGURE BGP ROUTING FOR ONPREMISES-ROUTER1 AND TEST
@@ -55,8 +57,20 @@ Click `Connect`
 
 `sudo reboot`  
 
-SHOW THE ROUTES VIA THE UI  
+`ONPREM-ROUTER1` once back will now be functioning as both an IPSEC endpoint and a BGP endpoint. It will be exchanging routes with the transit gateway in AWS.  
+
+Locate and select `ONPREM-ROUTER1`  
+Right Click => `Connect`  
+Select `Session Manager`  
+Click `Connect`  
+
+`sudo bash`  
+`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a very temp workaround until i fix a bug - FRR won't start all daemons because the /var/run/frr is created with 640 permissions.. it needs to be 740).   
+
+
+SHOW THE ROUTES VIA THE UI `route`   
 SHOW THE ROUTES VIA `vtysh`  
+`show ip route`. 
 
 Move to EC2 Console  
 https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState  
@@ -98,8 +112,22 @@ run `ping IP_ADDRESS_OF_ONPREM-SERVER1`
 
 `sudo reboot`  
 
-SHOW THE ROUTES VIA THE UI  
+`ONPREM-ROUTER2` once back will now be functioning as both an IPSEC endpoint and a BGP endpoint. It will be exchanging routes with the transit gateway in AWS.  
+
+
+Locate and select `ONPREM-ROUTER1`  
+Right Click => `Connect`  
+Select `Session Manager`  
+Click `Connect`  
+
+`sudo bash`  
+`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a very temp workaround until i fix a bug - FRR won't start all daemons because the /var/run/frr is created with 640 permissions.. it needs to be 740).      
+
+
+SHOW THE ROUTES VIA THE UI  `route`  
 SHOW THE ROUTES VIA `vtysh`  
+`show ip route`  
+
 
 Move to EC2 Console  
 https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState  

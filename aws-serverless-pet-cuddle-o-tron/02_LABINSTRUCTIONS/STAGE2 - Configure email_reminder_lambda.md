@@ -72,6 +72,7 @@ def lambda_handler(event, context):
 This function will send an email to an address it's supplied with (by step functions) and it will be FROM the email address we specify.    
 Select `REPLACE_ME` and replace with the `PetCuddleOTron Sending Address` which you noted down in `STAGE1`    
 Click `Save` to configure the lambda function    
+(IF YOU HAVE THE NEW LAMBDA UI, THERE WILL BE A `DEPLOY` BUTTON , CLICK THAT).  
 Scroll all the way to the top, and click the `copy` icon next to the lambda function ARN.  
 Note this ARN down somewhere same as the `email_reminder_lambda` ARN    
 
