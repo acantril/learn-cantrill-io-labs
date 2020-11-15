@@ -76,6 +76,12 @@ There are four main mistakes which you can make in stage 4
 
 ### api_lamdbda placeholder
 
+Within the api_lambda code is a placeholder. The original code has a line as below :-
+```
+SM_ARN = 'YOUR_STATEMACHINE_ARN'
+```
+The `YOUR_STATEMACHINE_ARN` needs to be replaced with the ARN of the `PetCuddleOTron` Statemachine created in Stage 3.  
+
 ### Configure as proxy resource
 
 ### Enable API Gateway CORS
