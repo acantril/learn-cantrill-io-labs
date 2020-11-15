@@ -84,9 +84,15 @@ The `YOUR_STATEMACHINE_ARN` needs to be replaced with the ARN of the `PetCuddleO
 
 ### Configure as proxy resource
 
+
+
 ### Enable API Gateway CORS
 
 ### Use Lambda Proxy integration
+
+### Wrong Invoke URL
+
+
 
 
 ## STAGE5
