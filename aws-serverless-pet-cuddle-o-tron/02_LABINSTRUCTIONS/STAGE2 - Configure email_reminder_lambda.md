@@ -36,7 +36,7 @@ Click on `Create Function`
 Select `Author from scratch`  
 For `Function name` enter `email_reminder_lambda`  
 and for runtime click the dropdown and pick `Python 3.8`  
-Expand `Choose or create an execution role`  
+Expand `Change default execution role`  
 Pick to `Use an existing Role`  
 Click the `Existing Role` dropdown and pick `LambdaRole` (there will be randomness and thats ok)  
 Click `Create Function`  
@@ -71,8 +71,7 @@ def lambda_handler(event, context):
 
 This function will send an email to an address it's supplied with (by step functions) and it will be FROM the email address we specify.    
 Select `REPLACE_ME` and replace with the `PetCuddleOTron Sending Address` which you noted down in `STAGE1`    
-Click `Save` to configure the lambda function    
-(IF YOU HAVE THE NEW LAMBDA UI, THERE WILL BE A `DEPLOY` BUTTON , CLICK THAT).  
+Click `Deploy` to configure the lambda function    
 Scroll all the way to the top, and click the `copy` icon next to the lambda function ARN.  
 Note this ARN down somewhere same as the `email_reminder_lambda` ARN    
 
