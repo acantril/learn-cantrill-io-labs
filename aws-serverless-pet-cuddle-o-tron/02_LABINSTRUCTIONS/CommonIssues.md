@@ -21,9 +21,54 @@ If you don't do this, emails will never arrive when sent by the application.
 
 ### Deploying the `email_reminder_lambda` function
 
-After pasting the lambda function code, and updating the above placeholder you **need** to click `Deploy` to ensure the Lambda Function is deployed ready for use.  
+After pasting the lambda function code, and updating the above placeholder you **need** to click `Deploy` to ensure the Lambda Function is deployed ready for use. If you don't deploy, the generic `Hello World` lambda function will run and emails wont be sent.  
 
 ## STAGE3
+
+In Stage3 there are two placeholders you need to replace in the ASL for the `PetCuddleOTron` State Machine.  
+
+inside here :-
+
+```
+    "EmailOnly": {
+      "Type" : "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "EMAIL_LAMBDA_ARN",
+        "Payload": {
+          "Input.$": "$"
+        }
+      },
+      "Next": "NextState"
+    },
+```
+
+You need to replace `EMAIL_LAMBDA_ARN` with the ARN of the `email_reminder_lambda` Lambda function.  
+**AND**
+inside here :-
+```
+    "EmailandSMS": {
+      "Type": "Parallel",
+      "Branches": [
+        {
+          "StartAt": "ParallelEmail",
+          "States": {
+            "ParallelEmail": {
+              "Type" : "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "EMAIL_LAMBDA_ARN",
+                "Payload": {
+                  "Input.$": "$"
+                }
+              },
+              "End": true
+            }
+          }
+        },
+```
+You need to replace `EMAIL_LAMBDA_ARN` with the ARN of the `email_reminder_lambda` Lambda function. 
+Failure to do either of these will result in the step function failing, no emails will be sent.  
 
 ## STAGE4
 
