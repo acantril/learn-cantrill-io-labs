@@ -72,6 +72,17 @@ Failure to do either of these will result in the step function failing, no email
 
 ## STAGE4
 
+There are four main mistakes which you can make in stage 4
+
+### api_lamdbda placeholder
+
+### Configure as proxy resource
+
+### Enable API Gateway CORS
+
+### Use Lambda Proxy integration
+
+
 ## STAGE5
 
 In Stage5 you need to edit the `serverless.js` file before uploading it to S3.  
