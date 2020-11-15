@@ -47,8 +47,7 @@ It's job is to be called by API Gateway when its used by the serverless front en
 It accepts some information from you, via API Gateway and then it starts a state machine execution - which is the logic of the application.  
 
 You need to locate the `YOUR_STATEMACHINE_ARN` placeholder and replace this with the State Machine ARN you noted down in the previous step.  
-Click `Deploy` to save the lambda function and configuration.    
-At the top of the screen, click the `copy` icon to copy the `api_lambda` ARN down, and store it somewhere safe.  
+Click `Deploy` to save the lambda function and configuration.     
 
 
 # STAGE 4C - CONFIGURE THE LAMBDA FUNCTION (Using the preview/NEW UI)
@@ -60,6 +59,14 @@ depending on your browser it might download the .py file, if so, open it in eith
 Move back to the Lambda console.  
 Select the existing lambda code and delete it.  
 Paste the code into the lambda fuction.  
+his is the function which will provide compute to API Gateway.  
+It's job is to be called by API Gateway when its used by the serverless front end part of the application (loaded by S3)
+It accepts some information from you, via API Gateway and then it starts a state machine execution - which is the logic of the application.  
+
+You need to locate the `YOUR_STATEMACHINE_ARN` placeholder and replace this with the State Machine ARN you noted down in the previous step.  
+
+Click `Deploy as latest`  
+
 
 # STAGE 4D - CREATE API
 
