@@ -73,3 +73,17 @@ Failure to do either of these will result in the step function failing, no email
 ## STAGE4
 
 ## STAGE5
+
+In Stage5 you need to edit the `serverless.js` file before uploading it to S3.  
+At the top of this file is a placeholder  
+```
+var API_ENDPOINT = 'REPLACEME_API_GATEWAY_INVOKE_URL';
+```
+Which needs to be updated with the full Invoke URL for your API Gateway, which should look something like this :-
+```
+https://somethingsomething.execute-api.us-east-1.amazonaws.com/prod/petcuddleotron
+```
+Failure to do this, will result in an error message like this when clicking on the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons.  
+```
+Oops! Error Error: SyntaxError: Unexpected token < in JSON at position 0
+```
