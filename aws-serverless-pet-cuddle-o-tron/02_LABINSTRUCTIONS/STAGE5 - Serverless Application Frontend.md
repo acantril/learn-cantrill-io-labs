@@ -34,7 +34,8 @@ Scroll Down to the bottom and click `Create bucket`
 
 Go into the bucket you just created.  
 Click the `Permissions` tab.  
-Click on the `Bucket Policy` box
+Scroll down and in the `Bucket Policy` area, click `Edit`. 
+
 
 in the box, paste the code below
 
@@ -53,19 +54,21 @@ in the box, paste the code below
   }
 
 ```
-Replace the `REPLACEME_PET_CUDDLE_O_TRON_BUCKET_ARN` (being careful NOT to include the `/*`) with the bucket ARN, which you can see next to `Bucket policy editor ARN: `
-Click `Save`  
-You will see a warning saying `This bucket has public access` .. thats fine, thats what you needed to do.  
+Replace the `REPLACEME_PET_CUDDLE_O_TRON_BUCKET_ARN` (being careful NOT to include the `/*`) with the bucket ARN, which you can see near to `Bucket ARN `
+Click `Save Changes`  
 
 
 # STAGE 5C - ENABLE STATIC HOSTING
 Next you need to enable static hosting on the S3 bucket so that it can be used as a front end website.  
 Click on the `Properties Tab`  
-Click `Static Website hosting`  
-Click `Use this bucket to host a website`  
+Scroll down and locate `Static website hosting`  
+Click `Edit`  
+Select `Enable` 
+Select `Host a static website`  
 For both `Index Document` and `Error Document` enter `index.html` 
-Copy down the  `Endpoint` URL at the top of the dialog thats how you will access the static website when fully configured. Note this down as the `PetCuddleOTron URL`  
-Click `Save`  
+Click `Save Changes`  
+Scroll down and locate `Static website hosting` again.  
+Under `Bucket Website Endpoint` copy and note down the bucket endpoint URL.  
 
 
 # STAGE 5D - DOWNLOAD AND EDIT THE FRONT END FILES
@@ -87,12 +90,15 @@ Save the file.
 # STAGE 5E - UPLOAD AND TEST
 
 Return to the S3 console
-Click on the `Overview` Tab.  
+Click on the `Objects` Tab.  
 Click `Upload`  
 Drag the 4 files from the serverless_frontend folder onto this tab, including the serverless.js file you just edited.
 **MAKE SURE ITS THE EDITED VERSION**
 
-Click `Upload` and wait for it to complete.
+Click `Upload` and wait for it to complete.  
+Click `Exit`  
+Verify All 4 files are in the `Objects` area of the bucket.  
+
 
 Open the `PetCuddleOTron URL` you just noted down in a new tab.  
 What you are seeing is a simple HTML web page created by the HTML file itself and the `main.css` stylesheet.
