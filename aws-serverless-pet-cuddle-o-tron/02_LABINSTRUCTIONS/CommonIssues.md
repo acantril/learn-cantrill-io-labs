@@ -99,37 +99,37 @@ Click `Enable CORS and replace existing CORS headers`
 **INCLUDE IMAGE HERE**  
 Click `Yes, replace existing values`  
 **INCLUDE IMAGE HERE**  
-Click `Actions` then `Deploy API`  
-**INCLUDE IMAGE HERE**
-Select `prod` and click `Deploy`  
+Click `Actions` then `Deploy API`    
+**INCLUDE IMAGE HERE**  
+Select `prod` and click `Deploy`   
 Go back to the PetCuddleOTron application, refresh the browser and retry to the app - it should work.  
 
 
 ### Use Lambda Proxy integration
 
-When creating the API Gateway Method, you need to check the `Use Lambda Proxy Integration Box`. 
+When creating the API Gateway Method, you need to check the `Use Lambda Proxy Integration Box`.   
 **INCLUDEPIC1**  
 If you don't, when running the application you will recieve the error below.  
 **INCLUDEPIC2**  
 You can get further information via the `/aws/lambda/api_lambda` log group inside cloudwatch logs.  
-It will show an error similar to the one below (note the KeyError). 
+It will show an error similar to the one below (note the KeyError).   
 **INCLUDEPIC3**  
-To fix it, either delete and recreate the API (the easy way). 
+To fix it, either delete and recreate the API (the easy way).  
 **or**  
-Click `resources` in API gateway, then selevct the `POST` method in the `/petcuddleotron` resource
-**INCLUDEPIC4**
-Click `Integration Request`. 
+Click `resources` in API gateway, then selevct the `POST` method in the `/petcuddleotron` resource  
+**INCLUDEPIC4**  
+Click `Integration Request`.  
 Check check the `Use Lambda Proxy Integration Box`  
-**INCLUDEPIC5**
-Click `OK`. 
+**INCLUDEPIC5**  
+Click `OK`.  
 **INCLUDEPIC6**  
-Click `OK`. 
+Click `OK`.  
 **INCLUDEPIC7**  
-Click `Actions` then `Deploy API`. 
+Click `Actions` then `Deploy API`.  
 **INCLUDEPIC8**  
-Choose `prod` in `Deployment stage`  
-Click `Deploy`. 
-Refresh the Pet Cuddle O Tron application and try again.  
+Choose `prod` in `Deployment stage`   
+Click `Deploy`.  
+Refresh the Pet Cuddle O Tron application and try again.   
 
 
 ### Wrong Invoke URL
