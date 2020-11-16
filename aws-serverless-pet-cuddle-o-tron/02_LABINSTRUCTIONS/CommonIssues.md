@@ -95,7 +95,7 @@ To fix this one, either delete the entire API and start again (the easy way).
 **or**  
 Click `Resources` in API Gateway console.  
 Select the `/petcuddleotron` resource in API Gateway, click `Actions` and select `Enable CORS`  
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors1.png)
 Click `Enable CORS and replace existing CORS headers`  
 **INCLUDE IMAGE HERE**  
 Click `Yes, replace existing values`  
