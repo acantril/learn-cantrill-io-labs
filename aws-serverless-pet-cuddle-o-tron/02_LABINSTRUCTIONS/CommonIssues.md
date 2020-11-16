@@ -81,6 +81,7 @@ Within the api_lambda code is a placeholder. The original code has a line as bel
 SM_ARN = 'YOUR_STATEMACHINE_ARN'
 ```
 The `YOUR_STATEMACHINE_ARN` needs to be replaced with the ARN of the `PetCuddleOTron` Statemachine created in Stage 3.  
+If you don't replace this placeholder you will see an `Oops! Error Error: TypeError: Failed to fetch` error when clicking the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons.  
 
 ### Configure as proxy resource
 
