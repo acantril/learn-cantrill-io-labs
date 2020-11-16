@@ -110,7 +110,7 @@ Go back to the PetCuddleOTron application, refresh the browser and retry to the 
 ### Use Lambda Proxy integration
 
 When creating the API Gateway Method, you need to check the `Use Lambda Proxy Integration Box`.   
-**INCLUDEPIC1**  
+![](lambdaproxyintegration/lambdaproxyintegration1.png) 
 If you don't, when running the application you will recieve the error below.  
 **INCLUDEPIC2**  
 You can get further information via the `/aws/lambda/api_lambda` log group inside cloudwatch logs.  
