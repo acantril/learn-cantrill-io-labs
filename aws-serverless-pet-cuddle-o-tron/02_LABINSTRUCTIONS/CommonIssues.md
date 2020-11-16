@@ -74,62 +74,72 @@ Failure to do either of these will result in the step function failing, no email
 
 There are four main mistakes which you can make in stage 4
 
-### api_lamdbda placeholder
+### api_lamdda placeholder
 
 Within the api_lambda code is a placeholder. The original code has a line as below :-
 ```
 SM_ARN = 'YOUR_STATEMACHINE_ARN'
 ```
+![](api_lambda_placeholder/api_lambda_placeholder1.png) 
+
 The `YOUR_STATEMACHINE_ARN` needs to be replaced with the ARN of the `PetCuddleOTron` Statemachine created in Stage 3.  
 If you don't replace this placeholder you will see an `Oops! Error Error: TypeError: Failed to fetch` error when clicking the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons. 
+![](api_lambda_placeholder/api_lambda_placeholder2.png) 
+
+You can get further information via the `/aws/lambda/api_lambda` log group inside cloudwatch logs.  
+It will show an error similar to the one below  
+![](api_lambda_placeholder/api_lambda_placeholder3.png) 
 
 Fix this by going to the Lambda console, selecting `api_lambda` finding the lambda code, update the SM_ARN line with the PetCuddleOTron state machine ARN and then `Deploy` or `Deploy as latest`.  
+![](api_lambda_placeholder/api_lambda_placeholder4.png) 
 
 ### Enable API Gateway CORS
 
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors1.png) 
 
 When configuring the RESOURCE if you don't tick the `Enable API Gateway CORS` box the serverless application will fail with an `Oops! Error Error: TypeError: Failed to fetch` error (the same error as the api_lambda placeholder error above).  
-
+![](corsbox/cors2.png)
 To fix this one, either delete the entire API and start again (the easy way).  
 **or**  
 Click `Resources` in API Gateway console.  
 Select the `/petcuddleotron` resource in API Gateway, click `Actions` and select `Enable CORS`  
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors3.png)
 Click `Enable CORS and replace existing CORS headers`  
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors4.png)
 Click `Yes, replace existing values`  
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors5.png)
 Click `Actions` then `Deploy API`    
-**INCLUDE IMAGE HERE**  
-Select `prod` and click `Deploy`   
+![](corsbox/cors6.png)
+Select `prod` and click `Deploy`  
+![](corsbox/cors7.png)
 Go back to the PetCuddleOTron application, refresh the browser and retry to the app - it should work.  
 
 
 ### Use Lambda Proxy integration
 
 When creating the API Gateway Method, you need to check the `Use Lambda Proxy Integration Box`.   
-**INCLUDEPIC1**  
+![](lambdaproxyintegration/lambdaproxyintegration1.png) 
 If you don't, when running the application you will recieve the error below.  
-**INCLUDEPIC2**  
+![](lambdaproxyintegration/lambdaproxyintegration2.png)  
 You can get further information via the `/aws/lambda/api_lambda` log group inside cloudwatch logs.  
 It will show an error similar to the one below (note the KeyError).   
-**INCLUDEPIC3**  
+![](lambdaproxyintegration/lambdaproxyintegration3.png) 
 To fix it, either delete and recreate the API (the easy way).  
 **or**  
 Click `resources` in API gateway, then selevct the `POST` method in the `/petcuddleotron` resource  
-**INCLUDEPIC4**  
+![](lambdaproxyintegration/lambdaproxyintegration4.png)  
 Click `Integration Request`.  
 Check check the `Use Lambda Proxy Integration Box`  
-**INCLUDEPIC5**  
+![](lambdaproxyintegration/lambdaproxyintegration5.png)  
 Click `OK`.  
-**INCLUDEPIC6**  
+![](lambdaproxyintegration/lambdaproxyintegration6.png) 
 Click `OK`.  
-**INCLUDEPIC7**  
+![](lambdaproxyintegration/lambdaproxyintegration7.png)  
 Click `Actions` then `Deploy API`.  
-**INCLUDEPIC8**  
+![](lambdaproxyintegration/lambdaproxyintegration8.png) 
 Choose `prod` in `Deployment stage`   
 Click `Deploy`.  
+![](lambdaproxyintegration/lambdaproxyintegration9.png) 
 Refresh the Pet Cuddle O Tron application and try again.   
 
 
