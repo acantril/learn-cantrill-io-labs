@@ -156,9 +156,13 @@ Which needs to be updated with the full Invoke URL for your API Gateway, which s
 ```
 https://somethingsomething.execute-api.us-east-1.amazonaws.com/prod/petcuddleotron
 ```
-![](serverlessjs_notupdated/serverlessjs3.png) 
+![](serverlessjs_notupdated/serverlessjs4.png) 
 Failure to do this, will result in an error message like this when clicking on the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons.  
 ```
 Oops! Error Error: SyntaxError: Unexpected token < in JSON at position 0
 ```
 ![](serverlessjs_notupdated/serverlessjs2.png) 
+
+Be sure to use the full invoke URL with the petcuddleotron on the end, **NOT** like the image below which is missing it. This will also cause an error.  
+
+![](serverlessjs_notupdated/serverlessjs3.png) 
