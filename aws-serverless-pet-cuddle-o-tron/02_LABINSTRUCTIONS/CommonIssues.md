@@ -81,7 +81,9 @@ Within the api_lambda code is a placeholder. The original code has a line as bel
 SM_ARN = 'YOUR_STATEMACHINE_ARN'
 ```
 The `YOUR_STATEMACHINE_ARN` needs to be replaced with the ARN of the `PetCuddleOTron` Statemachine created in Stage 3.  
-If you don't replace this placeholder you will see an `Oops! Error Error: TypeError: Failed to fetch` error when clicking the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons.  
+If you don't replace this placeholder you will see an `Oops! Error Error: TypeError: Failed to fetch` error when clicking the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons. 
+
+Fix this by going to the Lambda console, selecting `api_lambda` finding the lambda code, update the SM_ARN line with the PetCuddleOTron state machine ARN and then `Deploy` or `Deploy as latest`.  
 
 ### Configure as proxy resource
 
