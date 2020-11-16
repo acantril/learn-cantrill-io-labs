@@ -85,10 +85,6 @@ If you don't replace this placeholder you will see an `Oops! Error Error: TypeEr
 
 Fix this by going to the Lambda console, selecting `api_lambda` finding the lambda code, update the SM_ARN line with the PetCuddleOTron state machine ARN and then `Deploy` or `Deploy as latest`.  
 
-### Configure as proxy resource
-
-
-
 ### Enable API Gateway CORS
 
 **INCLUDE IMAGE HERE**  
@@ -110,6 +106,31 @@ Go back to the PetCuddleOTron application, refresh the browser and retry to the 
 
 
 ### Use Lambda Proxy integration
+
+When creating the API Gateway Method, you need to check the `Use Lambda Proxy Integration Box`. 
+**INCLUDEPIC1**  
+If you don't, when running the application you will recieve the error below.  
+**INCLUDEPIC2**  
+You can get further information via the `/aws/lambda/api_lambda` log group inside cloudwatch logs.  
+It will show an error similar to the one below (note the KeyError). 
+**INCLUDEPIC3**  
+To fix it, either delete and recreate the API (the easy way). 
+**or**  
+Click `resources` in API gateway, then selevct the `POST` method in the `/petcuddleotron` resource
+**INCLUDEPIC4**
+Click `Integration Request`. 
+Check check the `Use Lambda Proxy Integration Box`  
+**INCLUDEPIC5**
+Click `OK`. 
+**INCLUDEPIC6**  
+Click `OK`. 
+**INCLUDEPIC7**  
+Click `Actions` then `Deploy API`. 
+**INCLUDEPIC8**  
+Choose `prod` in `Deployment stage`  
+Click `Deploy`. 
+Refresh the Pet Cuddle O Tron application and try again.  
+
 
 ### Wrong Invoke URL
 
