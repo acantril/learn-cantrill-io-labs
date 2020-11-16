@@ -74,16 +74,24 @@ Failure to do either of these will result in the step function failing, no email
 
 There are four main mistakes which you can make in stage 4
 
-### api_lamdbda placeholder
+### api_lamdda placeholder
 
 Within the api_lambda code is a placeholder. The original code has a line as below :-
 ```
 SM_ARN = 'YOUR_STATEMACHINE_ARN'
 ```
+![](api_lambda_placeholder/api_lambda_placeholder1.png) 
+
 The `YOUR_STATEMACHINE_ARN` needs to be replaced with the ARN of the `PetCuddleOTron` Statemachine created in Stage 3.  
 If you don't replace this placeholder you will see an `Oops! Error Error: TypeError: Failed to fetch` error when clicking the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons. 
+![](api_lambda_placeholder/api_lambda_placeholder2.png) 
+
+You can get further information via the `/aws/lambda/api_lambda` log group inside cloudwatch logs.  
+It will show an error similar to the one below  
+![](api_lambda_placeholder/api_lambda_placeholder3.png) 
 
 Fix this by going to the Lambda console, selecting `api_lambda` finding the lambda code, update the SM_ARN line with the PetCuddleOTron state machine ARN and then `Deploy` or `Deploy as latest`.  
+![](api_lambda_placeholder/api_lambda_placeholder4.png) 
 
 ### Enable API Gateway CORS
 
