@@ -59,7 +59,7 @@ depending on your browser it might download the .py file, if so, open it in eith
 Move back to the Lambda console.  
 Select the existing lambda code and delete it.  
 Paste the code into the lambda fuction.  
-his is the function which will provide compute to API Gateway.  
+This is the function which will provide compute to API Gateway.  
 It's job is to be called by API Gateway when its used by the serverless front end part of the application (loaded by S3)
 It accepts some information from you, via API Gateway and then it starts a state machine execution - which is the logic of the application.  
 
