@@ -87,22 +87,23 @@ Fix this by going to the Lambda console, selecting `api_lambda` finding the lamb
 
 ### Enable API Gateway CORS
 
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors1.png) 
 
 When configuring the RESOURCE if you don't tick the `Enable API Gateway CORS` box the serverless application will fail with an `Oops! Error Error: TypeError: Failed to fetch` error (the same error as the api_lambda placeholder error above).  
-
+![](corsbox/cors2.png)
 To fix this one, either delete the entire API and start again (the easy way).  
 **or**  
 Click `Resources` in API Gateway console.  
 Select the `/petcuddleotron` resource in API Gateway, click `Actions` and select `Enable CORS`  
-![](corsbox/cors1.png)
+![](corsbox/cors3.png)
 Click `Enable CORS and replace existing CORS headers`  
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors4.png)
 Click `Yes, replace existing values`  
-**INCLUDE IMAGE HERE**  
+![](corsbox/cors5.png)
 Click `Actions` then `Deploy API`    
-**INCLUDE IMAGE HERE**  
-Select `prod` and click `Deploy`   
+![](corsbox/cors6.png)
+Select `prod` and click `Deploy`  
+![](corsbox/cors7.png)
 Go back to the PetCuddleOTron application, refresh the browser and retry to the app - it should work.  
 
 
