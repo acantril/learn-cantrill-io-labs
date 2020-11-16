@@ -93,6 +93,7 @@ When configuring the RESOURCE if you don't tick the `Enable API Gateway CORS` bo
 
 To fix this one, either delete the entire API and start again (the easy way).  
 **or**  
+Click `Resources` in API Gateway console.  
 Select the `/petcuddleotron` resource in API Gateway, click `Actions` and select `Enable CORS`  
 **INCLUDE IMAGE HERE**  
 Click `Enable CORS and replace existing CORS headers`  
@@ -130,11 +131,6 @@ Click `Actions` then `Deploy API`.
 Choose `prod` in `Deployment stage`   
 Click `Deploy`.  
 Refresh the Pet Cuddle O Tron application and try again.   
-
-
-### Wrong Invoke URL
-
-
 
 
 ## STAGE5
