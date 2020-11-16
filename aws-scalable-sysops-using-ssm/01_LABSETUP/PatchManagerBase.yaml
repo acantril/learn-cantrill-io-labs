@@ -1,0 +1,436 @@
+Description:  Advanced Demo - AWS Systems Manager, this template MUST be used in us-east-1
+Parameters:
+  KeyPairName:
+    Description: KeyPair for Instances
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: "A4L"
+  WindowsAMI:
+    Description: AMI for Windows Server
+    Type: String
+    Default: "ami-02b5cd5aa444bee23"
+  UbuntuAMI:
+    Description: AMI For Ubuntu
+    Type: String
+    Default: "ami-03a2cbdcd9e7d1955"
+  CentosAMI:
+    Description: AMI For Centos
+    Type: String
+    Default: "ami-01ca03df4a6012157"
+  AmazonLinux2AMI:
+    Description: AMI for Bastion Host (default is latest AmaLinux2)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+Resources:
+  OnpremVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 192.168.10.0/24
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: onprem-vpc
+  OnpremIGW:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: IGW-ONPREM
+  OnpremIGWAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref OnpremVPC
+      InternetGatewayId: !Ref OnpremIGW
+  OnpremSNPrivate:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref OnpremVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.10.0/25
+      Tags:
+        - Key: Name
+          Value: sn-onprem-private
+  OnpremSNPublic:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref OnpremVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.10.128/25
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sn-onprem-public
+  OnpremRTPublic: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref OnpremVPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-RT-PUBLIC
+  OnpremRTPublicAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref OnpremSNPublic
+      RouteTableId:
+        Ref: OnpremRTPublic
+  OnpremRTPrivate: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref OnpremVPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-RT-PRIVATE
+  OnpremRTPrivateAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref OnpremSNPrivate
+      RouteTableId:
+        Ref: OnpremRTPrivate
+  OnpremRouteDefaultPublic: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: OnpremIGWAttachment
+    Properties:
+      RouteTableId:
+        Ref: OnpremRTPublic
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: OnpremIGW
+  OnpremEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+  OnpremNATGW:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt OnpremEIP.AllocationId
+      SubnetId: !Ref OnpremSNPublic
+  OnpremRouteDefaultPrivate: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: OnpremIGWAttachment
+    Properties:
+      RouteTableId:
+        Ref: OnpremRTPrivate
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId:
+        Ref: OnpremNATGW
+  OnpremInstanceSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref OnpremVPC
+      GroupDescription: Default A4L AWS SG
+      SecurityGroupIngress: 
+        - Description: 'Allow SSH IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow RDP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow ALL from ONPREM Networks'
+          IpProtocol: "-1"
+          CidrIp: '192.168.8.0/21'
+  ONPREMInstanceSGSelfRef:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref OnpremInstanceSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref OnpremInstanceSG
+  AWSVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.16.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: aws-vpc
+  AWSIGW:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: IGW-AWS
+  AWSIGWAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref AWSVPC
+      InternetGatewayId: !Ref AWSIGW
+  AWSSNPrivate:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref AWSVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.0.0/24
+      Tags:
+        - Key: Name
+          Value: sn-aws-private
+  AWSSNPublic:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref AWSVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sn-aws-public
+  AWSRTPublic: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref AWSVPC
+      Tags:
+      - Key: Name
+        Value: AWS-RT-PUBLIC
+  AWSRTPublicAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref AWSSNPublic
+      RouteTableId:
+        Ref: AWSRTPublic
+  AWSRTPrivate: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref AWSVPC
+      Tags:
+      - Key: Name
+        Value: AWS-RT-PRIVATE
+  AWSRTPrivateAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref AWSSNPrivate
+      RouteTableId:
+        Ref: AWSRTPrivate
+  AWSRouteDefaultPublic: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: AWSIGWAttachment
+    Properties:
+      RouteTableId:
+        Ref: AWSRTPublic
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: AWSIGW
+  AWSEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+  AWSNATGW:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt AWSEIP.AllocationId
+      SubnetId: !Ref AWSSNPublic
+  AWSRouteDefaultPrivate: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: AWSIGWAttachment
+    Properties:
+      RouteTableId:
+        Ref: AWSRTPrivate
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId:
+        Ref: AWSNATGW
+  AWSInstanceSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref AWSVPC
+      GroupDescription: Default A4L AWS SG
+      SecurityGroupIngress: 
+        - Description: 'Allow SSH IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow RDP IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow ALL from ONPREM Networks'
+          IpProtocol: "-1"
+          CidrIp: '192.168.8.0/21'
+  AWSInstanceSGSelfRef:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref AWSInstanceSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref AWSInstanceSG
+  onpremVPCESSM:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref OnpremSNPrivate
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !Ref OnpremVPC
+  onpremVPCEEC2Messages:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref OnpremSNPrivate
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !Ref OnpremVPC
+  onpremVPCESSMMessages:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref OnpremSNPrivate
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !Ref OnpremVPC
+  onpremVPCESEC2:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref OnpremSNPrivate
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2
+      VpcId: !Ref OnpremVPC
+  A4LWIN:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'WindowsAMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'OnpremSNPrivate'
+      Tags:
+        - Key: Name
+          Value: 'A4L-WIN'
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      KeyName: !Ref 'KeyPairName'
+  A4LCENTOS:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'CentosAMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'OnpremSNPrivate'
+      Tags:
+        - Key: Name
+          Value: 'A4L-CENTOS'
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      KeyName: !Ref 'KeyPairName'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum install python3 -y
+  A4LUBUNTU:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'UbuntuAMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'OnpremSNPrivate'
+      Tags:
+        - Key: Name
+          Value: 'A4L-Ubuntu'
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      KeyName: !Ref 'KeyPairName'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          snap remove amazon-ssm-agent
+  AWSWIN:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - AWSNATGW
+    Properties:
+      ImageId: !Ref 'WindowsAMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'AWSSNPrivate'
+      Tags:
+        - Key: Name
+          Value: 'AWS-WIN'
+      SecurityGroupIds:
+        - !Ref AWSInstanceSG
+      KeyName: !Ref 'KeyPairName'
+  AWSCENTOS:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - AWSNATGW
+    Properties:
+      ImageId: !Ref 'CentosAMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'AWSSNPrivate'
+      Tags:
+        - Key: Name
+          Value: 'AWS-CENTOS'
+      SecurityGroupIds:
+        - !Ref AWSInstanceSG
+      KeyName: !Ref 'KeyPairName'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum install python3 -y
+  AWSUBUNTU:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - AWSNATGW
+    Properties:
+      ImageId: !Ref 'UbuntuAMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'AWSSNPrivate'
+      Tags:
+        - Key: Name
+          Value: 'AWS-Ubuntu'
+      SecurityGroupIds:
+        - !Ref AWSInstanceSG
+      KeyName: !Ref 'KeyPairName'
+  AWSJUMPBOX:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'AmazonLinux2AMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'AWSSNPublic'
+      Tags:
+        - Key: Name
+          Value: 'AWS-JUMPBOX'
+      SecurityGroupIds:
+        - !Ref AWSInstanceSG
+      KeyName: !Ref 'KeyPairName'
+  ONPREMJUMPBOX:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'AmazonLinux2AMI'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref 'OnpremSNPublic'
+      Tags:
+        - Key: Name
+          Value: 'A4L-JUMPBOX'
+      SecurityGroupIds:
+        - !Ref OnpremInstanceSG
+      KeyName: !Ref 'KeyPairName'
+Outputs:
+  AWSVPC:
+    Description: VPC ID of the AWS VPC
+    Value: !Ref AWSVPC
+    Export:
+      Name: AWSVPC
+  AWSSNPRIVATE:
+    Description: AWS Private Subnet ID
+    Value: !Ref AWSSNPrivate
+    Export:
+      Name: AWSSNPRIVATE
+  AWSINSTANCESG:
+    Description: AWS Instance Security Group ID
+    Value: !Ref AWSInstanceSG
+    Export:
+      Name: AWSINSTANCESG
+  AWSRTPRIVATE:
+    Description: AWS PRIVATE RT ID
+    Value: !Ref AWSRTPrivate
+    Export:
+      Name: AWSRTPRIVATE
