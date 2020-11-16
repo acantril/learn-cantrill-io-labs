@@ -11,6 +11,9 @@ The advanced demo consists of 6 stages :-
 - STAGE 5 : Implement the static frontend application and test functionality
 - STAGE 6 : Cleanup the account
 
+**IF YOU HAVE ANY ISSUES WITH THE DEMO ... CHECK THE COMMON ISSUES PAGE BELOW**
+
+[https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-serverless-pet-cuddle-o-tron/02_LABINSTRUCTIONS/CommonIssues.md](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-serverless-pet-cuddle-o-tron/02_LABINSTRUCTIONS/CommonIssues.md)
 
 ![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-serverless-pet-cuddle-o-tron/ArchitectureEvolutionAll.png)
 
