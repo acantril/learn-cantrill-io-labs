@@ -112,25 +112,26 @@ Go back to the PetCuddleOTron application, refresh the browser and retry to the 
 When creating the API Gateway Method, you need to check the `Use Lambda Proxy Integration Box`.   
 ![](lambdaproxyintegration/lambdaproxyintegration1.png) 
 If you don't, when running the application you will recieve the error below.  
-**INCLUDEPIC2**  
+![](lambdaproxyintegration/lambdaproxyintegration2.png)  
 You can get further information via the `/aws/lambda/api_lambda` log group inside cloudwatch logs.  
 It will show an error similar to the one below (note the KeyError).   
-**INCLUDEPIC3**  
+![](lambdaproxyintegration/lambdaproxyintegration3.png) 
 To fix it, either delete and recreate the API (the easy way).  
 **or**  
 Click `resources` in API gateway, then selevct the `POST` method in the `/petcuddleotron` resource  
-**INCLUDEPIC4**  
+![](lambdaproxyintegration/lambdaproxyintegration4.png)  
 Click `Integration Request`.  
 Check check the `Use Lambda Proxy Integration Box`  
-**INCLUDEPIC5**  
+![](lambdaproxyintegration/lambdaproxyintegration5.png)  
 Click `OK`.  
-**INCLUDEPIC6**  
+![](lambdaproxyintegration/lambdaproxyintegration6.png) 
 Click `OK`.  
-**INCLUDEPIC7**  
+![](lambdaproxyintegration/lambdaproxyintegration7.png)  
 Click `Actions` then `Deploy API`.  
-**INCLUDEPIC8**  
+![](lambdaproxyintegration/lambdaproxyintegration8.png) 
 Choose `prod` in `Deployment stage`   
 Click `Deploy`.  
+![](lambdaproxyintegration/lambdaproxyintegration9.png) 
 Refresh the Pet Cuddle O Tron application and try again.   
 
 
