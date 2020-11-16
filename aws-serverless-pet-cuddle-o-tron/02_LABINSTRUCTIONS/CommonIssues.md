@@ -150,11 +150,15 @@ At the top of this file is a placeholder
 ```
 var API_ENDPOINT = 'REPLACEME_API_GATEWAY_INVOKE_URL';
 ```
+![](serverlessjs_notupdated/serverless1.png) 
+
 Which needs to be updated with the full Invoke URL for your API Gateway, which should look something like this :-
 ```
 https://somethingsomething.execute-api.us-east-1.amazonaws.com/prod/petcuddleotron
 ```
+![](serverlessjs_notupdated/serverless3.png) 
 Failure to do this, will result in an error message like this when clicking on the `LEVEL1`, `LEVEL2` or `LEVEL3` buttons.  
 ```
 Oops! Error Error: SyntaxError: Unexpected token < in JSON at position 0
 ```
+![](serverlessjs_notupdated/serverless2.png) 
