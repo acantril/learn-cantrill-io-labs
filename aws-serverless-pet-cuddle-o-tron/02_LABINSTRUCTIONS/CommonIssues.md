@@ -1,4 +1,4 @@
-# Common Issues - Cause
+# Common Issues - Cause & Fixes
 
 ## STAGE1
 
