@@ -145,6 +145,10 @@ Resources:
           Ebs:
             VolumeSize: 100
             VolumeType: gp2
+        - DeviceName: /dev/sda2
+          Ebs:
+            VolumeSize: 100
+            VolumeType: gp2  
       SecurityGroupIds:
         - !Ref InstanceSGID
       PrivateIpAddress: !Ref 'ADServer1PrivateIP'
@@ -166,6 +170,10 @@ Resources:
           Value: !Ref 'ADServer2NetBIOSName'
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 100
+            VolumeType: gp2
+        - DeviceName: /dev/sda2
           Ebs:
             VolumeSize: 100
             VolumeType: gp2
