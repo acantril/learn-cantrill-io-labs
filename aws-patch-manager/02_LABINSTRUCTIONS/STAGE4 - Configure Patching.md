@@ -44,7 +44,7 @@ Select Both Centos Instances
 Scroll Down to Patching Schedule  
 At this stage you could define a schedule ... select `Schedule in a new Maintenance Window`  
 and configure start times and dates, window duration... and that would be used every time  
-Check `Use a CRON schedule builder`  
+Check `Use rate schedule builder`  
 Check `Every 30 minutes`  
 for Maintanance window name pick `Centos-every-30-mins`  
 Select `Scan and install`  
@@ -65,7 +65,7 @@ Select Both Ubuntu Instances
 Scroll Down to Patching Schedule  
 At this stage you could define a schedule ... select `Schedule in a new Maintenance Window`  
 and configure start times and dates, window duration... and that would be used every time  
-Check `Use a CRON schedule builder`  
+Check `Use rate schedule builder` 
 Check `Every 30 minutes`  
 for Maintanance window name pick `Ubuntu-every-30-mins`  
 Select `Scan and install`  
@@ -84,7 +84,7 @@ Select Both Win Instances
 Scroll Down to Patching Schedule  
 At this stage you could define a schedule ... select `Schedule in a new Maintenance Window`  
 and configure start times and dates, window duration... and that would be used every time  
-Check `Use a CRON schedule builder`  
+Check `Use rate schedule builder`  
 Check `Every 30 minutes`  
 for Maintanance window name pick `Win-every-30-mins`  
 Select `Scan and install`  
