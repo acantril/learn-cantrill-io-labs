@@ -58,12 +58,14 @@ From the A4L-JUMPBOX
 run  
 `ssh centos@PRIVATE_IP_OF_A4L-CENTOS`  
 
+Note: Replace ACTIVATION-CODE and ACTIVATION-ID with the values you noted down ealier.
+
 ``` 
 mkdir /tmp/ssm
 curl https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm -o /tmp/ssm/amazon-ssm-agent.rpm
 sudo dnf install -y /tmp/ssm/amazon-ssm-agent.rpm
 sudo systemctl stop amazon-ssm-agent
-sudo amazon-ssm-agent -register -code "activation-code" -id "activation-id" -region "us-east-1"
+sudo amazon-ssm-agent -register -code "ACTIVATION-CODE" -id "ACTIVATION-ID" -region "us-east-1"
 sudo systemctl start amazon-ssm-agent
 
 ```
@@ -86,12 +88,14 @@ From the A4L-JUMPBOX
 run  
 `ssh ubuntu@PRIVATE_IP_OF_A4L-UBUNTU`  
 
+Note: Replace ACTIVATION-CODE and ACTIVATION-ID with the values you noted down ealier.
+
 ```
 mkdir /tmp/ssm
 curl https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb -o /tmp/ssm/amazon-ssm-agent.deb
 sudo dpkg -i /tmp/ssm/amazon-ssm-agent.deb
 sudo service amazon-ssm-agent stop
-sudo amazon-ssm-agent -register -code "activation-code" -id "activation-id" -region "us-east-1" 
+sudo amazon-ssm-agent -register -code "ACTIVATION-CODE" -id "ACTIVATION-ID" -region "us-east-1" 
 sudo service amazon-ssm-agent start
 
 ```
@@ -149,11 +153,13 @@ if powershell closes
     Type `PowerShell`  
     locate , under apps, `Windows Powershell` right click, select `Run as Administrator`  
 
-Run the code below, line by line, replacing activation-code , actiovation-id with the values you noted down ealier  
+Run the code below, line by line.
+
+Note: Replace ACTIVATION-CODE and ACTIVATION-ID with the values you noted down ealier.
 
 ```
-$code = "activation-code"
-$id = "activation-id"
+$code = "ACTIVATION-CODE"
+$id = "ACTIVATION-ID"
 $region = "us-east-1"
 $dir = $env:TEMP + "\ssm"
 New-Item -ItemType directory -Path $dir -Force
