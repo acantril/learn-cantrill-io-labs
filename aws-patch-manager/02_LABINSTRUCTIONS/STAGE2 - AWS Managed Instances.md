@@ -59,16 +59,18 @@ The CENTOS AMI used ... is one which doesn't and thats the next thing to fix ...
 You're going to be connecting to the `AWS-CENTOS` instance, via the `AWS-JUMPBOX`  
 AWS Publish a guide for various different operating systems here https://aws.amazon.com/blogs/security/securely-connect-to-linux-instances-running-in-a-private-amazon-vpc/  
 You need an SSH Agent running on your local machine .... with your A4L SSH Key loaded  
-THis means when you connect to the jumpbox, and then to the centos instance ... the agent running on your machine can be used for authentication  
+This means when you connect to the jumpbox, and then to the CENTOS instance ... the agent running on your machine can be used for authentication  
 It means you dont have to load the SSH key onto the jumpbox to use to connect to the AWS-CENTOS box  
 
-For windows - follow the instructions in the link above for Putty and Pageant  
-For macOS and linux make sure ssh-agent is runnign with   
+- For windows - follow the instructions in the link above for Putty and Pageant 
+
+- For macOS and linux verify that ssh-agent by running:   
 
 ``` eval `ssh-agent` ```  
 
-For macOS then run `ssh-add -K A4L.pem`  
-for Linux run `ssh-add A4L.pem`  
+- For macOS then run `ssh-add -K A4L.pem`  
+
+- For Linux run `ssh-add A4L.pem`  
 
 Open the EC2 Console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 Click `Running Instances`  
