@@ -21,24 +21,24 @@ and diagnose any SSM issues which arise.
 Move to https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 Click `Instances`  
 Click `Name` Column to sort by name  
-Select AWS-CENTOS, `right click`, `instance settings`, Select `Attach/Replace Iam Role`  
+Select AWS-CENTOS, `right click`, `Security`, Select `Modify IAM Role`  
 Click dropdown and select role which contains `SSMInstanceProfile`  
-Click `Apply`, then `Close`  
-Select AWS-WIN, `right click`, `instance settings`, Select `Attach/Replace Iam Role`   
+Click `Save`  
+Select AWS-WIN, `right click`, `Security`, Select `Modify IAM Role`   
 Click dropdown and select role which contains `SSMInstanceProfile`  
-Click `Apply`, then `Close`  
-Select AWS-UBUNTU, `right click`, `instance settings`, Select `Attach/Replace Iam Role`  
+Click `Save`   
+Select AWS-UBUNTU, `right click`, `Security`, Select `Modify IAM Role`  
 Click dropdown and select role which contains `SSMInstanceProfile`  
-Click `Apply`, then `Close`  
+Click `Save`  
 
 To ensure the Instance are able to connect to the SSM Agent, you are going to restart them  
 
-Select AWS-CENTOS, `right click`, `instance state`, Select `Reboot`  
-Click `Yes, Reboot`  
-Select AWS-WIN, `right click`, `instance state`, Select `Reboot`  
-Click `Yes, Reboot`  
-Select AWS-UBUNTU, `right click`, `instance state`, Select `Reboot`  
-Click `Yes, Reboot`  
+Select AWS-CENTOS, `right click`, Select `Reboot isntance`
+Click `Reboot`  
+Select AWS-WIN, `right click`, Select `Reboot isntance`
+Click `Reboot`  
+Select AWS-UBUNTU, `right click`, Select `Reboot isntance`  
+Click `Reboot`  
 
 Now lets check systems manager  
 
