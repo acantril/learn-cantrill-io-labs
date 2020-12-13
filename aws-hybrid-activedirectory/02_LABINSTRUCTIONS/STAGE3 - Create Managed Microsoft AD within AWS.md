@@ -40,7 +40,7 @@ Click `next configure instance details`
 Click `Network` Dropdown `AWS-VPC`  
 In `Subnet` Dropdown set to `AWS-PUBLIC`  
 Under `Domain join directory` select `aws.animals4life.org`  
-Under `IAM Role` select `EC2 Instance Profile`  
+Under `IAM Role` select `EC2InstanceProfile`  
 Click `Next Add Storage`  
 Click `Next Add Tags`  
 Click `Add Tag`  
