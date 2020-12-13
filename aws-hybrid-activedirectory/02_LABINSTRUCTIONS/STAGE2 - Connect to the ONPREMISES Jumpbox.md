@@ -67,7 +67,7 @@ Move the RDP tab at the top to the far left ... this will mean when closing thin
 # STAGE 2F - Browse to the A4L FileServer  
 
 From the Client instance  
-Click Start ... type \\\FileServer\A4LFiles  
+Click Start ... type \\FileServer\A4LFiles  
 See that we have a (small) FileShare here  
 
 Create a text document  
