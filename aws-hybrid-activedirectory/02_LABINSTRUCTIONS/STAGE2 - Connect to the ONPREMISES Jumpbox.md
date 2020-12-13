@@ -19,12 +19,13 @@ Linux : Various 3rd party solutions available
 Open https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=tag:Name  
 Select `JumpBox`  
 Locate the `Public DNS (IPv4)` for the Jumpbox and note down the DNS name  
-Right Click and Select `Connect`  
-Note down the `username` it should be `Administrator` (note this down as JumpBox Username)  
-Click on `Get Password`  
-Click on `Choose file`  
-Locate the `A4L.pem` file you downloaded earlier and click `Open`  
-Click on `Decrypt Password` and note down the password as `JumpBox Password`  
+Right Click and Select `Connect`
+Select `RDP Client`
+Click on `Get Password` 
+Click on `Choose file`
+Locate the `A4L.pem` key pair file you downloaded earlier and click `Open`
+Click `Decrypt Password`
+Note down the `User name` it should be `Administrator` (note this down as JumpBox Username)    
 
 # STAGE 2C - Connect to the Jumpbox  
 
