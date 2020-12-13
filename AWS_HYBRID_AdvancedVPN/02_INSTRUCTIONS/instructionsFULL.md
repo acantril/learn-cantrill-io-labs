@@ -48,6 +48,7 @@ Click `Dynamic` for `Routing options`
 Click `Enable Acceleration`
 Click `Create Attachment`
 
+Click `Transit Gateway Attachments` under `Transit Gateways`
 Click `Create Transit Gateway Attachment`
 Click `Transit Gateway ID` dropdown and select `A4LTGW`
 Select `VPN` for attachment type
