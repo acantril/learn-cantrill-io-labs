@@ -46,7 +46,8 @@ Click `Create Endpoint`
 For `Endpoint type` choose `Source Endpoint`  
 Under `Endpoint configuration` set `Endpoint identifier` to be `CatDBOnpremises`
 Under `Source Engine` set `mariadb`  
-unde `Server name` use the privateIPv4 address of `CatDB` (get it from EC2 console)  
+Under `Access to endpoint database` choose `Provide access information manually`  
+Under `Server name` use the privateIPv4 address of `CatDB` (get it from EC2 console)  
 For port `3306`  
 For username `a4lwordpress`  
 for password user the DBPassword you noted down in stage 1  
@@ -59,6 +60,7 @@ For `Endpoint type` choose `Target Endpoint`
 Check `Select RDS DB Instance`  
 Select `a4lwordpress` in the dropdown  
 It will prepopulate the boxes  
+Under `Access to endpoint database` choose `Provide access information manually`  
 For `Password` enter the DBPassword you noted down in stage1  
 Scroll down and click `Create Endpoint`  
 
@@ -70,13 +72,13 @@ for `Replication instance` pick the replication instance you just created
 for `Source database endpoint` pick `catdbonpremises`  
 for `Target database endpoint` pick `a4lwordpress`  
 for `Migration type` pick `migrate existing data` **you could pick and replicate changes here if this were a high volume production DB**  
-for `Table mappings` pick `Guided UI`  
+for `Table mappings` pick `Wizard`  
 Click `Add new selection rule`  
 in `Schema` box select `Enter a Schema`  
 in `Schema Name` type `a4lwordpress`  
 Scroll down and click `Create Task`  
 
-THis starts the replication task and does a full load from `catdbonpremises` to the RDS Instance.  
+This starts the replication task and does a full load from `catdbonpremises` to the RDS Instance.  
 It will create the task  
 then start the task  
 then it will be in the `Running` State until it moves into `Load complete`  
