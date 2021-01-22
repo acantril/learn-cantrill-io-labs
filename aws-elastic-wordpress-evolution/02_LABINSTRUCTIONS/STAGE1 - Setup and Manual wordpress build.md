@@ -94,7 +94,7 @@ Set Tier to `Standard`
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
 Leave `KMS Key ID` as default
-Set `Value` to your chosen database password (make sure its complex) Password1234!!
+Set `Value` to `4n1m4l54L1f3`
 Click `Create parameter`  
 
 ## Create Parameter - DBRootPassword (the password for the database root user, used for self-managed admin)  
@@ -105,7 +105,7 @@ Set Tier to `Standard`
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
 Leave `KMS Key ID` as default
-Set `Value` to your chosen database password (make sure its complex)
+Set `Value` to `4n1m4l54L1f3`
 Click `Create parameter`  
 
 # STAGE 1C - Connect to the instance and install a database and wordpress
