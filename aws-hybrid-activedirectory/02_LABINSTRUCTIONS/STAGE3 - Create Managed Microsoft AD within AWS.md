@@ -61,7 +61,7 @@ Click `Launch Instances`
 Use the remote desktop application to connect to the Jumpbox-AWS  
 You will need :-  
 - server address (this might be called differently, its the `Public DNS` value above)  
-- Username ... should be `Admin`  
+- Username ... should be `admin@aws.animals4life.org`  
 - Password ... the `Domain Admin Password` you chose for the directory service  
 
 If there are any resolution settings `DONT` use fullscreen and set a resolution lower than your screen resolution (so you can see the instructions)  
