@@ -207,6 +207,6 @@ This configuration has several limitations :-
 - The IP of the instance is hardcoded into the database ....
 
 
-You can now move onto STAGE3
+You can now move onto STAGE 4
 
 
