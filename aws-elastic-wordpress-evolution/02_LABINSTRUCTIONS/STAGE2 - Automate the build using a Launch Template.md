@@ -22,7 +22,7 @@ Under `networking Settings` make sure `Virtual Private Cloud (VPC)` is selected
 Under `Security Groups` select `A4LVPC-SGWordpress`  
 Expand `Advanced Details`
 Under `IAM instance profile` select `A4LVPC-WordpressInstanceProfile`  
-Under `T2/T3 Unlimited` select `Enable`  
+Under `Credit specification` select `Unlimited`
 
 # STAGE 2B - Add Userdata
 
