@@ -119,7 +119,7 @@ def lambda_handler(event, context):
     http = urllib3.PoolManager()
     
     for i in range(10):
-        r = http.request('GET', 'http://thecatapi.com/api/images/get?size=medformat=src&type=png&api_key=8f7dc437-0b9b-47b8-a2c0-65925d593acf')
+        r = http.request('GET', 'http://thecatapi.com/api/images/get?size=med&format=src&type=png&api_key=8f7dc437-0b9b-47b8-a2c0-65925d593acf')
         with open('/mnt/efs/'+str(uuid.uuid1())+".png", "wb" ) as png:
             png.write(r.data)
     
