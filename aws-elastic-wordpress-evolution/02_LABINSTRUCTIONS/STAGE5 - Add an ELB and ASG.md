@@ -188,7 +188,7 @@ For policy `type` select `Simple scaling`
 for `Scaling Policy name` enter `LOWCPU`  
 Click `Create a CloudWatch Alarm`  
 Click `Select Metric`  
-Click `EC2'  
+Click `EC2`  
 Click `By Auto Scaling Group`
 Check `A4LWORDPRESSASG CPU Utilization`  
 Click `Select Metric`  
@@ -198,7 +198,7 @@ Click `Next`
 Enter `WordpressLOWCPU` in `Alarm Name`  
 Click `Next`  
 Click `Create Alarm`  
-Go back to the AutoScalingGroup tab and click the `Refresh SYmbol` next to Cloudwatch Alarm  
+Go back to the AutoScalingGroup tab and click the `Refresh Symbol` next to Cloudwatch Alarm  
 Click the dropdown and select `WordpressLOWCPU`  
 For `Take the action` choose `Remove` `1` Capacity units  
 Click `Create`
