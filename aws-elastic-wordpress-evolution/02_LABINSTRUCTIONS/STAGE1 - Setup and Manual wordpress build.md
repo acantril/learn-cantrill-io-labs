@@ -29,7 +29,7 @@ Click `Next: Configure Instance Details`
 For `Network` select `A4LVPC`  
 for `Subnet` select `sn-Pub-A`  
 For `IAM role` select `A4LVPC-WordpressInstanceProfile`  
-Enable `T2/T3 Unlimited`  
+Check the box `Unlimited` against `Credit specification`
 _Even though it says Additional Changes may apply thats only if the rolling 24 hour average exceeds baseline, it won't_  
 Click `Next: Add Storage`  
 Click `Next: Add Tags`  
