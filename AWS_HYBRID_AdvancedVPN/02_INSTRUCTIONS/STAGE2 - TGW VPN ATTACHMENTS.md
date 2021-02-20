@@ -9,23 +9,25 @@ Once the connections have been created, you will download the configuration file
 
 Move back to `Transit Gateway Attachments` https://console.aws.amazon.com/vpc/home?region=us-east-1#TransitGatewayAttachments:sort=transitGatewayAttachmentId  
 
-Click `Create Transit Gateway Attachment`  
-Click `Transit Gateway ID` dropdown and select `A4LTGW`  
-Select `VPN` for attachment type  
-Select `Existing` for `Customer gateway`  
-Click `Customer gateway ID` dropdown and select `ONPREM-ROUTER1`  
-Click `Dynamic` for `Routing options`  
-Click `Enable Acceleration`  
-Click `Create Attachment`  
+Click `Transit Gateway Attachments` under `Transit Gateways`
+Click `Create Transit Gateway Attachment`
+Click `Transit Gateway ID` dropdown and select `A4LTGW`
+Select `VPN` for attachment type
+Select `Existing` for `Customer gateway`
+Click `Customer gateway ID` dropdown and select `ONPREM-ROUTER1`
+Click `Dynamic` for `Routing options`
+Click `Enable Acceleration`
+Click `Create Attachment`
 
-Click `Create Transit Gateway Attachment`  
-Click `Transit Gateway ID` dropdown and select `A4LTGW`  
-Select `VPN` for attachment type  
-Select `Existing` for `Customer gateway`  
-Click `Customer gateway ID` dropdown and select `ONPREM-ROUTER2`  
-Click `Dynamic` for `Routing options`  
-Click `Enable Acceleration`  
-Click `Create Attachment`  
+Click `Transit Gateway Attachments` under `Transit Gateways`
+Click `Create Transit Gateway Attachment`
+Click `Transit Gateway ID` dropdown and select `A4LTGW`
+Select `VPN` for attachment type
+Select `Existing` for `Customer gateway`
+Click `Customer gateway ID` dropdown and select `ONPREM-ROUTER2`
+Click `Dynamic` for `Routing options`
+Click `Enable Acceleration`
+Click `Create Attachment` 
 
 Move to `Site-to-Site VPN Connections` under `Virtual Private Network` https://console.aws.amazon.com/vpc/home?region=us-east-1#VpnConnections:sort=VpnConnectionId  
 

@@ -1,6 +1,6 @@
 # Advanced Highly-Available Dynamic Site-to-Site VPN
 
-In this STAGE .. you will e configuring each of the on premises Ubuntu, strongSwan Routers to create IPSEC tunnels to AWS. Each Router ... will create 2 IPSEC tunnels ... each going to a different AWS Endpoint. Its worth checking the visual PNG file which accompanies this STAGE to understand tunnel architecture.  
+In this STAGE .. you will be configuring each of the on premises Ubuntu, strongSwan Routers to create IPSEC tunnels to AWS. Each Router ... will create 2 IPSEC tunnels ... each going to a different AWS Endpoint. Its worth checking the visual PNG file which accompanies this STAGE to understand tunnel architecture.  
 
 Make sure before starting this stage that both VPN connections are in an `available` state  
 ** You will need the completed DemoValueTemplate.md file for this stage **  
