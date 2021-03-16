@@ -57,6 +57,7 @@ Click `Connect`
 
 `sudo reboot`  
 
+
 `ONPREM-ROUTER1` once back will now be functioning as both an IPSEC endpoint and a BGP endpoint. It will be exchanging routes with the transit gateway in AWS.  
 
 Locate and select `ONPREM-ROUTER1`  
@@ -64,7 +65,8 @@ Right Click => `Connect`
 Select `Session Manager`  
 Click `Connect`  
 
-`sudo bash`    
+`sudo bash`
+`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a very temp workaround until i fix a bug - FRR won't start all daemons because the /var/run/frr is created with 640 permissions.. it needs to be 740).
 
 SHOW THE ROUTES VIA THE UI `route`   
 SHOW THE ROUTES VIA `vtysh`  
@@ -119,6 +121,7 @@ Select `Session Manager`
 Click `Connect`  
 
 `sudo bash`     
+`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a very temp workaround until i fix a bug - FRR won't start all daemons because the /var/run/frr is created with 640 permissions.. it needs to be 740).
 
 SHOW THE ROUTES VIA THE UI  `route`  
 SHOW THE ROUTES VIA `vtysh`  
