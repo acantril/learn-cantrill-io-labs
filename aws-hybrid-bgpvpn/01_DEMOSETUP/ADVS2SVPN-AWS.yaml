@@ -1,0 +1,234 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description:  Advanced Demo - Highly-Available Dynamic Accelerated Site-to-Site VPN
+Parameters:
+  LatestAmiId:
+    Description: AMI for Bastion Host (default is latest AmaLinux2)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.16.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: A4L-AWS
+  SubnetPrivateA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.16.32.0/20
+      Tags:
+        - Key: Name
+          Value: sn-aws-private-A
+  SubnetPrivateB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: 10.16.96.0/20
+      Tags:
+        - Key: Name
+          Value: sn-aws-private-B
+  CustomRT: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: A4L-AWS-RT
+  TGWDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: "TGWVPC"
+    Properties:
+      TransitGatewayId: !Ref TGW
+      RouteTableId: !Ref CustomRT
+      DestinationCidrBlock: "0.0.0.0/0"
+  RTAssociationPrivateA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPrivateA
+      RouteTableId:
+        Ref: CustomRT
+  RTAssociationPrivateB:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPrivateB
+      RouteTableId:
+        Ref: CustomRT
+  InstanceSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Default A4L AWS SG
+      SecurityGroupIngress: 
+        - Description: 'Allow SSH IPv4 IN'
+          IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+        - Description: 'Allow ALL from ONPREM Networks'
+          IpProtocol: "-1"
+          CidrIp: '192.168.8.0/21'
+  InstanceSGSelfReferenceRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref InstanceSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref InstanceSG
+  EC2A:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - ssminterfaceendpoint
+      - ssmec2messagesinterfaceendpoint
+      - ssmmessagesinterfaceendpoint
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref SubnetPrivateA
+      SecurityGroupIds: 
+        - !Ref InstanceSG
+      Tags:
+        - Key: Name
+          Value: AWS-EC2-A
+  EC2B:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - ssminterfaceendpoint
+      - ssmec2messagesinterfaceendpoint
+      - ssmmessagesinterfaceendpoint
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref SubnetPrivateB
+      SecurityGroupIds: 
+        - !Ref InstanceSG
+      Tags:
+        - Key: Name
+          Value: AWS-EC2-B
+  EC2Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ssm:DescribeAssociation'
+                  - 'ssm:GetDeployablePatchSnapshotForInstance'
+                  - 'ssm:GetDocument'
+                  - 'ssm:DescribeDocument'
+                  - 'ssm:GetManifest'
+                  - 'ssm:GetParameter'
+                  - 'ssm:GetParameters'
+                  - 'ssm:ListAssociations'
+                  - 'ssm:ListInstanceAssociations'
+                  - 'ssm:PutInventory'
+                  - 'ssm:PutComplianceItems'
+                  - 'ssm:PutConfigurePackageResult'
+                  - 'ssm:UpdateAssociationStatus'
+                  - 'ssm:UpdateInstanceAssociationStatus'
+                  - 'ssm:UpdateInstanceInformation'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'ssmmessages:CreateControlChannel'
+                  - 'ssmmessages:CreateDataChannel'
+                  - 'ssmmessages:OpenControlChannel'
+                  - 'ssmmessages:OpenDataChannel' 
+                Resource: '*'
+              - Effect: Allow
+                Action: 
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:DeleteMessage'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:SendReply'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 's3:*'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'sns:*'
+                Resource: '*'
+  EC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2Role
+  ssminterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !Ref VPC
+  ssmec2messagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !Ref VPC
+  ssmmessagesinterfaceendpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !Ref VPC
+  TGW:
+    Type: "AWS::EC2::TransitGateway"
+    Properties:
+      AmazonSideAsn: 64512
+      Description: "A4LTGW"
+      DefaultRouteTableAssociation: "enable"
+      DnsSupport: "enable"
+      VpnEcmpSupport: "enable"
+  TGWVPC:
+    Type: AWS::EC2::TransitGatewayAttachment
+    Properties: 
+      SubnetIds: 
+        - !Ref SubnetPrivateA
+        - !Ref SubnetPrivateB
+      Tags: 
+        - Key: Name
+          Value: A4LTGWATTACHMENT
+      TransitGatewayId: !Ref TGW
+      VpcId: !Ref VPC    

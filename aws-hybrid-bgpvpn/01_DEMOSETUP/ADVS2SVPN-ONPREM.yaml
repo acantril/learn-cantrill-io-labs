@@ -1,0 +1,387 @@
+Description:  Advanced Demo - Highly-Available Dynamic Accelerated Site-to-Site VPN - MUST be applied in us-east-1 // ONPREMISES SIMULATED ENVIRONMENT
+Parameters:
+  LatestAmiId:
+    Description: AMI for Bastion Host (default is latest AmaLinux2)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 192.168.8.0/21
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: ONPREM
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+      - Key: Name
+        Value: IGW-ONPREM
+  InternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  Pub:
+    Type: AWS::EC2::Subnet
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.12.0/24
+      Tags:
+        - Key: Name
+          Value: ONPREM-PUBLIC
+  Priv1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.10.0/24
+      Tags:
+        - Key: Name
+          Value: ONPREM-PRIVATE-1
+  Priv2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 192.168.11.0/24
+      Tags:
+        - Key: Name
+          Value: ONPREM-PRIVATE-2
+  PrivateRT1: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-PRIVATE-RT1
+  PrivateRT2: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-PRIVATE-RT2
+  PublicRT: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: ONPREM-PUBLIC-RT
+  RouteDefaultIPV4Pub: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId:
+        Ref: PublicRT
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: InternetGateway
+  Route1AWSIPv4:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRT1
+      DestinationCidrBlock: '10.16.0.0/16'
+      NetworkInterfaceId: !Ref ENIR1PRIVATE
+  Route2AWSIPv4:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId:
+        Ref: PrivateRT2
+      DestinationCidrBlock: '10.16.0.0/16'
+      NetworkInterfaceId: !Ref ENIR2PRIVATE
+  RTOnPremPriv1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Priv1
+      RouteTableId:
+        Ref: PrivateRT1
+  RTOnPremPriv2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Priv2
+      RouteTableId:
+        Ref: PrivateRT2
+  RTOnPremPub:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Pub
+      RouteTableId:
+        Ref: PublicRT
+  Router1:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - ssmVPCe
+      - ssmec2messagesVPCe
+      - ssmmessagesVPCe
+    Properties:
+      InstanceType: "t3.small"
+      ImageId: "ami-0ac80df6eff0e70b5"
+      SubnetId: !Ref Pub
+      SecurityGroupIds: 
+        - !Ref InstanceSG
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SourceDestCheck: "false"
+      Tags:
+        - Key: Name
+          Value: ONPREM-ROUTER1
+      UserData:
+        Fn::Base64: !Sub |
+            #!/bin/bash -xe
+            apt-get update && apt-get install -y strongswan wget
+            mkdir /home/ubuntu/demo_assets
+            cd /home/ubuntu/demo_assets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ipsec-vti.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ipsec.conf
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter1/ffrouting-install.sh
+            chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
+            cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
+            netplan --debug apply
+  ENIR1PRIVATE:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref Priv1
+      Description: Router1 PRIVATE INTERFACE
+      GroupSet: 
+      - !Ref InstanceSG
+      SourceDestCheck: false
+      Tags:
+        -
+          Key: Name
+          Value: ONPREM-R1-PRIVATE
+  ENIAttachmentRouter11:
+    Type: AWS::EC2::NetworkInterfaceAttachment
+    Properties:
+        InstanceId:
+          Ref: Router1
+        NetworkInterfaceId:
+          Ref: ENIR1PRIVATE
+        DeviceIndex: 1
+  Router2:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - ssmVPCe
+      - ssmec2messagesVPCe
+      - ssmmessagesVPCe
+    Properties:
+      InstanceType: "t3.small"
+      ImageId: "ami-0ac80df6eff0e70b5"
+      SubnetId: !Ref Pub
+      SecurityGroupIds: 
+        - !Ref InstanceSG
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SourceDestCheck: "false"
+      Tags:
+        - Key: Name
+          Value: ONPREM-ROUTER2
+      UserData:
+        Fn::Base64: !Sub |
+            #!/bin/bash -xe
+            apt-get update && apt-get install -y strongswan wget
+            mkdir /home/ubuntu/demo_assets
+            cd /home/ubuntu/demo_assets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ipsec-vti.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ipsec.conf
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/AWS_HYBRID_AdvancedVPN/OnPremRouter2/ffrouting-install.sh
+            chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
+            cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
+            netplan --debug apply
+  ENIR2PRIVATE:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref Priv2
+      Description: Router2 PRIVATE INTERFACE
+      GroupSet: 
+      - !Ref InstanceSG
+      SourceDestCheck: false
+      Tags:
+        -
+          Key: Name
+          Value: ONPREM-R2-PRIVATE
+  ENIAttachmentRouter21:
+    Type: AWS::EC2::NetworkInterfaceAttachment
+    Properties:
+        InstanceId:
+          Ref: Router2
+        NetworkInterfaceId:
+          Ref: ENIR2PRIVATE
+        DeviceIndex: 1
+  ONPREMSERVER1:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - ssmVPCe
+      - ssmec2messagesVPCe
+      - ssmmessagesVPCe
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref Priv1
+      SecurityGroupIds: 
+        - !Ref InstanceSG
+      Tags:
+        - Key: Name
+          Value: ONPREM-SERVER1
+  ONPREMSERVER2:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - ssmVPCe
+      - ssmec2messagesVPCe
+      - ssmmessagesVPCe
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SubnetId: !Ref Priv2
+      SecurityGroupIds: 
+        - !Ref InstanceSG
+      Tags:
+        - Key: Name
+          Value: ONPREM-SERVER2
+  EC2Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ssm:DescribeAssociation'
+                  - 'ssm:GetDeployablePatchSnapshotForInstance'
+                  - 'ssm:GetDocument'
+                  - 'ssm:DescribeDocument'
+                  - 'ssm:GetManifest'
+                  - 'ssm:GetParameter'
+                  - 'ssm:GetParameters'
+                  - 'ssm:ListAssociations'
+                  - 'ssm:ListInstanceAssociations'
+                  - 'ssm:PutInventory'
+                  - 'ssm:PutComplianceItems'
+                  - 'ssm:PutConfigurePackageResult'
+                  - 'ssm:UpdateAssociationStatus'
+                  - 'ssm:UpdateInstanceAssociationStatus'
+                  - 'ssm:UpdateInstanceInformation'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'ssmmessages:CreateControlChannel'
+                  - 'ssmmessages:CreateDataChannel'
+                  - 'ssmmessages:OpenControlChannel'
+                  - 'ssmmessages:OpenDataChannel' 
+                Resource: '*'
+              - Effect: Allow
+                Action: 
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:DeleteMessage'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:SendReply'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 's3:*'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'sns:*'
+                Resource: '*'
+  EC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2Role
+  InstanceSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Default ONPREM SG
+      SecurityGroupIngress: 
+        - Description: 'Allow All from AWS Environment'
+          IpProtocol: '-1'
+          CidrIp: '10.16.0.0/16'
+  InstanceSGSelfReferenceRule:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref InstanceSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref InstanceSG
+  ssmVPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref Pub
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssm
+      VpcId: !Ref VPC
+  ssmec2messagesVPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref Pub
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ec2messages
+      VpcId: !Ref VPC
+  ssmmessagesVPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
+        - !Ref Pub
+      SecurityGroupIds:
+        - !Ref InstanceSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
+      VpcId: !Ref VPC
+  s3VPCe:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds:
+        - !Ref PublicRT
+        - !Ref PrivateRT1
+        - !Ref PrivateRT2
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcId: !Ref VPC
+Outputs:
+  Router1Public:
+    Description: Public IP of Router1
+    Value: !GetAtt Router1.PublicIp
+  Router2Public:
+    Description: Public IP of Router2
+    Value: !GetAtt Router2.PublicIp
+  Router1Private:
+    Description: Private IP of Router1
+    Value: !GetAtt Router1.PrivateIp
+  Router2Private:
+    Description: Private IP of Router2
+    Value: !GetAtt Router2.PrivateIp
