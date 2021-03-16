@@ -23,10 +23,9 @@ The demo consists of 5 stages, each implementing additional components of the ar
 
 ## 1-Click Installs
 Make sure you are logged into AWS and in `us-east-1`  
-Apply the first template and THEN once the first is in `CREATE_COMPLETE` the second
+Apply the template below and wait for `CREATE_COMPLETE` before continuing
 
-- [AWSSIDE](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/ADVS2SVPN-AWS.yaml&stackName=AWS)
-- [SIMULATEDONPREMISES](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/ADVS2SVPN-ONPREM.yaml&stackName=ONPREM)
+- [BGPVPN](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-bgpvpn/BGPVPNINFRA.yaml&stackName=BGPVPN)
 
 ## Architecture Diagrams
 
