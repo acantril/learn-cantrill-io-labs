@@ -166,3 +166,30 @@ Oops! Error Error: SyntaxError: Unexpected token < in JSON at position 0
 Be sure to use the full invoke URL with the petcuddleotron on the end, **NOT** like the image below which is missing it. This will also cause an error.  
 
 ![](serverlessjs_notupdated/serverlessjs3.png) 
+
+In Stage5, if you get below error message on the index page and CORS Policy issue on the Browser's console.
+You have to edit the `serverless.js` file and upload it again to S3. 
+
+![](serverlessjs_notupdated/cors-failed-to-fetch.PNG) 
+
+```
+Access to fetch at 'https://apigateway.amazonaws.com/prod/petcuddleotron' from origin 'http://s3-bucket.amazonaws.com' has been blocked by CORS policy: Request header field access-control-allow-origin is not allowed by Access-Control-Allow-Headers in preflight response.
+```
+
+![](serverlessjs_notupdated/cors-failed-to-fetch-console-error.PNG) 
+
+Below Changes needs to be done in `serverless.js`
+```
+mode: "no-cors"
+```
+![](serverlessjs_notupdated/serverlessjs-cors-issue.PNG) 
+
+```
+"Access-Control-Allow-Origin": "*",
+"Access-Control-Allow-Methods": "GET,POST,PUT",
+"Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token"
+```
+
+![](serverlessjs_notupdated/serverlessjs-cors-issue-solution.PNG) 
+
+Post this changes and uploading it on S3, refresh the static page and it should solve the issue.
