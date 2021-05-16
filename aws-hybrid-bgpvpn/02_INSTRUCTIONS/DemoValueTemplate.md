@@ -47,7 +47,6 @@ CONN2_TUNNEL2_AWS_INSIDE_IP         =
 CONN2_TUNNEL2_AWS_BGP_IP            =  
 
 
-
 # INSTRUCTIONS ON GETTING THE VALUES
 
 We will be locating values for a specific connection `CONN1` or `CONN2` and a specific tunnel .. `TUNNEL1` or `TUNNEL2`  

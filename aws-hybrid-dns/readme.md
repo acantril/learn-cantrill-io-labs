@@ -1,4 +1,4 @@
-# Advanced Demo - Hybrid Directory between AWS and Simulated On-Premises
+# Advanced Demo - Hybrid DNS between AWS and Simulated On-Premises
 
 In this advanced demo you will get the chance to experience how to integrate the DNS platforms of AWS and a linux based, simulated on-premises environment using Route53 inbound and outbound endpoints.
 
