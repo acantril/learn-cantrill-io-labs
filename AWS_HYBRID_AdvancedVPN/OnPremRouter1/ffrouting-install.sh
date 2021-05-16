@@ -12,11 +12,12 @@ sudo apt-get install -y \
 
 # Libyang
 cd /tmp
-git clone https://github.com/CESNET/libyang.git
+git clone https://github.com/CESNET/libyang.git -b libyang2
 cd libyang
+git checkout v2.0.0
 mkdir build; cd build
-cmake -DENABLE_LYD_PRIV=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-      -D CMAKE_BUILD_TYPE:String="Release" ..
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+      -DCMAKE_BUILD_TYPE:String="Release" ..
 make
 sudo make install
 
