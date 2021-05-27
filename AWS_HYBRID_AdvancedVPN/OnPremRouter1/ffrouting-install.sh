@@ -12,7 +12,7 @@ sudo apt-get install -y \
 
 # Libyang
 cd /tmp
-git clone https://github.com/CESNET/libyang.git -b libyang2
+git clone https://github.com/CESNET/libyang.git
 cd libyang
 git checkout v2.0.0
 mkdir build; cd build
