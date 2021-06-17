@@ -7,7 +7,7 @@ Parameters:
   WindowsAMI:
     Description: AMI for Windows Server
     Type: String
-    Default: "ami-02642c139a9dfb378"
+    Default: "ami-077f1edd46ddb3129"
   UbuntuAMI:
     Description: AMI For Ubuntu
     Type: String
