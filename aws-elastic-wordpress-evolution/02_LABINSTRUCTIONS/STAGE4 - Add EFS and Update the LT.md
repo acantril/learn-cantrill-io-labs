@@ -43,7 +43,7 @@ Note down the `fs-XXXXXXXX` file system ID once visible at the top of this scree
 
 # STAGE 4B - Add an fsid to parameter store
 
-Now that the file system has created, you need to add another parameter store value for the file system ID .. so that the automatically building instance(s) can load this safely.  
+Now that the file system has been created, you need to add another parameter store value for the file system ID so that the automatically built instance(s) can load this safely.
 
 Move to the Systems Manager console https://console.aws.amazon.com/systems-manager/home?region=us-east-1#  
 Click on `Parameter Store` on the left menu  
@@ -117,7 +117,7 @@ Once it restarts, ensure that you can still load the wordpress blog which is now
 Next you will update the launch template so that it automatically mounts the EFS file system during its provisioning process. This means that in the next stage, when you add autoscaling, all instances will have access to the same media store ...allowing the platform to scale.
 
 Go to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
-CLick `Launch Templates`  
+Click `Launch Templates`  
 Check the box next to the `Wordpress` launch template, click `Actions` and click `Modify Template (Create New Version)`  
 for `Template version description` enter `App only, uses EFS filesystem defined in /A4L/Wordpress/EFSFSID`  
 Scroll to the bottom and expand `Advanced Details`  
