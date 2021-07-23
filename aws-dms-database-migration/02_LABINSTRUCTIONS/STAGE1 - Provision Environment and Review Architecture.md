@@ -26,11 +26,11 @@ You should take note of the `parameter` values
 - DBUser
 
 You will need all of these in later stages.  
-All defaults should be pre-populated, you just need to scroll to the bottom, check the capabilities box and click `Create STack`  
+All defaults should be pre-populated, you just need to scroll to the bottom, check the capabilities box and click `Create Stack`  
 
 # STAGE 1 - FINISH   
 
-Once the slack is in the `CREATE_COMPLETE` status you will have a simulated `on-premises` environment and an AWS environment.
+Once the stack is in the `CREATE_COMPLETE` status you will have a simulated `on-premises` environment and an AWS environment.
 Move to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1  
 Click `Running Instances`  
 Select the `CatWEB` instance  
