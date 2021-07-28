@@ -109,7 +109,7 @@ then set a password on the ec2-user user
 run a `passwd ec2-user` and enter the `DBPassword` you noted down at the start of the demo.  
 **this is only temporary.. we're using the same password throughout the demo to make things easier and less prone to mistakes**
 
-restart SSHD to make those changes with `service sshd restart`  
+restart SSHD to make those changes with `service sshd restart`  or `systemctl restart ssh`
 
 
 Return back to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:  
@@ -146,6 +146,7 @@ chown -R ec2-user:apache /var/www
 chmod 2775 /var/www
 find /var/www -type d -exec chmod 2775 {} \;
 find /var/www -type f -exec chmod 0664 {} \;
+sudo systemctl restart httpd
 ```
 
 Move to the EC2 running instances console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:  
