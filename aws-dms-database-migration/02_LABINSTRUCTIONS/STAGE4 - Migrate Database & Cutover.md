@@ -32,7 +32,7 @@ Move to the DMS Console https://console.aws.amazon.com/dms/v2/home?region=us-eas
 Click `create Replication Instance`  
 for name enter `A4LONPREMTOAWS`
 use the same for `Description`  
-for `Instance Class` choose `dms.t2.micro`  
+for `Instance Class` choose `dms.t3.micro`  
 for `VPC` choose `awsVPC`  
 Uncheck `MultiAZ` and `Pubicly Accessing`  
 Expand `Advanced security and network configuration`  
