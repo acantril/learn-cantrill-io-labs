@@ -4,7 +4,8 @@
 
 In stage 5 of this advanced demo lesson, you will be adding an auto scaling group to provision and terminate instances automatically based on load on the system.  
 
-You have already performed all of the preperation steps required, my moving data storage onto RDS, media storage onto EFS and created a launch template to automatically build the wordpress application servers.  
+You have already performed all of the preparation steps required, by moving data storage onto RDS, media storage onto EFS and creating a launch template to automatically build the wordpress application servers.
+
 
 # STAGE 5A - Create the load balancer
 
@@ -27,6 +28,8 @@ Scroll down and click `Next: Configure Security Settings`
 because we're not using HTTP we can move past this  
 Click `Next: Configure Security Groups`  
 Check `Select an existing security group` and select `A4LVPC-SGLoadBalancer` it will have some random at the end and thats ok.  
+Unselect 'default VPC'
+
 
 Click `Next: Configure Routing`  
 
@@ -48,7 +51,7 @@ Scroll down and copy the `DNS Name` into your clipboard
 # STAGE 5B - Create a new Parameter store value with the ELB DNS name
 
 Move to the systems manager console https://console.aws.amazon.com/systems-manager/home?region=us-east-1#  
-Click `Paramater Store`  
+Click `Parameter Store`  
 Click `Create Parameter`  
 Under `Name` enter `/A4L/Wordpress/ALBDNSNAME` 
 Under `Description` enter `DNS Name of the Application Load Balancer for wordpress`  
@@ -76,7 +79,7 @@ ALBDNSNAME=`echo $ALBDNSNAME | sed -e 's/^"//' -e 's/"$//'`
 
 ```
 
-Move all the way to the bottom of the `User Data` and paste iin this block
+Move all the way to the bottom of the `User Data` and paste in this block
 
 ```
 cat >> /home/ec2-user/update_wp_ip.sh<< 'EOF'
@@ -117,18 +120,18 @@ For `Auto Scaling group name` enter `A4LWORDPRESSASG`
 Under `Launch Template` select `Wordpress`  
 Under `Version` select `Latest`  
 Scroll down and click `Next`  
-for `Purchase options and instance types` leave the default of `Adhere to launch template` selected.  
+for `Instance Purchase' options, leave the default of `Adhere to launch template` selected.  
 For `Network` `VPC` select `A4LVPC`  
 For `Subnets` select `sn-Pub-A`, `sn-pub-B` and `sn-pub-C`  
 Click `next`  
 
 # STAGE 5E - Integrate ASG and ALB
 
-Its here where we integrate the ASG with the Load Balanacer. Load balancers actually work (for EC2) with static instance registrations. What ASG does, it link with a target group, any instances provisioned by the ASG are added to the target group, anything terminated is removed.  
+Its here where we integrate the ASG with the Load Balancer. Load balancers actually work (for EC2) with static instance registrations. What ASG does, it link with a target group, any instances provisioned by the ASG are added to the target group, anything terminated is removed.  
 
-Check the `Enable Load balancing` box  
+Check the `Attach to an existing Load balancer` box  
 Ensure `Application Load Balancer or Network Load Balancer` is selected.  
-for `Choose a target group for your load balancer` sekect `A4LWORDPRESSALBTG`  
+for `Choose a target group for your load balancer` select `A4LWORDPRESSALBTG`  
 Under `health Checks - Optional` choose `ELB`  
 Scroll down and click `Next`  
 
@@ -156,7 +159,7 @@ Click `Auto Scaling Groups`
 Click the `A4LWORDPRESSASG` ASG  
 Click the `Automatic SCaling` Tab  
 
-We;re going to add two policies, scale in and scale out.
+We're going to add two policies, scale in and scale out.
 
 ## SCALEOUT when CPU usage on average is above 40%
 
@@ -169,7 +172,7 @@ Click `EC2'
 Click `By Auto Scaling Group`
 Check `A4LWORDPRESSASG CPU Utilization`  
 Click `Select Metric`  
-Scroll Down... select `Greater` and enter `40` in the `than` box and click `next`
+Scroll Down... select `Greater` and enter `40` in the `than` box and click `Next`
 Click `Remove` next to notification
 Click `Next`
 Enter `WordpressHIGHCPU` in `Alarm Name`  

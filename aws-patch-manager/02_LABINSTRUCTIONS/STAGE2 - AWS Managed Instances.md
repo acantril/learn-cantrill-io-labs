@@ -43,7 +43,7 @@ Click `Reboot`
 Now lets check systems manager  
 
 move to https://console.aws.amazon.com/systems-manager/home?region=us-east-1  
-Under `Instances & Nodes` click `Managed Instances`  
+Under `Node Management` click `Fleet Manager`  
 This will show any instances which have permissions to Systems manager & connectivity to systems manager  
 Instances which have the agent and permissions register themselves to become `Managed Instances`  
 You should see two instances `AWS-WIN` and `AWS-UBUNTU`  
