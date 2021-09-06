@@ -27,7 +27,7 @@
 
 - Connect to A4L VPN
 - enter the `Administrator` username and password you chose in stage 1 for the Directory Service
-- once connected open a terminal and `ping XXX.XXX.XXX.XXX'
+- once connected open a terminal and `ping DIRECTORY_SERVICE_IP_ADDRESS' (you can get this from the DS Console)
 
 Notice it doesn't work ? once more step, and thats authorizations
 
@@ -38,8 +38,9 @@ Notice it doesn't work ? once more step, and thats authorizations
 - For `Destination network to enable` enter `10.16.0.0/16`  
 - For `Grant access to` check `Allow access to all users`  
 - Click `Add Authorization Rule`
-- open a terminal and `ping DIRECTORY_SERVICE_IP_ADDRESS' (you can get this fromt he DS Console)
-- Browse to the IP Address of A4LSECRETINSTANCEA
+- open a terminal and `ping DIRECTORY_SERVICE_IP_ADDRESS' (you can get this from the DS Console)
+- notice how this works? you are now connected.
+- Browse to the Private IP Address of `CATWEB` instance using `http` (not https) this also should work.
 
 
 
