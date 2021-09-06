@@ -25,7 +25,7 @@ The demo consists of X stages, each implementing additional components of the ar
 ## 1-Click Installs
 Make sure you are logged into AWS and in `us-east-1`  
 
-- [VPC](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-client-vpn/A4LVPC.yaml&stackName=A4LVPC)
+- [VPC](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-client-vpn/A4LVPC.yaml&stackName=A4L)
 
 ## Architecture Diagrams
 
