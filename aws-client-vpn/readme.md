@@ -13,6 +13,11 @@ The demo consists of 6 stages, each implementing additional components of the ar
 
 ![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-client-vpn/Architecture.png)
 
+## 1-Click Installs (DO THIS FIRST)
+Make sure you are logged into AWS and in `us-east-1`  
+
+- [VPC](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-client-vpn/A4LVPC.yaml&stackName=A4L)
+
 ## Instructions
 
 - [Stage1](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-client-vpn/02_LABINSTRUCTIONS/STAGE1.md)
@@ -21,11 +26,6 @@ The demo consists of 6 stages, each implementing additional components of the ar
 - [Stage4](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-client-vpn/02_LABINSTRUCTIONS/STAGE4.md)
 - [Stage5](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-client-vpn/02_LABINSTRUCTIONS/STAGE5.md)
 - [Stage6](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-client-vpn/02_LABINSTRUCTIONS/STAGE6.md)
-
-## 1-Click Installs
-Make sure you are logged into AWS and in `us-east-1`  
-
-- [VPC](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-client-vpn/A4LVPC.yaml&stackName=A4L)
 
 ## Architecture Diagrams
 
