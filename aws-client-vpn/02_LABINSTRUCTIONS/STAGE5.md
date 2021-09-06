@@ -38,6 +38,8 @@ Notice it doesn't work ? once more step, and thats authorizations
 - For `Destination network to enable` enter `10.16.0.0/16`  
 - For `Grant access to` check `Allow access to all users`  
 - Click `Add Authorization Rule`
+- open a terminal and `ping DIRECTORY_SERVICE_IP_ADDRESS' (you can get this fromt he DS Console)
+- Browse to the IP Address of A4LSECRETINSTANCEA
 
 
 
