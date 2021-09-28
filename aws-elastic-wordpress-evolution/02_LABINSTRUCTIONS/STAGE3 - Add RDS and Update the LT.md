@@ -135,7 +135,7 @@ mysql -h $DBEndpoint -u $DBUser -p$DBPassword $DBName < a4lWordPress.sql
 this command will substitute `localhost` in the config file for the contents of `$DBEndpoint` which is the RDS instance
 
 ```
-sed -i "s/'localhost'/'$DBEndpoint'/g" /var/www/html/wp-config.php
+sudo sed -i "s/'localhost'/'$DBEndpoint'/g" /var/www/html/wp-config.php
 ```
 
 
