@@ -6,8 +6,8 @@ Parameters:
     Default: "A4L"
   WindowsAMI:
     Description: AMI for Windows Server
-    Type: String
-    Default: "ami-077f1edd46ddb3129"
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: "/aws/service/ami-windows-latest/Windows_Server-2019-English-Full-Base"
   UbuntuAMI:
     Description: AMI For Ubuntu
     Type: String
