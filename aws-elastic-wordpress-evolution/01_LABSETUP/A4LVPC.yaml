@@ -284,7 +284,7 @@ Resources:
                 responseData = {}
                 responseData['SubnetId'] = responseValue
                 cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
-      Runtime: python2.7
+      Runtime: python3.9
       Role: !GetAtt IPv6WorkaroundRole.Arn
       Timeout: 30
   SGWordpress:
