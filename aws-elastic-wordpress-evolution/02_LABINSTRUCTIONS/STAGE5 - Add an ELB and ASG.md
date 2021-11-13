@@ -120,7 +120,7 @@ For `Auto Scaling group name` enter `A4LWORDPRESSASG`
 Under `Launch Template` select `Wordpress`  
 Under `Version` select `Latest`  
 Scroll down and click `Next`  
-for `Instance Purchase' options, leave the default of `Adhere to launch template` selected.  
+for `Instance Purchase` options, leave the default of `Adhere to launch template` selected.  
 For `Network` `VPC` select `A4LVPC`  
 For `Subnets` select `sn-Pub-A`, `sn-pub-B` and `sn-pub-C`  
 Click `next`  
