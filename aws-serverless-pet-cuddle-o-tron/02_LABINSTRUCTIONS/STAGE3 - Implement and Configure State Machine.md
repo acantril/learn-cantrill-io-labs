@@ -32,7 +32,7 @@ note how it gives
 Move to the AWS Step Functions Console https://console.aws.amazon.com/states/home?region=us-east-1#/homepage  
 Click the `Hamburger Menu` at the top left and click `State Machines`  
 Click `Create State Machine`  
-Select `Author with Code Snippets` which will allow you to use Amazon States Language  
+Select `Write your workflow in code` which will allow you to use Amazon States Language  
 Scroll down
 for `type` select `standard`  
 Open this in a new tab https://learn-cantrill-labs.s3.amazonaws.com/aws-serverless-pet-cuddle-o-tron/pet-cuddle-o-tron.json  
