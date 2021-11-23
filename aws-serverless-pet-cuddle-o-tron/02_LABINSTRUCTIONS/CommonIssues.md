@@ -6,6 +6,11 @@ There are no common problems at this stage. Just ensure that you verify two emai
 
 For production usage you would remove SES sandbox mode.  
 
+You may receive this message which can be fixed by adding an origination phone number:
+```
+Error code: UserError - Error message: No origination entities available to send
+```
+
 ## STAGE2
 
 There are two main mistakes which can be made in stage 2.  
