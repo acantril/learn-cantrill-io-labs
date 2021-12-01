@@ -100,7 +100,7 @@ Click `View Launch Templates`
 
 Select the launch template in the list ... it should be called `Wordpress`  
 Click `Actions` and `Launch instance from template`  
-Scroll down to `Key pair (login)` and under `Key pair name` select `Don't include in launch template`. 
+Scroll down to `Key pair (login)` and under `Key pair name` select `Don't include in launch template`  
 Scroll down to `Network settings` and under `Subnet` select `sn-pub-A`  
 Scroll to `Resource Tags` click `Add tag`
 Set `Key` to `Name` and `Value` to `Wordpress-LT`
