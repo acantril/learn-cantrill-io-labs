@@ -20,7 +20,7 @@ Wait for the stack to move into a `CREATE_COMPLETE` status **Estimated time to c
 Open a new tab to the VPC Console (https://console.aws.amazon.com/vpc/home?region=us-east-1#)  
 Open a new tab to CloudFormation Console (https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/)  
 In the cloudFormation Tab  
-Click `BGPVPN` stack  
+Click `ONPREM` stack  
 Click Outputs  
 Note down IP for `Router1Public` and `Router2Public`  
 
