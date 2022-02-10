@@ -6,7 +6,7 @@ It will allow you to grant access to the resources of one, from the other.
 
 # STAGE 4A - ONPREM Ensure That Kerberos Pre-authentication Is Enabled
 
-Connect to the JumpBox  
+Connect to the JumpBox  (THE SIMULATED ONPREM ONE, NOT AWS)
 Connect to the Client Instance  
 Load Active Directory Users and Computers  
 Select Users 
