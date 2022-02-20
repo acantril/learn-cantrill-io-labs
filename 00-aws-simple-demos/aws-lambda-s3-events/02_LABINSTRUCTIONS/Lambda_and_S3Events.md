@@ -90,10 +90,30 @@ On the lambda screen, click `Upload` locate and select that .zip, and then click
 This upload will take a few minutes, but once complete you might see something saying `The deployment package of your Lambda function "pixelator" is too large to enable inline code editing. However, you can still invoke your function.` which is OK :)  
 
 
-
 # Stage 4 - Configure the Lambda Function & Trigger
 
+Click `Configuration` tab and then `Environment variables`  
+We need to add an environment variable telling the pixelator function which processed bucket to use, it will know the source bucket because it's told about that in the event data.  
+Click `Edit` then `Add environment variable`, under Key put `processed_bucket` and for `Value` put the bucket name of *your* processed bucket. 
+As an example `donotusethisname-processed`  (but use *your* bucket name)  
+Be `really really really` sure you put your `processed` bucket here and *NOT* your source bucket.  
+*if you use the source bucket here, the output images will be stored in the source bucket, this will cause the lambda function to run over and over again ... bad*
+*be super-sure to put your processed bucket*
+Click `Save`  
+
+Click `Add trigger`  
+In the dropdown pick `S3`  
+Under `Bucket` pick your *source* bucket ... *AGAIN* be really really sure this is your source bucket and *NOT* your destination bucket and *NOT* any other bucket. Only pick your *SOURCE* bucket here.  
+You will need to check the `Recursive invocation` acknowledgment box, this is because this lambda function is invoked every time anything is added to the *source* bucket, if you configure this wrongly, or configure the environment variable above wrongly ... it will run the lambda function over and over again *for ever*. 
+Once checked, click `Add`  
+
 # Stage 5 - Test and Monitor
+
+open a tab to the `cloudwatch logs` console (https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups)  
+make sure you have two tabs open to the `s3 console` (https://s3.console.aws.amazon.com/s3/home?region=us-east-1) 
+In one tab open your `-source` bucket & in the other open the `-processed' bucket  
+
+
 
 # Stage 6 - Cleanup
 
