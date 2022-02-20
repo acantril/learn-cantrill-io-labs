@@ -5,26 +5,29 @@ import boto3
 
 from PIL import Image
 
-pixels=(48,48) # lower = bigger pixels
-dest_bucket = 'ac-pixelator-1337-output'
+# pixels=(X,Y) e.g. (48,48)
+pixels=os.environ['pixelsize']
+# bucketname for pixelated images
+dest_bucket=os.environ['dest_bucket']
+
 s3_client = boto3.client('s3')
 
 def lambda_handler(event, context):
 	print(event)
 	
-	# getting bucket and object key from event object
+	# get bucket and object key from event object
 	source_bucket = event['Records'][0]['s3']['bucket']['name']
 	key = event['Records'][0]['s3']['object']['key']
 	
-	# Set a temp name and location for our original image
+	# Generate a temp name, and set location for our original image
 	object_key = str(uuid.uuid4()) + '-' + key
 	img_download_path = '/tmp/{}'.format(object_key)
 	
-	# Download the source image from S3
+	# Download the source image from S3 to temp location within execution environment
 	with open(img_download_path,'wb') as img_file:
 		s3_client.download_fileobj(source_bucket, key, img_file)
 		
-	# Biggify the pixels and store a pixelated version
+	# Biggify the pixels and store a temp pixelated version
 	pixelate(img_download_path, '/tmp/pixelated-{}'.format(object_key) )
 	
 	# uploading the pixelated version to destination bucket
