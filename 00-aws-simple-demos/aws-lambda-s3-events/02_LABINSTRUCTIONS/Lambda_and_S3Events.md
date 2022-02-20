@@ -24,11 +24,72 @@ For `Role name` put `PixelatorRole`  then Create the role
 Click `PixelatorRole`  
 Under `Permissions Policy` we need to add permissions and it will be an `inline policy`  
 Click `JSON`  and delete the contents of the code box entirely.  
+Load this link in a new tab (https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/00-aws-simple-demos/aws-lambda-s3-events/01_LABSETUP/policy/s3pixelator.json)  
+Copy the entire contents into your clipboard and paste into the previous permissions policy code editor box  
+Locate the words `REPLACEME` there should be `4` occurrences, 2 each for the source and processed buckets .. and for each of those one for the bucket and another for the objects in that bucket.  
+Replace the term `REPLACEME` with the name you picked for your buckets above, in my example it is `donotusethisname`  
+You should end with 4 lines looking like this, only with `YOUR` bucket names  
 
+```
+"Resource":[
+	"arn:aws:s3:::donotusethisname-processed",
+	"arn:aws:s3:::donotusethisname-processed/*",
+	"arn:aws:s3:::donotusethisname-source/*",
+	"arn:aws:s3:::donotusethisname-source"
+]
 
+```
 
+Locate the two occurrences of `YOURACCOUNTID`, you need to replace both of these words with your AWS account ID  
+To get that, click the account dropdown at the top right   
+click the small icon to copy down the `Account ID` and replace the `YOURACCOUNTID` in the policy code editor. *important* if you use the 'icon' to copy this number, it will remove the `-` in the account number for you :) you need to paste `123456789000` rather than `1234-5678-9000`  
+
+You should have something which looks like this, only with your account ID:  
+
+```
+{
+	  "Effect": "Allow",
+	  "Action": "logs:CreateLogGroup",
+	  "Resource": "arn:aws:logs:us-east-1:123456789000:*"
+  },
+  {
+	  "Effect": "Allow",
+	  "Action": [
+		  "logs:CreateLogStream",
+		  "logs:PutLogEvents"
+	  ],
+	  "Resource": [
+		  "arn:aws:logs:us-east-1:123456789000:log-group:/aws/lambda/pixelator:*"
+	  ]
+  }
+
+```
+
+Click `Review Policy`  
+For name put `pixelator_access_inline`  and create the policy.  
+
+# Stage 3 (pre) - ONLY DO THIS PART IF YOU WANT TO GET EXPERIENCE OF CREATING A LAMBDA ZIP
+
+TO BE FINISHED
 
 # Stage 3 - Create the Lambda Function
+
+Move to the lambda console (https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions)  
+Click `Create Function`  
+We're going to be `Authoring from Scratch`  
+For `Function name` enter `pixelator`  
+for `Runtime` select `Python 3.9`  
+For `Architecture` select `x86_64`  
+For `Permissions` expand `Change default execution role` pick `Use an existing role` and in the `Existing role` dropdown, pick `PixelatorRole`  
+Then `Create Function`  
+Close down any `notifcation` dialogues/popups  
+Click `Upload from` and select `.zip file`
+Either 1, download this zip to your local machine (https://github.com/acantril/learn-cantrill-io-labs/blob/master/00-aws-simple-demos/aws-lambda-s3-events/01_LABSETUP/my-deployment-package.zip, click Download)  
+or 2, locate the .zip you created yourself in the `Stage 3(pre)` above - they will be identical  
+On the lambda screen, click `Upload` locate and select that .zip, and then click the `Save` button  
+This upload will take a few minutes, but once complete you might see something saying `The deployment package of your Lambda function "pixelator" is too large to enable inline code editing. However, you can still invoke your function.` which is OK :)  
+
+
 
 # Stage 4 - Configure the Lambda Function & Trigger
 

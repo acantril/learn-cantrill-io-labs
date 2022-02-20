@@ -5,10 +5,8 @@ import boto3
 
 from PIL import Image
 
-# pixels=(X,Y) e.g. (48,48)
-pixels=os.environ['pixelsize']
 # bucketname for pixelated images
-dest_bucket=os.environ['dest_bucket']
+processed_bucket=os.environ['processed_bucket']
 
 s3_client = boto3.client('s3')
 
@@ -36,11 +34,11 @@ def lambda_handler(event, context):
 	
 	# uploading the pixelated version to destination bucket
 	upload_key = 'pixelated-{}'.format(object_key)
-	s3_client.upload_file('/tmp/pixelated-8x8-{}'.format(object_key), dest_bucket,'pixelated-8x8-{}'.format(object_key)
-	s3_client.upload_file('/tmp/pixelated-16x16-{}'.format(object_key), dest_bucket,'pixelated-16x16-{}'.format(object_key)
-	s3_client.upload_file('/tmp/pixelated-32x32-{}'.format(object_key), dest_bucket,'pixelated-32x32-{}'.format(object_key)
-	s3_client.upload_file('/tmp/pixelated-48x48-{}'.format(object_key), dest_bucket,'pixelated-48x48-{}'.format(object_key)
-	s3_client.upload_file('/tmp/pixelated-64x64-{}'.format(object_key), dest_bucket,'pixelated-64x64-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-8x8-{}'.format(object_key), processed_bucket,'pixelated-8x8-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-16x16-{}'.format(object_key), processed_bucket,'pixelated-16x16-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-32x32-{}'.format(object_key), processed_bucket,'pixelated-32x32-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-48x48-{}'.format(object_key), processed_bucket,'pixelated-48x48-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-64x64-{}'.format(object_key), processed_bucket,'pixelated-64x64-{}'.format(object_key)
 	
 def pixelate(pixelsize, image_path, pixelated_img_path):
 	img = Image.open(image_path)
