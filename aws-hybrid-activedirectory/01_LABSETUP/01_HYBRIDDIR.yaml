@@ -22,13 +22,14 @@ Metadata:
       - Label:
           default: Microsoft Active Directory configuration (Simulated On-Premises)
         Parameters:
-          - ADInstanceType
+          - ADServer1InstanceType
+          - ADServer2InstanceType
           - DC1NetBIOSName
           - DC2NetBIOSName
           - DC1PRIVATEIP
           - DC2PRIVATEIP
-          - ADAdminUser
-          - ADAdminPassword
+          - DomainAdminUser
+          - DomainAdminPassword
           - DomainDNSName
           - DomainNetBIOSName
           - DomainAdminPassword
@@ -40,7 +41,11 @@ Metadata:
           - QSS3KeyPrefix
           - KeyPairName
 Parameters:
-  ADInstanceType:
+  ADServer1InstanceType:
+    Type: String
+    Default: t3.large
+    Description: Amazon EC2 instance type for the AD Domain controllers
+  ADServer2InstanceType:
     Type: String
     Default: t3.large
     Description: Amazon EC2 instance type for the AD Domain controllers
@@ -68,14 +73,14 @@ Parameters:
     Default: 192.168.11.100
     Description: Fixed private IP for the DC2 located in AZB
     Type: String
-  ADAdminPassword:
+  DomainAdminPassword:
     AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
     Description: Password for the ONPREM AD Domain Admin User
     MaxLength: '32'
     MinLength: '8'
     NoEcho: 'true'
     Type: String
-  ADAdminUser:
+  DomainAdminUser:
     AllowedPattern: '[a-zA-Z0-9]*'
     Default: Admin
     Description: User name for the account that will be added as Domain Administrator. This is separate from the default "Administrator" account
@@ -177,7 +182,7 @@ Parameters:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/).
-    Default: quickstart-fsx-windows-file-server/
+    Default: quickstart-microsoft-activedirectory/
     Description: Specify the S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
@@ -199,15 +204,16 @@ Resources:
     Type: AWS::CloudFormation::Stack
     DependsOn: ONPREMVPC
     Properties:
-      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/03_HYBRIDDIR-NESTED-ONPREM-AD.yaml
+      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/03_HYBRIDDIR-NESTED-ONPREM-AD-v2.yaml
       Parameters:
-        ADInstanceType: !Ref ADInstanceType
+        ADServer1InstanceType: !Ref ADServer1InstanceType
+        ADServer2InstanceType: !Ref ADServer2InstanceType
         ADServer1NetBIOSName: !Ref DC1NetBIOSName
         ADServer2NetBIOSName: !Ref DC2NetBIOSName
         ADServer1PrivateIP: !Ref DC1PRIVATEIP
         ADServer2PrivateIP: !Ref DC2PRIVATEIP
-        ADAdminPassword: !Ref ADAdminPassword
-        ADAdminUser: !Ref ADAdminUser
+        DomainAdminPassword: !Ref DomainAdminPassword
+        DomainAdminUser: !Ref DomainAdminUser
         DomainDNSName: !Ref DomainDNSName
         DomainNetBIOSName: !Ref DomainNetBIOSName
         KeyPairName: !Ref KeyPairName
@@ -216,9 +222,9 @@ Resources:
         VPCCIDR: !Ref ONPREMVPCCIDR
         VPCID: !GetAtt 'ONPREMVPC.Outputs.VPCID'
         InstanceSGID: !GetAtt 'ONPREMVPC.Outputs.InstanceSGID'
-        QSS3BucketName: !Ref QSS3BucketName
-        QSS3BucketRegion: !Ref QSS3BucketRegion
-        QSS3KeyPrefix: !Sub '${QSS3KeyPrefix}submodules/quickstart-microsoft-activedirectory/'
+        QSS3BucketName: !Ref 'QSS3BucketName'
+        QSS3BucketRegion: !Ref 'QSS3BucketRegion'
+        QSS3KeyPrefix: !Ref 'QSS3KeyPrefix'
         KeyPairName: !Ref KeyPairName
   ONPREMCOMPUTE:
     Type: AWS::CloudFormation::Stack
@@ -229,8 +235,8 @@ Resources:
         PrivateSubnet1ID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetAID'
         PrivateSubnet2ID: !GetAtt 'ONPREMVPC.Outputs.PrivateSubnetBID'
         PublicSubnetID: !GetAtt 'ONPREMVPC.Outputs.PublicSubnetAID'
-        ADAdminPassword: !Ref ADAdminPassword
-        ADAdminUser: !Ref ADAdminUser
+        DomainAdminPassword: !Ref DomainAdminPassword
+        DomainAdminUser: !Ref DomainAdminUser
         DomainDNSName: !Ref DomainDNSName
         DomainNetBIOSName: !Ref DomainNetBIOSName
         InstanceSGID: !GetAtt 'ONPREMVPC.Outputs.InstanceSGID'

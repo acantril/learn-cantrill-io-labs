@@ -148,7 +148,7 @@ Resources:
         - DeviceName: /dev/sda2
           Ebs:
             VolumeSize: 100
-            VolumeType: gp2  
+            VolumeType: gp2           
       SecurityGroupIds:
         - !Ref InstanceSGID
       PrivateIpAddress: !Ref 'ADServer1PrivateIP'
@@ -176,7 +176,7 @@ Resources:
         - DeviceName: /dev/sda2
           Ebs:
             VolumeSize: 100
-            VolumeType: gp2
+            VolumeType: gp2            
       SecurityGroupIds:
         - !Ref InstanceSGID
       PrivateIpAddress: !Ref 'ADServer2PrivateIP'
@@ -623,7 +623,7 @@ Resources:
                       - UsingDefaultBucket
                       - !Ref AWS::Region
                       - !Ref QSS3BucketRegion
-              commandLine: "./ConfigDC2.ps1 -ADServer2NetBIOSName {{ADServer2NetBIOSName}} -DomainNetBIOSName {{DomainNetBIOSName}} -DomainDNSName {{DomainDNSName}} -ADServer1PrivateIP {{ADServer1PrivateIP}} -ADAdminSecParam {{ADAdminSecParamName}}"
+              commandLine: "./ConfigDC2.ps1 -ADServer2NetBIOSName {{ADServer2NetBIOSName}} -DomainNetBIOSName {{DomainNetBIOSName}} -DomainDNSName {{DomainDNSName}} -ADServer1PrivateIP {{ADServer1PrivateIP}} -ADAdminSecParam {{ADAdminSecParamName}} -RestoreModeSecParam {{RestoreModeSecParamName}}"
         # Kicks off DSC Configuration and loops\reboots until Node matches Configuration defined in MOF file.
         - name: "configDC2"
           action: aws:runCommand

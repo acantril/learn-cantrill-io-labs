@@ -10,14 +10,14 @@ Parameters:
   PublicSubnetID:
     Description: ID of the private subnet B in the ONPREM SIMULATED NETWORK
     Type: AWS::EC2::Subnet::Id
-  ADAdminPassword:
+  DomainAdminPassword:
     AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
     Description: Password for the ONPREM AD Domain Admin User
     MaxLength: '32'
     MinLength: '8'
     NoEcho: 'true'
     Type: String
-  ADAdminUser:
+  DomainAdminUser:
     AllowedPattern: '[a-zA-Z0-9]*'
     Default: Admin
     Description: User name for the account that will be added as Domain Administrator. This is separate from the default "Administrator" account
@@ -95,8 +95,8 @@ Resources:
           New-Item -Path 'C:\a4lfiles' -ItemType Directory
           New-SmbShare -Name "a4lfiles" -Path "C:\a4lfiles" -FullAccess "Users"
           $AdDomain = "${DomainDNSName}"
-          $Password = ConvertTo-SecureString '${ADAdminPassword}' -AsPlainText -Force  
-          $Username = "${ADAdminUser}"
+          $Password = ConvertTo-SecureString '${DomainAdminPassword}' -AsPlainText -Force  
+          $Username = "${DomainAdminUser}"
           $Credential = New-Object System.Management.Automation.PSCredential($Username,$Password)
 
           Try {
@@ -139,8 +139,8 @@ Resources:
           }
 
           $AdDomain = "${DomainDNSName}"
-          $Password = ConvertTo-SecureString '${ADAdminPassword}' -AsPlainText -Force  
-          $Username = "${ADAdminUser}"
+          $Password = ConvertTo-SecureString '${DomainAdminPassword}' -AsPlainText -Force  
+          $Username = "${DomainAdminUser}"
           $Credential = New-Object System.Management.Automation.PSCredential($Username,$Password)
 
           Try {
