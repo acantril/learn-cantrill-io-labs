@@ -9,10 +9,10 @@
 		   "s3:*"
 		],
 		"Resource":[
-			"arn:aws:s3:::ac-pixelator-1337-output",
-			"arn:aws:s3:::ac-pixelator-1337-output/*",
-			"arn:aws:s3:::ac-pixelator-1337/*",
-			"arn:aws:s3:::ac-pixelator-1337"
+			"arn:aws:s3:::REPLACEME-processed",
+			"arn:aws:s3:::REPLACEME-processed/*",
+			"arn:aws:s3:::REPLACEME-source/*",
+			"arn:aws:s3:::REPLACEME-source"
 		]
 		
 	  },

@@ -27,14 +27,22 @@ def lambda_handler(event, context):
 	with open(img_download_path,'wb') as img_file:
 		s3_client.download_fileobj(source_bucket, key, img_file)
 		
-	# Biggify the pixels and store a temp pixelated version
-	pixelate(img_download_path, '/tmp/pixelated-{}'.format(object_key) )
+	# Biggify the pixels and store temp pixelated versions
+	pixelate((8,8), img_download_path, '/tmp/pixelated-8x8-{}'.format(object_key) )
+	pixelate((16,16), img_download_path, '/tmp/pixelated-16x16-{}'.format(object_key) )
+	pixelate((32,32), img_download_path, '/tmp/pixelated-32x32-{}'.format(object_key) )
+	pixelate((48,48), img_download_path, '/tmp/pixelated-48x48-{}'.format(object_key) )
+	pixelate((64,64), img_download_path, '/tmp/pixelated-64x64-{}'.format(object_key) )
 	
 	# uploading the pixelated version to destination bucket
 	upload_key = 'pixelated-{}'.format(object_key)
-	s3_client.upload_file('/tmp/pixelated-{}'.format(object_key), dest_bucket,upload_key)
+	s3_client.upload_file('/tmp/pixelated-8x8-{}'.format(object_key), dest_bucket,'pixelated-8x8-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-16x16-{}'.format(object_key), dest_bucket,'pixelated-16x16-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-32x32-{}'.format(object_key), dest_bucket,'pixelated-32x32-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-48x48-{}'.format(object_key), dest_bucket,'pixelated-48x48-{}'.format(object_key)
+	s3_client.upload_file('/tmp/pixelated-64x64-{}'.format(object_key), dest_bucket,'pixelated-64x64-{}'.format(object_key)
 	
-def pixelate(image_path, pixelated_img_path):
+def pixelate(pixelsize, image_path, pixelated_img_path):
 	img = Image.open(image_path)
 	temp_img = img.resize(pixels, Image.BILINEAR)
 	new_img = temp_img.resize(img.size, Image.NEAREST)
