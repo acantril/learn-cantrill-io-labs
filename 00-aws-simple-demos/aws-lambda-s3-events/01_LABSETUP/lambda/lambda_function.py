@@ -42,7 +42,7 @@ def lambda_handler(event, context):
 	
 def pixelate(pixelsize, image_path, pixelated_img_path):
 	img = Image.open(image_path)
-	temp_img = img.resize(pixels, Image.BILINEAR)
+	temp_img = img.resize(pixelsize, Image.BILINEAR)
 	new_img = temp_img.resize(img.size, Image.NEAREST)
 	new_img.save(pixelated_img_path)
 	
