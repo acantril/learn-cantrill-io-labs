@@ -27,15 +27,15 @@ Click `JSON`  and delete the contents of the code box entirely.
 Load this link in a new tab (https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/00-aws-simple-demos/aws-lambda-s3-events/01_LABSETUP/policy/s3pixelator.json)  
 Copy the entire contents into your clipboard and paste into the previous permissions policy code editor box  
 Locate the words `REPLACEME` there should be `4` occurrences, 2 each for the source and processed buckets .. and for each of those one for the bucket and another for the objects in that bucket.  
-Replace the term `REPLACEME` with the name you picked for your buckets above, in my example it is `donotusethisname`  
+Replace the term `REPLACEME` with the name you picked for your buckets above, in my example it is `dontusethisname`  
 You should end with 4 lines looking like this, only with `YOUR` bucket names  
 
 ```
 "Resource":[
-	"arn:aws:s3:::donotusethisname-processed",
-	"arn:aws:s3:::donotusethisname-processed/*",
-	"arn:aws:s3:::donotusethisname-source/*",
-	"arn:aws:s3:::donotusethisname-source"
+	"arn:aws:s3:::dontusethisname-processed",
+	"arn:aws:s3:::dontusethisname-processed/*",
+	"arn:aws:s3:::dontusethisname-source/*",
+	"arn:aws:s3:::dontusethisname-source"
 ]
 
 ```
@@ -95,11 +95,13 @@ This upload will take a few minutes, but once complete you might see something s
 Click `Configuration` tab and then `Environment variables`  
 We need to add an environment variable telling the pixelator function which processed bucket to use, it will know the source bucket because it's told about that in the event data.  
 Click `Edit` then `Add environment variable`, under Key put `processed_bucket` and for `Value` put the bucket name of *your* processed bucket. 
-As an example `donotusethisname-processed`  (but use *your* bucket name)  
+As an example `dontusethisname-processed`  (but use *your* bucket name)  
 Be `really really really` sure you put your `processed` bucket here and *NOT* your source bucket.  
 *if you use the source bucket here, the output images will be stored in the source bucket, this will cause the lambda function to run over and over again ... bad*
 *be super-sure to put your processed bucket*
 Click `Save`  
+
+Click `General configuration` then click `Edit` and change the timeout to `1` minutes and `0` seconds, then click `Save`  
 
 Click `Add trigger`  
 In the dropdown pick `S3`  
@@ -113,7 +115,19 @@ open a tab to the `cloudwatch logs` console (https://console.aws.amazon.com/clou
 make sure you have two tabs open to the `s3 console` (https://s3.console.aws.amazon.com/s3/home?region=us-east-1) 
 In one tab open your `-source` bucket & in the other open the `-processed' bucket  
 
-
+In the `-source` bucket tab, make sure to select the `Objects` tab and click `Upload`  
+Add some files and click `Upload`  
+Once finished, click `Close`  
+Move to the `CloudWatch Logs` tab  
+Click the `Refresh` icon, locate and click `/aws/lambda/pixelator`  
+If there is a log stream in there, click the most recent one, if not, keep clicking the `Refresh` icon and then click the most recent log stream  
+Expand the line which begins with `{'Records': [{'eventVersion':` and you can see all of the event information about the lambda invocation, you should see the object name listed in `'object': {'key'` ...
+Go to the S3 COnsole tab for the `-processed` bucket  
+Click the `Refresh` icon  
+Select each of the pixelated versions of the image ... you should have 5 (`8x8`, `16x16`, `32x32`, `48x48` and `64x64`)  
+Click `Open`  
+You browser will either open or save all of the images  
+Open them one by one, starting with `8x8` and finally `64x64` in order ... notice how they are the same image, but less and less pixelated :)  
 
 # Stage 6 - Cleanup
 
