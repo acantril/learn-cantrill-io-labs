@@ -19,7 +19,7 @@
 	  {
 		  "Effect": "Allow",
 		  "Action": "logs:CreateLogGroup",
-		  "Resource": "arn:aws:logs:us-east-1:226329766099:*"
+		  "Resource": "arn:aws:logs:us-east-1:YOURACCOUNTID:*"
 	  },
 	  {
 		  "Effect": "Allow",
@@ -28,7 +28,7 @@
 			  "logs:PutLogEvents"
 		  ],
 		  "Resource": [
-			  "arn:aws:logs:us-east-1:226329766099:log-group:/aws/lambda/pixelator:*"
+			  "arn:aws:logs:us-east-1:YOURACCOUNTID:log-group:/aws/lambda/pixelator:*"
 		  ]
 	  }
 	]
