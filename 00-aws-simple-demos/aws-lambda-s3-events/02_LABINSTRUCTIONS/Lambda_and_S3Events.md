@@ -116,7 +116,7 @@ make sure you have two tabs open to the `s3 console` (https://s3.console.aws.ama
 In one tab open your `-source` bucket & in the other open the `-processed' bucket  
 
 In the `-source` bucket tab, make sure to select the `Objects` tab and click `Upload`  
-Add some files and click `Upload`  
+Add some files and click `Upload`  (use your own, or these https://github.com/acantril/learn-cantrill-io-labs/tree/master/00-aws-simple-demos/aws-lambda-s3-events/01_LABSETUP/media)  
 Once finished, click `Close`  
 Move to the `CloudWatch Logs` tab  
 Click the `Refresh` icon, locate and click `/aws/lambda/pixelator`  
