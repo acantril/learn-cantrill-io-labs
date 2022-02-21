@@ -39,7 +39,6 @@ You should end with 4 lines looking like this, only with `YOUR` bucket names
 	"arn:aws:s3:::dontusethisname-source/*",
 	"arn:aws:s3:::dontusethisname-source"
 ]
-
 ```
 
 Locate the two occurrences of `YOURACCOUNTID`, you need to replace both of these words with your AWS account ID  
@@ -64,7 +63,6 @@ You should have something which looks like this, only with your account ID:
 		  "arn:aws:logs:us-east-1:123456789000:log-group:/aws/lambda/pixelator:*"
 	  ]
   }
-
 ```
 
 Click `Review Policy`  
