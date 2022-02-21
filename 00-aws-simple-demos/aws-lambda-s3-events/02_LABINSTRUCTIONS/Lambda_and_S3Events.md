@@ -69,8 +69,23 @@ Click `Review Policy`
 For name put `pixelator_access_inline`  and create the policy.  
 
 # Stage 3 (pre) - ONLY DO THIS PART IF YOU WANT TO GET EXPERIENCE OF CREATING A LAMBDA ZIP
+## this guide is only tested on macOS, it should work on linux, windows may require different tools.
+## if in doubt, skip to step 3 below
 
-TO BE FINISHED
+From the CLI/Terminal
+Create a folder my_lambda_deployment  
+Move into that folder
+create a folder called lambda  
+Move into that folder
+Create a file called `lamda_function.py` and paste in the code for the lambda `pixelator` function (https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/00-aws-simple-demos/aws-lambda-s3-events/01_LABSETUP/lambda/lambda_function.py) then save  
+Download this file (https://files.pythonhosted.org/packages/f3/3b/d7bb231b3bc1414252e77463dc63554c1aeccffe0798524467aca7bad089/Pillow-9.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl) into that folder
+run `upzip Pillow-9.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl` and then `rm Pillow-9.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl`  
+These are the Pillow module files ... required for image manipulation in Python 3.9 (which is what the lambda function will be using)  
+From the same folder, run `zip -r ../my-deployment-package.zip .` which will create a lambda function zip, containing all these files in the parent directory.  
+
+This zip will be the same zip which i link below, so if you do have any issues with the lambda function, you can use the one i've pre-created.
+
+
 
 # Stage 3 - Create the Lambda Function
 
