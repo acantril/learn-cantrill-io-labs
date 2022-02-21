@@ -148,6 +148,25 @@ Open them one by one, starting with `8x8` and finally `64x64` in order ... notic
 
 # Stage 6 - Cleanup
 
+Open the `pixelator` lambda function (https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions/pixelator?tab=code)  
+Delete the function  
+Move to the IAM Roles console (https://console.aws.amazon.com/iamv2/home#/roles) 
+Click `PixelatorRole`, then `Delete` the role, then confirm the deletion.  
+Go to the `S3 Console` (https://s3.console.aws.amazon.com/s3/home?region=us-east-1&region=us-east-1)  
+For each of the `source` and `processed` buckets do:
+
+- Select the bucket.  
+- Click `Empty`.  
+- Type `permanently delete`, and `Empty`.  
+- Close the dialogue and move back to the main S3 Console.  
+- Make sure the bucket is still selected, click `Delete`.   
+- Type the name of the bucket then delete the bucket.  
+
+That's all folks! :)  
+  
+
+
+
 
 
 
