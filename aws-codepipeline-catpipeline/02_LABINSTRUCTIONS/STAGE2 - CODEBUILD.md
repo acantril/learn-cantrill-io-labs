@@ -147,3 +147,50 @@ Check progress under phase details tab and build logs tab
 
 ## TEST THE DOCKER IMAGE
 
+Use this link to deploy an EC2 instance with docker installed (https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-codepipeline-catpipeline/ec2docker.yaml&stackName=DOCKER) accept all details, check the checkbox and create the stack.
+Wait for this to move into the `CREATE_COMPLETE` state before continuing.  
+
+Move to the EC2 Console ( https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Home: )  
+Instances  
+Select `A4L-PublicEC2`, right click, connect  
+Choose EC2 Instance Connect, leave everything with defaults and connect.  
+
+
+Docker should already be preinstalled and the EC2 instance has a role which gives ECR permissions which you will need for the next step.
+
+test docker via  `docker ps` command
+it should output an empty list  
+
+
+run a `aws ecr get-login-password --region us-east-1`, this command gives us login information for ECR which can be used with the docker command. To use it use this command.
+
+you will need to replace the placeholder with your AWS Account ID (with no dashes)
+
+`aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNTID_REPLACEME.dkr.ecr.us-east-1.amazonaws.com`
+
+Go to the ECR console (https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1)  
+Repositories  
+Click the `catpipeline` repository  
+For `latest` copy the URL into your clipboard  
+
+run the command below pasting in your clipboard after docker p
+`docker pull ` but paste in your clipboard after the space, i.e 
+`docker pull 918849966740.dkr.ecr.us-east-1.amazonaws.com/catpipeline-dev:latest` (this is an example, you will need your image URI)  
+
+run `docker images` and copy the image ID into your clipboard for the `catpipeline` docker image
+
+run the following command replacing the placeholder with the image ID you copied above.  
+
+`docker run -p 80:80 IMAGEID_REPLACEME`
+
+Move back to the EC2 console tab  
+Click `Instances` and get the public IPv4 address for the A4L-PublicEC2 instance.  
+open that IP in a new tab, ensuring it's http://IP not https://IP  
+You should see the docker container running, with cats in containers... if so, this means your automated build process is working.  
+
+
+
+
+
+
+
