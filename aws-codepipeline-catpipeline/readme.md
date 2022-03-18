@@ -10,15 +10,15 @@ The advanced demo consists of 5 stages :-
 - STAGE 4 : Create an ECS Cluster, TG's , ALB and configure the code pipeline for deployment to ECS Fargate
 - STAGE 5 : CLEANUP
 
-![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/catpipeline-arc-all.png)
+![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/catpipeline-arch-all.png)
 
 ## Instructions
 
-- [Stage1](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE1 - CODECOMMIT.md)
-- [Stage2](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE2 - CODEBUILD.md)
-- [Stage3](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE3 - CODEPIPELINE.md)
-- [Stage4](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE4 - CODEDEPLOY.md)
-- [Stage5](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE5 - CLEANUP.md)
+- [Stage1](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE1-CODECOMMIT.md)
+- [Stage2](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE2-CODEBUILD.md)
+- [Stage3](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE3-CODEPIPELINE.md)
+- [Stage4](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE4-CODEDEPLOY.md)
+- [Stage5](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE5-CLEANUP.md)
 
 
 
