@@ -14,11 +14,11 @@ The advanced demo consists of 5 stages :-
 
 ## Instructions
 
-- [Stage1](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE1-CODECOMMIT.md)
-- [Stage2](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE2-CODEBUILD.md)
-- [Stage3](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE3-CODEPIPELINE.md)
-- [Stage4](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE4-CODEDEPLOY.md)
-- [Stage5](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE5-CLEANUP.md)
+- [Stage1](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE1-CODECOMMIT.md)
+- [Stage2](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE2-CODEBUILD.md)
+- [Stage3](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE3-CODEPIPELINE.md)
+- [Stage4](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE4-CODEDEPLOY.md)
+- [Stage5](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/STAGE5-CLEANUP.md)
 
 
 
