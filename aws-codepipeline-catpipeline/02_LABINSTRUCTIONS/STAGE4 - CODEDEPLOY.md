@@ -1,4 +1,4 @@
-# STAGE 3 - CODE DEPLOY
+# STAGE 4 - CODE DEPLOY
 
 In this stage, you will configure automated deployment of the cat pipeline application to ECS Fargate
 
