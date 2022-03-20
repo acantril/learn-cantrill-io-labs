@@ -1,14 +1,23 @@
-Remove Service
-Remove Task Definition
-Remove Cluster
+# STAGE 5 - CLEANUP
 
-Remove LB
-Remove TG's
+In this stage you're going to clean up and remove all resources during the demo series.
 
-Remove Pipeline
-Remove Build
-Remove Source
+## ECS  
+Remove Service  
+Remove Task Definition  
+Remove Cluster  
 
-Remove Bucket
+## EC2  
+Remove LB  
+Remove TG's  
 
-Remove IAM Roles
+## CODE*  
+Remove Pipeline  
+Remove Build  
+Remove Source  
+
+## S3  
+Remove Artefact Bucket  
+
+## IAM
+Remove Service Role Created during the advanced demo  
