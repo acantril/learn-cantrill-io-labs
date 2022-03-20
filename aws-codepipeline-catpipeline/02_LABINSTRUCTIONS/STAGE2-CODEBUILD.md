@@ -101,7 +101,7 @@ Select to edit the raw `JSON` and delete the skeleton JSON, replacing it with
 ```
 
 Move on and review the policy.  
-Name it `Codebuild-ERC` and create the policy
+Name it `Codebuild-ECR` and create the policy
 This means codebuild can now access ECR.  
 
 ## BUILDSPEC.YML
@@ -175,7 +175,7 @@ For `latest` copy the URL into your clipboard
 
 run the command below pasting in your clipboard after docker p
 `docker pull ` but paste in your clipboard after the space, i.e 
-`docker pull 918849966740.dkr.ecr.us-east-1.amazonaws.com/catpipeline-dev:latest` (this is an example, you will need your image URI)  
+`docker pull ACCOUNTID_REPLACEME.dkr.ecr.us-east-1.amazonaws.com/catpipeline:latest` (this is an example, you will need your image URI)  
 
 run `docker images` and copy the image ID into your clipboard for the `catpipeline` docker image
 

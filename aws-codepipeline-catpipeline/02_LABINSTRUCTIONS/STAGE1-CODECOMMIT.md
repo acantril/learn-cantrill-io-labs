@@ -7,7 +7,7 @@ In this part of the advanced demo you will be creating and configuring a code co
 Full official instructions for Linux and macOS https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-ssh-unixes.html  
 
 Full offical instructions for windows https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-ssh-windows.html
-
+Run `cd ~/.ssh`
 Run `ssh-keygen -t rsa -b 4096` and call the key 'codecommit', don't set any password for the key.  
 Run `cat ~/.ssh/codecommit.pub` and copy the output onto your clipboard.  
 In the AWS console move to the IAM console ( https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/home )  

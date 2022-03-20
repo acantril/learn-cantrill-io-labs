@@ -24,7 +24,6 @@ Under `listners and routing` make sure HTTP:80 is configured for the listner.
 Create a target group, this will open a new tab
 call it `catpipelineA-TG`, ensure that `IP`, HTTP:80, HTTP1 and the default VPC are selected.  
 Click next and then create the target group, for now we wont register any targets.  
-create another target group with the same configuration called `catpipelineB-TG` while on the same tab
 Return to the original tab, hit the refresh icon next to target group and pick `catpipelineA-TG` from the list.  
 Then create the load balancer. 
 This will take a few minutes to create, but you can continue on with the next part while this is creatign.
