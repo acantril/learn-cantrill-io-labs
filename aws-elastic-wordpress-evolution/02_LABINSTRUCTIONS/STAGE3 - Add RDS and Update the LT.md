@@ -64,7 +64,7 @@ Scroll to the bottom and click `create Database`
 Open the EC2 Console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 Click `Instances`  
 Locate the `WordPress-LT` instance, right click, `Connect` and choose `Session Manager` and then click `Connect`  
-Type `bash`  
+Type `sudo bash`  
 Type `cd`  
 Type `clear`  
 
