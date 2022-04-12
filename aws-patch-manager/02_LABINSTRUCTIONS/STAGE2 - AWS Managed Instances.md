@@ -99,6 +99,10 @@ This will connect you into the `AWS-CENTOS` instance
 
 make sure python3 works  
 
+run following commands to point to the available mirrorlist before running next commands
+
+`sudo sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*`
+`sudo sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*`
 
 for centos the command to install the Systems Manager Agent is   
 
