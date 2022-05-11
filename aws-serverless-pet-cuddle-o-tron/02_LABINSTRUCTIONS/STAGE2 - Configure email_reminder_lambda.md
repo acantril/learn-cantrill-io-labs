@@ -35,7 +35,7 @@ Move to the lambda console https://console.aws.amazon.com/lambda/home?region=us-
 Click on `Create Function`  
 Select `Author from scratch`  
 For `Function name` enter `email_reminder_lambda`  
-and for runtime click the dropdown and pick `Python 3.8`  
+and for runtime click the dropdown and pick `Python 3.9`  
 Expand `Change default execution role`  
 Pick to `Use an existing Role`  
 Click the `Existing Role` dropdown and pick `LambdaRole` (there will be randomness and thats ok)  
