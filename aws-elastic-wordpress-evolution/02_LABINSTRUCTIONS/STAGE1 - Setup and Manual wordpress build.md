@@ -25,19 +25,14 @@ Locate the `Amazon Linux 2 AMI (HVM), SSD Volume Type` AMI
 ensure `64-bit (x86)` is selected  
 Click `Select`
 Select whatever instance shows as `Free tier eligible`  
-Click `Next: Configure Instance Details`  
-For `Network` select `A4LVPC`  
+Click on dropdown of `Key pair login (info)` and select `Proceed without a key pair (Not recommended)` We will not need it for this demo.
+For `Network Settings` select `A4LVPC`  
 for `Subnet` select `sn-Pub-A`  
-For `IAM role` select `A4LVPC-WordpressInstanceProfile`  
+Under `Firewall (security groups)` Select `Select existing security group`
+Click on the dropdown menu of `Common security groups info` and select `A4LVPC-SGWordpress-xxxxxxxxxxxx sg-xxxxxxxxxx`
+Under `Advanced details` and `IAM instance profile` Click dropdown menu and `Select`  `A4LVPC-WordpressInstanceProfile`
 Check the box `Unlimited` against `Credit specification`
 _Even though it says Additional Changes may apply thats only if the rolling 24 hour average exceeds baseline, it won't_  
-Click `Next: Add Storage`  
-Click `Next: Add Tags`  
-Click `Add Tag`  
-Set `Key` to `Name` & set `Value` to `Wordpress-Manual`  
-Click `Next: Configure Security Group`  
-Check `Select an existing security group`  
-Select `A4LVPC-SGWordpress` it will have randomness after it, thats ok :)  
 Click `Review and Launch`  
 Click `Continue` to the port 22 warning, thats ok  
 Click `Launch`  
