@@ -30,15 +30,15 @@ select `scripts.js` and click `Download` & save the file locally
 # STAGE 4B - Update files with your specific connection information  
 
 Open the local copy of `index.html` in a code editor.    
-Locate the `XXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com` placeholder   
+Locate the `REPLACE_ME_GOOGLE_APP_CLIENT_ID` placeholder   
 Replace this with YOUR CLIENT ID  
 Save `index.html`  
 
 Open the local copy of `scripts.js` in a code editor.   
-Locate the IdentityPoolId: `IdentityPoolId: 'XX-XXXX-X:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'` placeholder    
-Replace the `XXXXX` part with your IDENTITY POOL ID you noted down in the previous step  
-Locate the `Bucket: "REPLACE_ME_PRIVATE_PATCHES_BUCKET" ` placeholder.  
-Replace `REPLACE_ME_PRIVATE_PATCHES_BUCKET` with with bucket name of the `webidf-patchesprivatebucket-` bucket
+Locate the IdentityPoolId: `REPLACE_ME_COGNITO_IDENTITY_POOL_ID` placeholder    
+Replace the `REPLACE_ME_COGNITO_IDENTITY_POOL_ID` part with your IDENTITY POOL ID you noted down in the previous step  
+Locate the `Bucket: "REPLACE_ME_NAME_OF_PATCHES_PRIVATE_BUCKET" ` placeholder.  
+Replace `REPLACE_ME_NAME_OF_PATCHES_PRIVATE_BUCKET` with with bucket name of the `webidf-patchesprivatebucket-` bucket
 Save `scripts.js`  
 
 # STAGE 4C - Upload files
@@ -49,18 +49,19 @@ Add the `index.html` and `scripts.js` files and click `Upload`
 
 # STAGE 4C - Test application  
 
-Open the S3 bucket static hosting endpoint which you noted down earlier for the `webidf-appbucket` bucket  
-This should have been noted down as `APP BUCKET ENDPOINT`  
-it should show a simple webpage  
-Click `Sign In`    
+Open the `WebApp URL` you noted down earlier, the `distribution domain name` of the cloudfront distribution  
+This is the web app, with no access to any AWS resources right now  
+Open your browser `web developer tools` (firefox tool->browser tools-> web developer tools)  
+it might be called browser console in other browsers, it will log any output from javascript running in your web browser.  
+With the browser console open, Click `Sign In`    
 Sign in with your google account  
 
-When you click the Sign In button a few things happen:-  
+When you click the Sign In button a few things happen:-  (watch the console)  
 
 - You authenticate with the Google IDP  
 - a Google Access token is returned  
 - This token is provided as part of the API Call to Cognito  
-- If successful this returns Temporary AWS credentials  
+- If successful this exchanges this for Temporary AWS credentials  
 - These are used to list objects in the private bucket  
 - for all objects, presignedURLs are generated and used to load the images in the browser.  
 
