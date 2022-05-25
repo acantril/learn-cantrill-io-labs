@@ -19,7 +19,7 @@ Type in the ID of the project, which might have a slightly different name (shown
 
 # STAGE 5B - Delete the Cognito ID Pool
 Move to the cognito console https://console.aws.amazon.com/cognito/home?region=us-east-1  
-Click `Manage Identity Pools`  
+Click `Federated Identities`  
 Click on `PetIDFIDPool`  
 Click `Edit Identity Pool`  
 Locate and expand `Delete identity pool`  
