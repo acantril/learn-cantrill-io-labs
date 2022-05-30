@@ -20,7 +20,7 @@ This advanced demo consists of 5 stages :-
 ![Stage1 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-cognito-web-identity-federation/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE1.png)  
 
 # Video Guide
-![Stage1 - Video Guide](https://youtu.be/DyiJZz07g_E)
+[Stage1 - Video Guide](https://youtu.be/DyiJZz07g_E)
 
 
 # STAGE 1A - Login to an AWS Account    
