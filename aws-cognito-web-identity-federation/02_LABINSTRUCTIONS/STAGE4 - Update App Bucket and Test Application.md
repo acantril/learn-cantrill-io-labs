@@ -20,7 +20,7 @@ This advanced demo consists of 5 stages :-
 ![Stage4 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-cognito-web-identity-federation/02_LABINSTRUCTIONS/ARCHITECTURE-STAGE4.png)  
 
 # Video Guide
-![](https://youtu.be/YkDImYUcY3U)
+[Stage4 - Video Guide](https://youtu.be/YkDImYUcY3U)
 
 
 # STAGE 4A - Download index.html and scripts.js from the S3   
