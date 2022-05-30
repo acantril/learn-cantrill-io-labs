@@ -34,6 +34,14 @@ Make sure you are logged into AWS and in `us-east-1`
 
 - [WEBIDF](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-cognito-web-identity-federation/WEBIDF.yaml&stackName=WEBIDF)
 
+## Video Guides
+
+- [STAGE1] (https://youtu.be/DyiJZz07g_E)
+- [STAGE2] (https://youtu.be/wWQ8lgqa4fo)
+- [STAGE3] (https://youtu.be/MXkqOgXkwRQ)
+- [STAGE4] (https://youtu.be/YkDImYUcY3U)
+- [STAGE5] (https://youtu.be/aJALTW-F24g)
+
 ## Architecture Diagrams
 
 - [Overall - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-cognito-web-identity-federation/02_LABINSTRUCTIONS/ARCHITECTURE-ENDSTATE.png)
