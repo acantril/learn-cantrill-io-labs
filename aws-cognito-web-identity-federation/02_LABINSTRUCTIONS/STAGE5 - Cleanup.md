@@ -11,6 +11,9 @@ This advanced demo consists of 5 stages :-
 - STAGE 4 : Update App Bucket & Test Application 
 - STAGE 5 : Cleanup the account **<= THIS STAGE**
 
+# Video Guide
+![](https://youtu.be/aJALTW-F24g)
+
 # STAGE 5A - Delete the Google API Project & Credentials
 https://console.developers.google.com/cloud-resource-manager 
 Select `PetIDF` and click `DELETE`  
