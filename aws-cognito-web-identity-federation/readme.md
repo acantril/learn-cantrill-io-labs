@@ -36,11 +36,11 @@ Make sure you are logged into AWS and in `us-east-1`
 
 ## Video Guides
 
-- [STAGE1] (https://youtu.be/DyiJZz07g_E)
-- [STAGE2] (https://youtu.be/wWQ8lgqa4fo)
-- [STAGE3] (https://youtu.be/MXkqOgXkwRQ)
-- [STAGE4] (https://youtu.be/YkDImYUcY3U)
-- [STAGE5] (https://youtu.be/aJALTW-F24g)
+- [STAGE1](https://youtu.be/DyiJZz07g_E) - SETUP
+- [STAGE2](https://youtu.be/wWQ8lgqa4fo) - Google API project
+- [STAGE3](https://youtu.be/MXkqOgXkwRQ) - Cognito Identity Pool
+- [STAGE4](https://youtu.be/YkDImYUcY3U) - Configure and Test Application
+- [STAGE5](https://youtu.be/aJALTW-F24g) - Cleanup
 
 ## Architecture Diagrams
 
