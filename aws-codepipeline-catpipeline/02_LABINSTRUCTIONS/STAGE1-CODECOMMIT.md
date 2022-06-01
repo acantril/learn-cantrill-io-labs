@@ -22,6 +22,8 @@ From your terminal, run `nano ~/.ssh/config` and at the top of the file add the 
 Host git-codecommit.*.amazonaws.com
   User KEY_ID_YOU_COPIED_ABOVE_REPLACEME
   IdentityFile ~/.ssh/codecommit
+  HostHostKeyAlgorithms +ssh-rsa
+  PubkeyAcceptedKeyTypes +ssh-rsa  
 ```
 
 Change the `KEY_ID_YOU_COPIED_ABOVE_REPLACEME` placeholder to be the actual SSH key ID you copied above. 
