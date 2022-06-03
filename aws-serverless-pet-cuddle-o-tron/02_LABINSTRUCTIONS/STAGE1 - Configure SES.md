@@ -14,6 +14,9 @@ This advanced demo consists of 6 stages :-
 - STAGE 5 : Implement the static frontend application and test functionality
 - STAGE 6 : Cleanup the account
 
+# STAGE1 VIDEO GUIDE 
+[STAGE1 VIDEO GUIDE](https://youtu.be/4bCv6gGE6yQ)
+
 # STAGE 1A - VERIFY SES APPLICATION SENDING EMAIL ADDRESS
 
 The Pet-Cuddle-O-Tron application is going to send reminder messages via SMS and Email.  It will use the simple email service or SES. In production, it could be configured to allow sending from the application email, to any users of the application. SES starts off in sandbox mode, which means you can only sent to verified addresses (to avoid you spamming). 
