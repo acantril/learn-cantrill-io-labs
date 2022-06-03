@@ -13,6 +13,9 @@ This advanced demo consists of 6 stages :-
 - STAGE 5 : Implement the static frontend application and test functionality
 - STAGE 6 : Cleanup the account
 
+# STAGE4 VIDEO GUIDE 
+[STAGE4 VIDEO GUIDE](https://youtu.be/mhFYhpobgOs)
+
 
 In this stage you will be creating the front end API for the serverless application.  
 The front end loads from S3, runs in your browser and communicates with this API.  
