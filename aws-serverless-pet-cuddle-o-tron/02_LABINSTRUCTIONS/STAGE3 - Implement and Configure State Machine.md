@@ -13,6 +13,10 @@ This advanced demo consists of 6 stages :-
 - STAGE 5 : Implement the static frontend application and test functionality
 - STAGE 6 : Cleanup the account
 
+
+# STAGE3 VIDEO GUIDE 
+[STAGE3 VIDEO GUIDE](https://youtu.be/8lVPdrF97LI)
+
 # STAGE 3A - CREATE STATE MACHINE ROLE
 In this stage of the demo you need to create an IAM role which the state machine will use to interact with other AWS services.  
 You could create this manually, but its easier to do this step using cloudformation to speed things up.  
