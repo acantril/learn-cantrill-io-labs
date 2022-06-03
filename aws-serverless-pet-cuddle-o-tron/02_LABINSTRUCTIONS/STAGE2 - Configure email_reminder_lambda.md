@@ -14,6 +14,9 @@ This advanced demo consists of 6 stages :-
 - STAGE 5 : Implement the static frontend application and test functionality
 - STAGE 6 : Cleanup the account
 
+# STAGE2 VIDEO GUIDE 
+[STAGE2 VIDEO GUIDE](https://youtu.be/MicGrt0_KUg)
+
 # STAGE 2A - CREATE THE Lambda Execution Role for Lambda
 
 In this stage of the demo you need to create an IAM role which the email_reminder_lambda will use to interact with other AWS services.  
