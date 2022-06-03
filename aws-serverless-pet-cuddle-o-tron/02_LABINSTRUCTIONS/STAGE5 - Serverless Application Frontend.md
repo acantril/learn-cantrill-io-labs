@@ -18,6 +18,9 @@ In this stage of the application you will create an S3 bucket and static website
 You will download the source files for the front end, configure them to connect to your specific API gateway and then upload them to S3.
 Finally, you will run some application tests to verify its functionality.  
 
+# STAGE5 VIDEO GUIDE 
+[STAGE5 VIDEO GUIDE](https://youtu.be/EH59wStuuik)
+
 
 # STAGE 5A - CREATE THE S3 BUCKET
 
