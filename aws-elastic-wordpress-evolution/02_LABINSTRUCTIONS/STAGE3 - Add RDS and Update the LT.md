@@ -12,13 +12,13 @@ In this case you will give it a selection of 3 subnets sn-db-A / B and C
 RDS can then decide freely which to use.  
 
 Move to the RDS Console https://console.aws.amazon.com/rds/home?region=us-east-1#  
-Click `SubNet Groups`  
+Click `Subnet Groups`  
 Click `Create DB Subnet Group`  
 Under `Name` enter `WordPressRDSSubNetGroup`  
 Under `Description` enter `RDS Subnet Group for WordPress`  
 Under `VPC` select `A4LVPC`  
 
-Under `Add subnets`
+Under `Add subnets` 
 In `Availability Zones` select `us-east-1a` & `us-east-1b` & `us-east-1c`  
 Under `Subnets` check the box next to 
 
@@ -37,7 +37,7 @@ Click `Databases`
 Click `Create Database`  
 Click `Standard Create`  
 Click `MySql`  
-Under `Version` select `MySQL 5.7.31` (best aurora compatability for snapshot migrations)  
+Under `Version` select `MySQL 8.0.28` (best aurora compatability for snapshot migrations)  
 
 Scroll down and select `Free Tier` under templates
 _this ensures there will be no costs for the database but it will be single AZ only_
@@ -46,12 +46,11 @@ under `Db instance identifier` enter `a4lWordPress`
 under `Master Username` enter enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBUser/description?region=us-east-1&tab=Table  
 under `Master Password` and `Confirm Password` enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBPassword/description?region=us-east-1&tab=Table  
 
-Under `DB Instance size`, then `DB instance class`, then `Burstable classes (includes t classes)` make sure db.t2.micro is selected  
+Under `DB Instance size`, then `DB instance class`, then `Burstable classes (includes t classes)` make sure db.t3.micro or db.t2.micro is selected  
 Scroll down, under `Connectivity`, `Virtual private cloud (VPC)` select `A4LVPC`  
-Expand `Additional connectivity configuration` 
 Ensure under `Subnet group` that `wordpressrdssubnetgroup` is selected  
-Make sure `Publicly accessible` is set to `No`  
-Under `Existing VPC security groups` add `A4LVPC-SG-Database` and remove `Default`  
+Make sure `Public Access` is set to `No`  
+Under `VPC security groups` make sure `choose existing` is selected, remove `default` and add `A4LVPC-SG-Database`  
 Under `Availability Zone` set `us-east-1a`  
 Scroll down and expand `Additional configuration`  
 in the `Initial database name` box enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBName/description?region=us-east-1&tab=Table  
@@ -106,7 +105,7 @@ Move to the RDS Console https://console.aws.amazon.com/rds/home?region=us-east-1
 Click the `a4lWordPressdb` instance  
 Copy the `endpoint` into your clipboard  
 Move to the Parameter store https://console.aws.amazon.com/systems-manager/parameters?region=us-east-1  
-Check the box next to `/A4L/Wordpress/DBEndpoint` and click `Delete`
+Check the box next to `/A4L/Wordpress/DBEndpoint` and click `Delete` (please do delete this, not just edit the existing one)  
 Click `Create Parameter`  
 
 Under `Name` enter `/A4L/Wordpress/DBEndpoint`  
