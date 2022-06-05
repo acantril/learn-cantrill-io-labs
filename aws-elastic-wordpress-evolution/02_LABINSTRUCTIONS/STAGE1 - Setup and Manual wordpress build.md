@@ -22,29 +22,25 @@ Wait for the STACK to move into the `CREATE_COMPLETE` state before continuing.
 Move to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1  
 Click `Launch Instance`  
 
-Locate the `Amazon Linux 2 AMI (HVM), SSD Volume Type` AMI  
-ensure `64-bit (x86)` is selected  
-Click `Select`
-Select whatever instance shows as `Free tier eligible`  
-Click `Next: Configure Instance Details`  
-For `Network` select `A4LVPC`  
+For `name` use `Wordpress-Manual`  
+Select `Amazon Linux`  
+From the dropdown make sure `Amazon Linux 2 AMI (HVM), SSD Volume Type` AMI is selected  
+ensure `64-bit (x86)` is selected in the architecture dropdown.  
+Under `instance type`  
+Select whatever instance shows as `Free tier eligible` (probably t2 or t3.micro)  
+Under `Key Pair(login)` select `Proceed without a KeyPair (not recommended)`  
+For `Network Settings`, click `Edit` and in the VPC download select `A4LVPC`  
 for `Subnet` select `sn-Pub-A`  
-For `IAM role` select `A4LVPC-WordpressInstanceProfile`  
-Check the box `Unlimited` against `Credit specification`
-_Even though it says Additional Changes may apply thats only if the rolling 24 hour average exceeds baseline, it won't_  
-Click `Next: Add Storage`  
-Click `Next: Add Tags`  
-Click `Add Tag`  
-Set `Key` to `Name` & set `Value` to `Wordpress-Manual`  
-Click `Next: Configure Security Group`  
+Make sure for both `Auto-assign public IP` and `Auto-assign IPv6 IP` you set to `Enable`  
+Under security Group
 Check `Select an existing security group`  
 Select `A4LVPC-SGWordpress` it will have randomness after it, thats ok :)  
-Click `Review and Launch`  
-Click `Continue` to the port 22 warning, thats ok  
-Click `Launch`  
-Select `Proceed Without a key pair` and check the acknowledge box  
-Click `Launch Instances`  
-Click `View Instances`  
+We will leave storage as default so make no changes here  
+Expand `Advanced Details`  
+For `IAM instance profile role` select `A4LVPC-WordpressInstanceProfile`  
+Find the `Credit Specification Dropdown` and choose `Standard` (some accounts aren't enabled for Unlimited)
+Click `Launch Instance`  
+Click `View All instancea`  
 
 Wait for the instance to be in a `RUNNING` state  
 _you can continue to stage 1B below while the instance is provisioning_
@@ -218,7 +214,7 @@ sudo rm /tmp/db.setup
 
 Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
 Select the `Wordpress-Manual` instance  
-copy the `IPv4 Public IP` into your clipboard  
+copy the `IPv4 Public IP` into your clipboard (**DON'T CLICK THE OPEN LINK ... just copy the IP**)
 Open that IP in a new tab  
 You should see the wordpress welcome page  
 
