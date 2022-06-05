@@ -24,10 +24,7 @@ Select the `A4l-WORDPRESS-CONTENT` File system, and click `Delete`. Confirm by t
 Click on `Services`, type `RDS` and move to the RDS Console.  
 Click `Databases`  
 Select `a4lwordpress`, click `Actions` and `Delete`  
-Uncheck `Create Final Snapshot`, check the `Acknowledge` box, type `delete me` and click `Delete`  
-Select `a4lwordpress-aurora-reader2`, click `Actions` then `Delete`. Type `delete me` and click `Delete`  
-Select `a4lwordpress-aurora-reader1`, click `Actions` then `Delete`. Type `delete me` and click `Delete`  
-Select `a4lwordpress-aurora`, click `Actions` then `Delete`. unckeck `create final snapshot`, check the `Acknowledge` box, Type `delete me` and click `Delete`  
+Uncheck `Create Final Snapshot`, Uncheck `Retain Automated Backups`, check the `Acknowledge` box, type `delete me` and click `Delete`  
 
 # STAGE 6E - Check Progress
 
@@ -38,15 +35,14 @@ Check that EFS and all EC2 instances, and ASG have finished deleting - hold here
 Move to EC2 Console, click on `Launch Templates`  
 Select the `Wordpress` Template, Click `Actions` and then `Delete Template`. Type `Delete` and Click `Delete`  
 
-# STAGE 7G - Wait for RDS
+# Stage 6G - Paramater Store
+Move to the Parameter Store Console
+Delete all of the parameters that you created while doing this demo, anything `A4L/Wordpress/*`  
+
+# STAGE 6H - Wait for RDS
 
 Move to the RDS console, click on `Databases` & wait for all RDS instances to be removed before continuing.  
-
-# STAGE 6H - RDS Snapshot
-
-Click `Snapshots`  
-Select the `a4lwordpressmigration` snapshot, click `Actions` `Delete Snapshot`, click `Delete` to confirm.  
-
+ 
 # STAGE 6I - Cloud Formation
 
 Move to the cloudformation console.  
