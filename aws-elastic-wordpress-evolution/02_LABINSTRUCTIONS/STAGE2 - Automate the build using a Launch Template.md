@@ -6,6 +6,10 @@ In stage 2 of this advanced demo lesson you are going to create a launch templat
 The architecture will still use the single instance for both the WordPress application and database, the only change will be an automatic build rather than manual.  
 Any level of automation/self-healing or scaling architecture will need a bootstrapped or AMI-baked build to function effectively.
 
+# STAGE 1 TIDYUP
+
+Right click on the manual instance you created in the previous step called `Wordpress-Manual` and select `Terminate Instance` and confirm that termination.  
+
 # STAGE 2A - Create the Launch Template
 
 Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
@@ -15,14 +19,17 @@ Under `Launch Template Name` enter `Wordpress`
 Under `Templace version description` enter `Single server DB and App`  
 Check the `Provide guidance to help me set up a template that I can use with EC2 Auto Scaling` box  
 
-Under `Amazon machine image (AMI) - required` click and locate `Amazon Linux 2 AMI (HVM), SSD Volume TYpe, Architecture: 64-bit (x86)`  
-Under `Instance Type` select `t2.micro` (or whichever is listed as free tier eligable)  
+Under `Application and OS Images (Amazon Machine Image)` click `Quick Start`  
+Click `Amazon Linux`  
+in the `Amqzon Machine Image` dropdown, locate `Amazon Linux 2 AMI (HVM), SSD Volume TYpe` and set the Architecture to `64-bit (x86)`  
+Under `Instance Type` select whichever instance is free tier eligable from either `t3.micro` and `t2.micro`    
 Under `Key pair (login)` select `Don't include in launch template`  
-Under `networking Settings` make sure `Virtual Private Cloud (VPC)` is selected
-Under `Security Groups` select `A4LVPC-SGWordpress`  
+Under `networking Settings` `select existing security group` and choose `A4LVPC-SGWordpress`
+Leave storage volumes unchanged  
+Leave Resource Tags Unchanged  
 Expand `Advanced Details`
-Under `IAM instance profile` select `A4LVPC-WordpressInstanceProfile`  
-Under `Credit specification` select `Unlimited`
+Under `IAM instance profile` select `A4LVPC-WordpressInstanceProfile` there will be some random at the end, thats ok!  
+Under `Credit specification` select `Standard`
 
 # STAGE 2B - Add Userdata
 
@@ -93,24 +100,25 @@ rm /tmp/db.setup
 
 Ensure to leave a blank line at the end  
 Click `Create Launch Template`  
-Click `View Launch Templates`
+Click  `Launch Templates` towards the top of the screen
 
 
 # STAGE 2C - Launch an instance using it
 
 Select the launch template in the list ... it should be called `Wordpress`  
 Click `Actions` and `Launch instance from template`
+Under `Key Pair(login` click the dropdown and select `Proceed without a key pair(Not Recommended)`  
 Scroll down to `Network settings` and under `Subnet` select `sn-pub-A`  
 Scroll to `Resource Tags` click `Add tag`
 Set `Key` to `Name` and `Value` to `Wordpress-LT`
-Scroll to the bottom and click `Launch Instance from template`  
+Scroll to the bottom and click `Launch Instance`  
 Click the instance id in the `Success` box
 
 # STAGE 2D - Test
 
 Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
 Select the `Wordpress-LT` instance  
-copy the `IPv4 Public IP` into your clipboard  
+copy the `IPv4 Public IP` into your clipboard, don't click the link to open, this will use https and we want http, just copy the IP.   
 Open that IP in a new tab  
 You should see the WordPress welcome page  
 
