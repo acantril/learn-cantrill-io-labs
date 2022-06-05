@@ -39,8 +39,8 @@ We will leave storage as default so make no changes here
 Expand `Advanced Details`  
 For `IAM instance profile role` select `A4LVPC-WordpressInstanceProfile`  
 Find the `Credit Specification Dropdown` and choose `Standard` (some accounts aren't enabled for Unlimited)
-Click `Launch Instance`  
-Click `View All instancea`  
+Click `Launch Instance`    
+Click `View All instances`  
 
 Wait for the instance to be in a `RUNNING` state  
 _you can continue to stage 1B below while the instance is provisioning_
