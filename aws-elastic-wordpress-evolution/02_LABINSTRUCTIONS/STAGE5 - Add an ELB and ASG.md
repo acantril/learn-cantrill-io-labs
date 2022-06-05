@@ -17,35 +17,31 @@ Under name enter `A4LWORDPRESSALB`
 Ensure `internet-facing` is selected  
 ensure `ipv4` selected for `IP Address type`  
 
-Under `Listeners` `HTTP` and `80` should be selected for `Load Balancer Protocol` and `Load Balancer Port`  
-
-Scroll down, under `Availability Zones` 
-for VPC ensure `A4LVPC` is selected  
-Check boxes next to `us-east-1a`, `us-east-1b` and `us-east-1c`  
+Under `Network Mapping` select `A4LVPC` in the `VPC Dropdown`  
+Check the boxes next to `us-east-1a` `us-east-1b` and `us-east-1c`  
 Select `sn-pub-A`, `sn-pub-B` and `sn-pub-C` for each.  
 
-Scroll down and click `Next: Configure Security Settings`  
-because we're not using HTTP we can move past this  
-Click `Next: Configure Security Groups`  
-Check `Select an existing security group` and select `A4LVPC-SGLoadBalancer` it will have some random at the end and thats ok.  
-Unselect 'default VPC'
+Scroll down and under `Security Groups` remove `default` and select the `A4LVPC-SGLoadBalancer` from the dropdown.  
 
-
-Click `Next: Configure Routing`  
-
-for `Target Group` choose `New Target Group`  
+Under `Listener and Routing` 
+Ensure `Protocol` is set to `HTTP` and `Port` is set to `80`.  
+Click `Create target group` which will open a new tab  
+for `Target Type` choose `Instance` 
 for Name choose `A4LWORDPRESSALBTG`  
-for `Target Type` choose `Instance`  
 For `Protocol` choose `HTTP`  
 For `Port` choose `80`  
+Make sure the `VPC` is set to `A4LVPC`  
+Check that `Protocol Version` is set to `HTTP1`  
+
 Under `Health checks`
 for `Protocol` choose `HTTP`
 and for `Path` choose `/`  
-Click `Next: Register Targets`  
-We wont register any right now, click `Next: Review`  
-Click `Create`  
-
-Click on the `A4LWORDPRESSALB` link  
+Click `Next`  
+We wont register any right now so click `Create target Group`  
+Go back to the previous tab where you are creating the Load Balancer
+Click the `Refresh Icon` and select the `A4LWORDPRESSALBTG` item in the dropdown.  
+Scroll down to the bottom and click `Create load balancer`  
+Click `View Load Balancer` and select the load balancer you are creating.  
 Scroll down and copy the `DNS Name` into your clipboard  
 
 # STAGE 5B - Create a new Parameter store value with the ELB DNS name
@@ -120,7 +116,6 @@ For `Auto Scaling group name` enter `A4LWORDPRESSASG`
 Under `Launch Template` select `Wordpress`  
 Under `Version` select `Latest`  
 Scroll down and click `Next`  
-for `Instance Purchase` options, leave the default of `Adhere to launch template` selected.  
 For `Network` `VPC` select `A4LVPC`  
 For `Subnets` select `sn-Pub-A`, `sn-pub-B` and `sn-pub-C`  
 Click `next`  
@@ -130,9 +125,11 @@ Click `next`
 Its here where we integrate the ASG with the Load Balancer. Load balancers actually work (for EC2) with static instance registrations. What ASG does, it link with a target group, any instances provisioned by the ASG are added to the target group, anything terminated is removed.  
 
 Check the `Attach to an existing Load balancer` box  
-Ensure `Application Load Balancer or Network Load Balancer` is selected.  
-for `Choose a target group for your load balancer` select `A4LWORDPRESSALBTG`  
+Ensure `Choose from your load balancer target groups` is selected.  
+for `existing load balancer targer groups` select `A4LWORDPRESSALBTG`  
 Under `health Checks - Optional` choose `ELB`  
+check `enable group metris collection within CloudWatch`  
+
 Scroll down and click `Next`  
 
 For now leave `Desired` `Mininum` and `Maximum` at `1`   
@@ -147,9 +144,9 @@ Click `Next`
 Click `Create Auto Scaling Group`  
 
 Right click on instances and open in a new tab  
-Right click Wordpress-LT, `Instance State`, `Terminate` and click `Yes Terminate`  
+Right click Wordpress-LT, `Terminate Instance` and confirm.   
 This removes the old manually created wordpress instance
-Click `Refresh` and you should see a new instance being created... `Wordpress-ASG` this is the one created automatically by the ASG using the launch template  
+Click `Refresh` and you should see a new instance being created... `Wordpress-ASG` this is the one created automatically by the ASG using the launch template - this is because the desired capacity is set to `1` and we currently have `0`  
 
 
 # STAGE 5F - Add scaling
@@ -163,7 +160,7 @@ We're going to add two policies, scale in and scale out.
 
 ## SCALEOUT when CPU usage on average is above 40%
 
-Click `Add Policy`  
+Click `Create dynamic Scaling Policy`  
 For policy `type` select `Simple scaling`  
 for `Scaling Policy name` enter `HIGHCPU`  
 Click `Create a CloudWatch Alarm`  
@@ -172,8 +169,8 @@ Click `EC2`
 Click `By Auto Scaling Group`
 Check `A4LWORDPRESSASG CPU Utilization`  
 Click `Select Metric`  
-Scroll Down... select `Greater` and enter `40` in the `than` box and click `Next`
-Click `Remove` next to notification
+Scroll Down... select `Threashhold style` `static`, select `Greater` and enter `40` in the `than` box and click `Next`
+Click `Remove` next to notification if you see anything listed here
 Click `Next`
 Enter `WordpressHIGHCPU` in `Alarm Name`  
 Click `Next`  
@@ -186,7 +183,7 @@ Click `Create`
 
 ## SCALEIN when CPU usage on average ie below 40%
 
-Click `Add Policy`  
+Click `Create Dynamic Scaling Policy`  
 For policy `type` select `Simple scaling`  
 for `Scaling Policy name` enter `LOWCPU`  
 Click `Create a CloudWatch Alarm`  
@@ -195,7 +192,7 @@ Click `EC2`
 Click `By Auto Scaling Group`
 Check `A4LWORDPRESSASG CPU Utilization`  
 Click `Select Metric`  
-Scroll Down... select `Lower` and enter `40` in the `than` box and click `next`
+Scroll Down... select `Static`, `Lower` and enter `40` in the `than` box and click `next`
 Click `Remove` next to notification
 Click `Next`
 Enter `WordpressLOWCPU` in `Alarm Name`  
