@@ -1,9 +1,25 @@
-Description:  Advanced Demo - Highly-Available BGP Site-to-Site VPN - MUST be applied in us-east-1
+Description:  Advanced Demo - HA BGP Site-to-Site VPN - MUST be applied in us-east-1
 Parameters:
   LatestAmiId:
-    Description: AMI for Bastion Host (default is latest AmaLinux2)
+    Description: AMI for Misc Instances (default is latest AmaLinux2)
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  RouterAmiId:
+    Description: AMI for the Router Instances (don't change)
+    Type: 'String'
+    Default: 'ami-0ac80df6eff0e70b5'
+  Branch:
+    Description: which branch to pull assets from, usually master/main (don't change this)
+    Type: 'String'
+    Default: 'master'
+    AllowedValues:
+      - 'master'
+      - 'stage'
+      - 'dev'
+  ProjectName:
+    Description: project name used for auto build, don't change this
+    Type: 'String'
+    Default: 'aws-hybrid-bgpvpn'
 Resources:
   AWSVPC:
     Type: AWS::EC2::VPC
@@ -341,6 +357,14 @@ Resources:
       SubnetId: !Ref ONPREMPub
       RouteTableId:
         Ref: ONPREMPublicRT
+  Router1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: ONPREMInternetGatewayAttachment
+  Router1EIPAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt Router1EIP.AllocationId
+      NetworkInterfaceId: !GetAtt ONPREMENIR1PUBLIC.Id
   ONPREMRouter1:
     Type: AWS::EC2::Instance
     DependsOn: 
@@ -348,13 +372,15 @@ Resources:
       - ONPREMssmec2messagesVPCe
       - ONPREMssmmessagesVPCe
     Properties:
+      NetworkInterfaces:
+      - NetworkInterfaceId: !Ref ONPREMENIR1PUBLIC
+        DeviceIndex: 0
+      - NetworkInterfaceId: !Ref ONPREMENIR1PRIVATE
+        DeviceIndex: 1
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
       InstanceType: "t3.small"
-      ImageId: "ami-0ac80df6eff0e70b5"
-      SubnetId: !Ref ONPREMPub
-      SecurityGroupIds: 
-        - !Ref ONPREMInstanceSG
+      ImageId: !Ref RouterAmiId
       IamInstanceProfile: !Ref ONPREMEC2InstanceProfile
-      SourceDestCheck: "false"
       Tags:
         - Key: Name
           Value: ONPREM-ROUTER1
@@ -364,11 +390,11 @@ Resources:
             apt-get update && apt-get install -y strongswan wget
             mkdir /home/ubuntu/demo_assets
             cd /home/ubuntu/demo_assets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter1/ipsec-vti.sh
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter1/ipsec.conf
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter1/ipsec.secrets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter1/51-eth1.yaml
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter1/ffrouting-install.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter1/ipsec-vti.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter1/ipsec.conf
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter1/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter1/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter1/ffrouting-install.sh
             chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
             cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
             netplan --debug apply
@@ -384,14 +410,26 @@ Resources:
         -
           Key: Name
           Value: ONPREM-R1-PRIVATE
-  ONPREMENIAttachmentRouter11:
-    Type: AWS::EC2::NetworkInterfaceAttachment
+  ONPREMENIR1PUBLIC:
+    Type: AWS::EC2::NetworkInterface
     Properties:
-        InstanceId:
-          Ref: ONPREMRouter1
-        NetworkInterfaceId:
-          Ref: ONPREMENIR1PRIVATE
-        DeviceIndex: 1
+      SubnetId: !Ref ONPREMPub
+      Description: Router1 PUBLIC INTERFACE
+      GroupSet: 
+      - !Ref ONPREMInstanceSG
+      SourceDestCheck: false
+      Tags:
+        -
+          Key: Name
+          Value: ONPREM-R1-PUBLIC
+  Router2EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: ONPREMInternetGatewayAttachment
+  Router2EIPAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt Router2EIP.AllocationId
+      NetworkInterfaceId: !GetAtt ONPREMENIR2PUBLIC.Id
   ONPREMRouter2:
     Type: AWS::EC2::Instance
     DependsOn: 
@@ -399,13 +437,15 @@ Resources:
       - ONPREMssmec2messagesVPCe
       - ONPREMssmmessagesVPCe
     Properties:
+      NetworkInterfaces:
+      - NetworkInterfaceId: !Ref ONPREMENIR2PUBLIC
+        DeviceIndex: 0
+      - NetworkInterfaceId: !Ref ONPREMENIR2PRIVATE
+        DeviceIndex: 1
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
       InstanceType: "t3.small"
-      ImageId: "ami-0ac80df6eff0e70b5"
-      SubnetId: !Ref ONPREMPub
-      SecurityGroupIds: 
-        - !Ref ONPREMInstanceSG
+      ImageId: !Ref RouterAmiId
       IamInstanceProfile: !Ref ONPREMEC2InstanceProfile
-      SourceDestCheck: "false"
       Tags:
         - Key: Name
           Value: ONPREM-ROUTER2
@@ -415,14 +455,26 @@ Resources:
             apt-get update && apt-get install -y strongswan wget
             mkdir /home/ubuntu/demo_assets
             cd /home/ubuntu/demo_assets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter2/ipsec-vti.sh
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter2/ipsec.conf
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter2/ipsec.secrets
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter2/51-eth1.yaml
-            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/aws-hybrid-bgpvpn/OnPremRouter2/ffrouting-install.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter2/ipsec-vti.sh
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter2/ipsec.conf
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter2/ipsec.secrets
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter2/51-eth1.yaml
+            wget https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/${Branch}/${ProjectName}/OnPremRouter2/ffrouting-install.sh
             chown ubuntu:ubuntu /home/ubuntu/demo_assets -R
             cp /home/ubuntu/demo_assets/51-eth1.yaml /etc/netplan
             netplan --debug apply
+  ONPREMENIR2PUBLIC:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref ONPREMPub
+      Description: Router2 PUBLIC INTERFACE
+      GroupSet: 
+      - !Ref ONPREMInstanceSG
+      SourceDestCheck: false
+      Tags:
+        -
+          Key: Name
+          Value: ONPREM-R2-PUBLIC
   ONPREMENIR2PRIVATE:
     Type: AWS::EC2::NetworkInterface
     Properties:
@@ -435,14 +487,6 @@ Resources:
         -
           Key: Name
           Value: ONPREM-R2-PRIVATE
-  ONPREMENIAttachmentRouter21:
-    Type: AWS::EC2::NetworkInterfaceAttachment
-    Properties:
-        InstanceId:
-          Ref: ONPREMRouter2
-        NetworkInterfaceId:
-          Ref: ONPREMENIR2PRIVATE
-        DeviceIndex: 1
   ONPREMSERVER1:
     Type: AWS::EC2::Instance
     DependsOn: 
