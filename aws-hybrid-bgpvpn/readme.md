@@ -29,13 +29,13 @@ Apply the template below and wait for `CREATE_COMPLETE` before continuing
 
 ## Video Guides
 
-- [STAGE1]()
-- [STAGE2-PART1]()
-- [STAGE2-PART2]()
-- [STAGE3-PART1]()
-- [STAGE3-PART2]()
-- [STAGE4]()
-- [STAGE5]()
+- [STAGE1](https://youtu.be/CDyZJ4iAIdM)
+- [STAGE2-PART1](https://youtu.be/F-fROSu_k90)
+- [STAGE2-PART2](https://youtu.be/u0ijTYpzb_o)
+- [STAGE3-PART1](https://youtu.be/wVyY22Nuxis)
+- [STAGE3-PART2](https://youtu.be/vS_hXYm9ueg)
+- [STAGE4](https://youtu.be/gZdWDka-nJI)
+- [STAGE5](https://youtu.be/reOxAOnFDP0)
 
 ## Architecture Diagrams
 
