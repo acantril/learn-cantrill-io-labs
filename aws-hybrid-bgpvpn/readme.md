@@ -21,11 +21,21 @@ The demo consists of 5 stages, each implementing additional components of the ar
 - [Stage4](https://github.com/acantril/learn-cantrill-io-labs/blob/master/AWS_HYBRID_AdvancedVPN/02_INSTRUCTIONS/STAGE4%20-%20BGP%20ROUTING%20AND%20TESTING.md)
 - [Stage5](https://github.com/acantril/learn-cantrill-io-labs/blob/master/AWS_HYBRID_AdvancedVPN/02_INSTRUCTIONS/STAGE5%20-%20CLEANUP.md)
 
-## 1-Click Installs
+## 1-Click Install
 Make sure you are logged into AWS and in `us-east-1`  
 Apply the template below and wait for `CREATE_COMPLETE` before continuing
 
-- [BGPVPN](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-bgpvpn/BGPVPNINFRA.yaml&stackName=BGPVPN)
+- [BGPVPN]([https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-bgpvpn/BGPVPNINFRA.yaml&stackName=BGPVPN](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-bgpvpn/BGPVPNINFRA.yaml&stackName=ADVANCEDVPNDEMO))
+
+## Video Guides
+
+- [STAGE1]()
+- [STAGE2-PART1]()
+- [STAGE2-PART2]()
+- [STAGE3-PART1]()
+- [STAGE3-PART2]()
+- [STAGE4]()
+- [STAGE5]()
 
 ## Architecture Diagrams
 
