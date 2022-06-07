@@ -10,11 +10,8 @@ In this part of the DEMO, you will be creating a few things:-
 First lets create the initial environments.
 
 Open https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/
-
-- Apply `ADVS2SVPN-AWS.yaml` to the `us-east-1` region in your AWS account (Call it AWS) - If prompted ... check capabilities Box
-- Apply `ADVS2SVPN-ONPREM.yaml` to the `us-east-1` region in your AWS account (Call it OMPREM) - If prompted ... check capabilities Box
-
-Wait for both stacks to move into a `CREATE_COMPLETE` status **Estimated time to complete 5-10 mins**
+Make sure you're logged in with an identity with admin permissions and you're using the us-east-1 region.
+Click [THIS LINK](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-bgpvpn/BGPVPNINFRA.yaml&stackName=ADVANCEDVPNDEMO) , it will open the quick create stack page. Scroll to the bottom, check the box and create stack.
 
 # STAGE 1B - CREATE CUSTOMER GATEWAY OBJECTS 
 
