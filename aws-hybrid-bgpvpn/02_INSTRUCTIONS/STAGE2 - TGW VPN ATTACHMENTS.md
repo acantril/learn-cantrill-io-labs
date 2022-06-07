@@ -14,7 +14,7 @@ Click `Transit Gateway ID` dropdown and select `A4LTGW`
 Select `VPN` for attachment type  
 Select `Existing` for `Customer gateway`  
 Click `Customer gateway ID` dropdown and select `ONPREM-ROUTER1`  
-Click `Dynamic` for `Routing options`  
+Click `Dynamic (requires BGP)` for `Routing options`  
 Click `Enable Acceleration`  
 Click `Create Attachment`  
 
@@ -23,7 +23,7 @@ Click `Transit Gateway ID` dropdown and select `A4LTGW`
 Select `VPN` for attachment type  
 Select `Existing` for `Customer gateway`  
 Click `Customer gateway ID` dropdown and select `ONPREM-ROUTER2`  
-Click `Dynamic` for `Routing options`  
+Click `Dynamic (requires BGP)` for `Routing options`  
 Click `Enable Acceleration`  
 Click `Create Attachment`  
 
