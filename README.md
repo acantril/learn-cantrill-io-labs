@@ -17,7 +17,7 @@ All demos have a structure ...
 
 A full range of Video guided versions are available in my courses at https://learn.cantrill.io
 
-## VIDEO GUIDED MINI PROJECTS (videos linked inside and on [Youtube](https://youtube.com/c/learncantrill)
+## VIDEO GUIDED MINI PROJECTS (videos linked inside and on [Youtube](https://youtube.com/c/learncantrill))
 
 - [Web Application Architecture Evolution](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-elastic-wordpress-evolution)
 - [Implement a Serverless Application](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-serverless-pet-cuddle-o-tron)
