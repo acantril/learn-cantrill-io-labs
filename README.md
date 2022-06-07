@@ -12,8 +12,9 @@ These demos are available in three ways:-
 The free versions here are fully functional, with instructions & architecture diagrams and are maintained by me.
 
 All demos have a structure ...
-- `01_LABSETUP` contains assets required for the DEMO
-- `02_LABINSTRUCTIONS` contains text instructions and architecture diagrams
+-  Most are started using a `1-Click Deployment` .. click a link, check a box, click create stack and wait until complete.
+- `01_LABSETUP` contains assets required for the DEMO if required - many are linked directly from the instructions.
+- `02_LABINSTRUCTIONS` contains text instructions and architecture diagrams - most of these are directly linked from the instructions.
 
 A full range of Video guided versions are available in my courses at https://learn.cantrill.io
 
