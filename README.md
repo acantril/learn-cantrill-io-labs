@@ -35,7 +35,7 @@ A full range of Video guided versions are available in my courses at https://lea
 - [Implement a simple client VPN](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-client-vpn)
 - [Pixelator - Serverless S3 Image Procesing Pipeline](https://github.com/acantril/learn-cantrill-io-labs/tree/master/00-aws-simple-demos/aws-lambda-s3-events)
 
-## UNDER CONSTRUCTION OR BROKEN PROJECTS (DON'T USE)
+## UNDER CONSTRUCTION OR BROKEN PROJECTS (DON'T USE) - fixes in progress
 
 - [Implement Hybrid Directory - On-premises & AWS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-activedirectory)
 - [Patching AWS and On-premises using Systems Manager Patch Manager](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-patch-manager)
