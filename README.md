@@ -28,6 +28,9 @@ A full range of Video guided versions are available in my courses at https://lea
 
 - [Hybrid DNS using Route53 Inbound and Outbound Endpoints](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-dns)
 - [Database Migration using DMS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-dms-database-migration)
+- [CatPipeline - code commit, build, deploy & pipeline using containers and ECS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-codepipeline-catpipeline)
+- [Implement a simple client VPN](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-client-vpn)
+- [Pixelator - Serverless S3 Image Procesing Pipeline](https://github.com/acantril/learn-cantrill-io-labs/tree/master/00-aws-simple-demos/aws-lambda-s3-events)
 
 ## UNDER CONSTRUCTION OR BROKEN PROJECTS (DON'T USE)
 
