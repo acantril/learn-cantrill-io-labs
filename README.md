@@ -17,6 +17,8 @@ All demos have a structure ...
 
 A full range of Video guided versions are available in my courses at https://learn.cantrill.io
 
+**I give free course credits for any bugs submitted via PR so please submit fixes for any issues you find**
+
 ## VIDEO GUIDED MINI PROJECTS (videos linked inside and on [Youtube](https://youtube.com/c/learncantrill))
 
 - [Web Application Architecture Evolution](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-elastic-wordpress-evolution)
