@@ -63,10 +63,7 @@ Locate and select `ONPREM-ROUTER1`
 Right Click => `Connect`  
 Select `Session Manager`  
 Click `Connect`  
-
 `sudo bash`  
-`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a very temp workaround until i fix a bug - FRR won't start all daemons because the /var/run/frr is created with 640 permissions.. it needs to be 740).   
-
 
 SHOW THE ROUTES VIA THE UI `route`   
 SHOW THE ROUTES VIA `vtysh`  
@@ -119,11 +116,8 @@ Locate and select `ONPREM-ROUTER1`
 Right Click => `Connect`  
 Select `Session Manager`  
 Click `Connect`  
-
 `sudo bash`  
-`sudo chmod 740 /var/run/frr && systemctl restart frr` (this is a very temp workaround until i fix a bug - FRR won't start all daemons because the /var/run/frr is created with 640 permissions.. it needs to be 740).      
-
-
+   
 SHOW THE ROUTES VIA THE UI  `route`  
 SHOW THE ROUTES VIA `vtysh`  
 `show ip route`  
