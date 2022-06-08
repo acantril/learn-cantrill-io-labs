@@ -25,6 +25,18 @@ The advanced demo consists of 5 stages :-
 ## 1-Click Installs
 No installs required for this Advanced Demo
 
+## Video Guides
+
+- [Stage0](https://youtu.be/7phmk5-iBDo)
+- [Stage1](https://youtu.be/FmoXgFz4ODc)
+- [Stage2-PART1](https://youtu.be/gOiV10FXgq0)
+- [Stage2-PART2](https://youtu.be/g8TbqrNs4D0)
+- [Stage3](https://youtu.be/GmnOW1UmXpA)
+- [Stage4-PART1](https://youtu.be/ylY_yGHhVDk)
+- [Stage4-PART2](https://youtu.be/xSdJiTRkqr4)
+- [Stage5](https://youtu.be/JEsmwIPw25E)
+
+
 ## Architecture Diagrams
 
 - [Stage1 - PNG](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/02_LABINSTRUCTIONS/catpipeline-arch-stage1.png)
