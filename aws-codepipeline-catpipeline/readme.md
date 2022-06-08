@@ -27,7 +27,7 @@ No installs required for this Advanced Demo
 
 ## Video Guides
 
-- [Stage0](https://youtu.be/7phmk5-iBDo)
+- [Stage0](https://youtu.be/7phmk5-iBDo) - INTRO
 - [Stage1](https://youtu.be/FmoXgFz4ODc)
 - [Stage2-PART1](https://youtu.be/gOiV10FXgq0)
 - [Stage2-PART2](https://youtu.be/g8TbqrNs4D0)
