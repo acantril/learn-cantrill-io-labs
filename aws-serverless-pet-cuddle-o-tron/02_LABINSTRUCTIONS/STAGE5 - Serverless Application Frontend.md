@@ -57,7 +57,7 @@ in the box, paste the code below
   }
 
 ```
-Replace the `REPLACEME_PET_CUDDLE_O_TRON_BUCKET_ARN` (being careful NOT to include the `/*`) with the bucket ARN, which you can see near to `Bucket ARN `
+Replace the `REPLACEME_PET_CUDDLE_O_TRON_BUCKET_ARN` (being careful NOT to remove the `/*`) with the bucket ARN, which you can see near to `Bucket ARN `
 Click `Save Changes`  
 
 
