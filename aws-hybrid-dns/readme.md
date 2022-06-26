@@ -11,6 +11,11 @@ The demo consists of 4 stages, each implementing additional components of the ar
 
 ![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-hybrid-dns/hybrid-dns-endstate.png)
 
+## 1-Click Install
+Make sure you are logged into AWS and in `us-east-1`  
+
+- [HYBRIDDNS](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-dns/HybridDNS.yaml&stackName=HYBRIDDNS)
+
 ## Instructions
 
 - [Stage1](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-dns/02_LABINSTRUCTIONS/STAGE1%20-%20Provision%20%26%20Verify.md)
@@ -18,11 +23,12 @@ The demo consists of 4 stages, each implementing additional components of the ar
 - [Stage3](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-dns/02_LABINSTRUCTIONS/STAGE3%20-%20Inbound%20Endpoints.md)
 - [Stage4](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-hybrid-dns/02_LABINSTRUCTIONS/STAGE4%20-%20Outbound%20Endpoints.md)
 
+## Video Guides
 
-## 1-Click Installs
-Make sure you are logged into AWS and in `us-east-1`  
-
-- [HYBRIDDNS](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-dns/HybridDNS.yaml&stackName=HYBRIDDNS)
+- [STAGE1]()
+- [STAGE2]()
+- [STAGE3]()
+- [STAGE4]()
 
 ## Architecture Diagrams
 
