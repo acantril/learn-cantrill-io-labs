@@ -25,10 +25,10 @@ Make sure you are logged into AWS and in `us-east-1`
 
 ## Video Guides
 
-- [STAGE1]()
-- [STAGE2]()
-- [STAGE3]()
-- [STAGE4]()
+- [STAGE1](https://youtu.be/UmPTavtAB9s)
+- [STAGE2](https://youtu.be/n1vSVxUhsQ4)
+- [STAGE3](https://youtu.be/uN49-noXk2I)
+- [STAGE4](https://youtu.be/0nub1kV1Hg8)
 
 ## Architecture Diagrams
 
