@@ -41,10 +41,9 @@ for `Masterpassword` enter the DBPassword parameter for cloudformation which you
 enter that same password in the `Confirm password` box  
 Scroll down to `Connectivity`  
 for `Virtual private cloud (VPC)` choose `awsVPC`  
-expand `Additional connectivity configuration` 
 make sure `Subnet Groups` is set toe `a4ldbsngroup`  
 for `public access` choose `No`  
-for `Existing VPC security groups` choose `***-awsSecurityGroupDB-***` (*** aren't important)  
+for `VPC security groups` select `Choose Existing` and choose  `***-awsSecurityGroupDB-***` (*** aren't important)  
 remove the `Default` security group by clicking the `X`    
 Scroll down and expand `Additional configuration`  
 Under `Initial database name` enter `a4lwordpress`  
@@ -57,27 +56,20 @@ This will take some time.. and you cant continue to `Stage4` until the database 
 Move to the EC2 Console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 Click `Instances`  
 Click `Launch Instances`  
-Ensuring the architecture is set to `64-bit (x86)` click `Select` next to `Amazon Linux 2 AMI`  
+Enter `awsCatWeb` for the Name of the instance.  
+Clck `Amazon Linux` and ensure `Amazon Linux 2 AMI (HVM) ...... SSD Volume Type` is selected.  
+Ensuring the architecture is set to `64-bit (x86)` below.    
 Choose the `Free Tier eligable` instance (should be t2.micro or t3.micro)  
-Click `Next: Configure Instance Details`  
-For `network` pick `awsVPC`  
+Scroll down and choose `Choose `Proceed without key pair (not recommended)` in the dropdown  
+Next to `Network Settings` click `Edit`  
+For `VPC` pick `awsVPC`  
 For `Subnet` pick `aws-PublicA`  
-for `IAM Role` pick `***-awsInstanceProfile-****` (*** aren't important)  
-Click `Next: Add Storage`  
-Click `Next: Add Tags`  
-Click `Add Tag`  
-Key = `Name`  
-Value = `awsCatWeb` 
-Click `Next: Configure Security Group`  
 Select `Select an existing security group`  
-Check the box next to `***-awsSecurityGroupWeb-***` (*** aren't important)    
-Click `Review and Launch`  
-If you see any warning dialogue click `Continue`  
-Click `Launch`  
-Choose `Proceed without key pair`  
-Check the `I acknowledge....` box  
-Click `Launch Instances`  
-Click `View Instances`  
+Choose `***-awsSecurityGroupWeb-***` (*** aren't important)  
+Scroll down past Storage and expand `Advanced Details` (don't confuse this with `Advanced Network Configuration` in the current area)  
+for `IAM Instance Profile` pick `***-awsInstanceProfile-****` (*** aren't important)  
+Click `Launch Instance`  
+Click `View All Instances`  
 
 Wait for the `awsCatWeb` instance to be in a `Running` state with `2/2 checks` before continuing.
 
