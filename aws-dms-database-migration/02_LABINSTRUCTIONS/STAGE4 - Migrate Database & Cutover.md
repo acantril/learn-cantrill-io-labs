@@ -117,9 +117,9 @@ $SQL_COMMAND "UPDATE wp_postmeta SET meta_value = replace(meta_value,'$OLD_URL',
 ```
 
 Move to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:  
-Select `CatDB`, right click, instance state, stop instance `stop`  
+Select `CatDB`, right click `stop instance`   
 Move to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:  
-Select `CatWeb`, right click, instance state, stop instance `stop`  
+Select `CatWeb`, right click `stop instance`   
 
 Move to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:  
 Select `awsCatWeb` and get its `Public IPv4 DNS` 
