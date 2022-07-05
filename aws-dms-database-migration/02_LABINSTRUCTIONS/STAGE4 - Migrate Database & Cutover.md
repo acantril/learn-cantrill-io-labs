@@ -34,7 +34,8 @@ for name enter `A4LONPREMTOAWS`
 use the same for `Description`  
 for `Instance Class` choose `dms.t3.micro`  
 for `VPC` choose `awsVPC`  
-Uncheck `MultiAZ` and `Pubicly Accessing`  
+For `MultiAZ` make sure it's set to `dev or test workload (single AZ)`  
+and for `Pubicly Accessible` uncheck the box  
 Expand `Advanced security and network configuration`  
 Ensure `a4ldmssngroup` is selected in `Replication subnet group`  
 For `VPC security group(s)` choose `***-awsSecurityGroupDB-***`  
@@ -43,8 +44,8 @@ Click `Create`
 # STAGE 4C - CREATE THE DMS SOURCE ENDPOINT
 Move to https://console.aws.amazon.com/dms/v2/home?region=us-east-1#endpointList  
 Click `Create Endpoint`  
-For `Endpoint type` choose `Source Endpoint`  
-Under `Endpoint configuration` set `Endpoint identifier` to be `CatDBOnpremises`
+For `Endpoint type` choose `Source Endpoint` and make sure that `Select RDS DB Instance` is UNCHECKED  
+Under `Endpoint configuration` set `Endpoint identifier` to be `CatDBOnpremises`  
 Under `Source Engine` set `mariadb`  
 Under `Access to endpoint database` choose `Provide access information manually`  
 Under `Server name` use the privateIPv4 address of `CatDB` (get it from EC2 console)  
@@ -64,7 +65,21 @@ Under `Access to endpoint database` choose `Provide access information manually`
 For `Password` enter the DBPassword you noted down in stage1  
 Scroll down and click `Create Endpoint`  
 
-# STAGE 4E - Migrate
+# STAGE 4E - TEST THE ENDPOINTS
+
+**make sure the replication instance is ready**
+Verify by going to `Replication Instances` and make sure the status is `Available`  
+Go back to `Endspoints`  
+
+Select the `a4lwordpress` endpoint, click `Actions` and then `Test Connections`  
+Click `Run Test` and make sure after a few minutes the status moves to `successful`  
+Go back to `Endpoints`  
+Select the `catdbonpremises` endpoint, click `Actions` and then `Test Connections`  
+Click `Run Test` and make sure after a few minutes the status moves to `successful`  
+
+If both of these are successful you can continue to the next step.  
+
+# STAGE 4F - Migrate
 Move to migration tasks  https://console.aws.amazon.com/dms/v2/home?region=us-east-1#tasks  
 Click `Create task`  
 for `Task identifier` enter `A4LONPREMTOAWSWORDPRESS`
@@ -86,7 +101,7 @@ then it will be in the `Running` State until it moves into `Load complete`
 
 At this point the data has been migrated into the RDS instance  
 
-# STAGE 4B - Cutover the application instance
+# STAGE 4G - Cutover the application instance
 
 Move to the RDS Console https://console.aws.amazon.com/rds/home?region=us-east-1#  
 Click `Databases`  
