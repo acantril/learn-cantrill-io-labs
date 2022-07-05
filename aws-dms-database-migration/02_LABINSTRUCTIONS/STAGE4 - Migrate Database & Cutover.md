@@ -6,7 +6,7 @@ You will be migrating this into AWS and running the architecture on an EC2 webse
 
 Architecture Link : INSERT THE LINK HERE
 
-This advanced demo consists of 6 stages :-
+This advanced demo consists of 5 stages :-
 
 - STAGE 1 : Provision the environment and review tasks 
 - STAGE 2 : Establish Private Connectivity Between the environments (VPC Peer) 
