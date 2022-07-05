@@ -29,6 +29,7 @@ A full range of Video guided versions are available in my courses at https://lea
 - [CatPipeline - code commit, build, deploy & pipeline using containers and ECS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-codepipeline-catpipeline)
 - [Hybrid DNS using Route53 Inbound and Outbound Endpoints](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-dns)
 - [Implement a simple client VPN](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-client-vpn)
+- [Pixel Art Image Processing Workflow - Pixelator 3000](https://github.com/acantril/learn-cantrill-io-labs/tree/master/00-aws-simple-demos/aws-lambda-s3-events)
 
 ## TEXT ONLY MINI PROJECTS
 
