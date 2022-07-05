@@ -2,6 +2,12 @@
 
 ![DEMOARCHITECTURE](https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/00-aws-simple-demos/aws-lambda-s3-events/02_LABINSTRUCTIONS/Architecture.png)
 
+# Video Guides for this Mini Project
+
+- [PART1](https://youtu.be/_7AKW8cSGU0)
+- [PART2](https://youtu.be/KQOS0ggsrfE)
+- [PLAYLIST](https://youtube.com/playlist?list=PLTk5ZYSbd9MjgSy227IkAB0GS4WAU5qcU)
+
 In this demo lesson you're going to create a simple event-driven image processing pipeline. The pipeline uses two S3 buckets, a source bucket and a processed bucket. When images are added to the source bucket a lambda function is triggered based on the PUT.  When invoked the lambda function receives the `event` and extracts the bucket and object information. Once those details are known, the lambda function, using the `PIL` module pixelates the image with `5` different variations (8x8, 16x16, 32x32, 48x48 and 64x64) and uploads them to the processed bucket.
 
 # Stage 1 - Create the S3 Buckets
