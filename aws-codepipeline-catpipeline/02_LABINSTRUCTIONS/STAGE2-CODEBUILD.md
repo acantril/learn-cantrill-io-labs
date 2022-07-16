@@ -70,7 +70,7 @@ and for `Stream Name` enter `catpipeline`
 
 Create the build Project
 
-## BUID SECURITY AND PERMISSIONS
+## BUILD SECURITY AND PERMISSIONS
 
 Our build project will be accessing ECR to store the resultant docker image, and we need to ensure it has the permissons to do that. The build process will use an IAM role created by codebuild, so we need to update that roles permissions with ALLOWS for ECR.  
 
