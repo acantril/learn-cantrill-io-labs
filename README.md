@@ -2,23 +2,23 @@
 
 ![DEMOGRID](https://github.com/acantril/learn-cantrill-io-labs/raw/master/demogrid.png)
 
-Welcome .. this repo stores a collection of freely available demos and mini projects for AWS (and in the future other cloud platforms)
-These demos are available in three ways:-
+Welcome .. This repo stores a collection of freely available demos and mini projects for AWS (and in the future other cloud platforms).
+These demos are available in three ways:
 
-- here in instruction & architecture diagram form for free
-- as part of [https://learn.cantrill.io](https://learn.cantrill.io) courses - including theory lessons and guided videos.
-- **some** of the popular mini projects have been upgraded with video guides on this repo (people buying my courses supports this)
+- Here in instruction & architecture diagram form for free
+- Zs part of [https://learn.cantrill.io](https://learn.cantrill.io) courses - including theory lessons and guided videos.
+- **Some** of the popular mini projects have been upgraded with video guides on this repo (people buying my courses supports this)
 
 The free versions here are fully functional, with instructions & architecture diagrams and are maintained by me.
 
 All demos have a structure ...
--  Most are started using a `1-Click Deployment` .. click a link, check a box, click create stack and wait until complete.
+-  Most are started using a `1-Click Deployment` .. click a link, check a box, click a create stack and wait until complete.
 - `01_LABSETUP` contains assets required for the DEMO if required - **many are linked directly from the instructions.**
 - `02_LABINSTRUCTIONS` contains text instructions and architecture diagrams - **most of these are directly linked from the instructions.**
 
 A full range of Video guided versions are available in my courses at https://learn.cantrill.io
 
-**I give free course credits for any bugs submitted via PR so please submit fixes for any issues you find**
+**I give free course credits for any bugs submitted via PR, so please submit fixes for any issues you find.**
 
 ## VIDEO GUIDED MINI PROJECTS (videos linked inside and on [Youtube](https://youtube.com/c/learncantrill))
 
