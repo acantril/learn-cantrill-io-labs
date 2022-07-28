@@ -132,10 +132,10 @@ phases:
 
 Then add this locally, commit and stage
 
-``` 
+```
 git add -A .
-git commit -m “add buildspec.yml”
-git push 
+git commit -m "add buildspec.yml"
+git push
 ```
 
 ## TEST THE CODEBUILD PROJECT

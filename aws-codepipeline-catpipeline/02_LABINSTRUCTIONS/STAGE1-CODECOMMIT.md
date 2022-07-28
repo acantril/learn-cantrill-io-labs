@@ -54,10 +54,10 @@ Delete the zip file
 then from the terminal move into that folder  
 Run these commands.  
 
-``` 
-git add -A . 
-git commit -m “container of cats” 
-git push 
+```
+git add -A .
+git commit -m "container of cats"
+git push
 
 ```
 
