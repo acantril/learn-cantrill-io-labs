@@ -158,15 +158,16 @@ Choose EC2 Instance Connect, leave everything with defaults and connect.
 
 Docker should already be preinstalled and the EC2 instance has a role which gives ECR permissions which you will need for the next step.
 
-test docker via  `docker ps` command
-it should output an empty list
+Run `sudo -i` to become root and then test docker via  `docker ps` command.  It should output an empty list.
 
 
-run a `aws ecr get-login-password --region us-east-1`, this command gives us login information for ECR which can be used with the docker command. To use it use this command.
+Run `aws ecr get-login-password --region us-east-1`, this command gives us login information for ECR which can be used with the docker command. To use it use this command, you will need to replace the placeholder with your AWS Account ID (with no dashes)
 
-you will need to replace the placeholder with your AWS Account ID (with no dashes)
-
-`aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNTID_REPLACEME.dkr.ecr.us-east-1.amazonaws.com`
+```yum install jq -y
+# get the account id from the metadata server
+export ACCOUNT_ID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .accountId)
+# sign in to ECR
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNTID_REPLACEME.dkr.ecr.us-east-1.amazonaws.com```
 
 Go to the ECR console (https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1)
 Repositories
@@ -174,8 +175,8 @@ Click the `catpipeline` repository
 For `latest` copy the URL into your clipboard
 
 run the command below pasting in your clipboard after docker p
-`docker pull ` but paste in your clipboard after the space, i.e
-`docker pull ACCOUNTID_REPLACEME.dkr.ecr.us-east-1.amazonaws.com/catpipeline:latest` (this is an example, you will need your image URI)
+`docker pull` but paste in your clipboard after the space, i.e
+`docker pull $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/catpipeline:latest` (this is an example, you will need your image URI)
 
 run `docker images` and copy the image ID into your clipboard for the `catpipeline` docker image
 
@@ -187,10 +188,3 @@ Move back to the EC2 console tab
 Click `Instances` and get the public IPv4 address for the A4L-PublicEC2 instance.
 open that IP in a new tab, ensuring it's http://IP not https://IP
 You should see the docker container running, with cats in containers... if so, this means your automated build process is working.
-
-
-
-
-
-
-
