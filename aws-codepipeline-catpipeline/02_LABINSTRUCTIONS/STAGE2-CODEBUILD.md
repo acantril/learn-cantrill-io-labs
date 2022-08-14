@@ -167,7 +167,8 @@ Run `aws ecr get-login-password --region us-east-1`, this command gives us login
 # get the account id from the metadata server
 export ACCOUNT_ID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .accountId)
 # sign in to ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNTID_REPLACEME.dkr.ecr.us-east-1.amazonaws.com```
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNTID_REPLACEME.dkr.ecr.us-east-1.amazonaws.com
+```
 
 Go to the ECR console (https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1)
 Repositories
