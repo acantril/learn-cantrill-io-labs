@@ -163,7 +163,8 @@ Run `sudo -i` to become root and then test docker via  `docker ps` command.  It 
 
 Run `aws ecr get-login-password --region us-east-1`, this command gives us login information for ECR which can be used with the docker command. To use it use this command, you will need to replace the placeholder with your AWS Account ID (with no dashes)
 
-```yum install jq -y
+```
+yum install jq -y
 # get the account id from the metadata server
 export ACCOUNT_ID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .accountId)
 # sign in to ECR
