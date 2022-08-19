@@ -86,13 +86,17 @@ then get the efs file system ID from parameter store
 ```
 EFSFSID=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/EFSFSID --query Parameters[0].Value)
 EFSFSID=`echo $EFSFSID | sed -e 's/^"//' -e 's/"$//'`
+
+cat /etc/fstab
 ```
 
 Next .. add a line to /etc/fstab to configure the EFS file system to mount as /var/www/html/wp-content/
 
 ```
 echo -e "$EFSFSID:/ /var/www/html/wp-content efs _netdev,tls,iam 0 0" >> /etc/fstab
+cat /etc/fstab
 mount -a -t efs defaults
+df -k
 ```
 
 now we need to copy the origin content data back in and fix permissions
@@ -109,6 +113,7 @@ run the following command to reboot the EC2 wordpress instance
 ```
 reboot
 ```
+(=> outputs: Terminated)
 
 Once it restarts, ensure that you can still load the wordpress blog which is now loading the media from EFS.  
 
