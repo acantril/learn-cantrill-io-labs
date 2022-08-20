@@ -27,6 +27,16 @@ Make sure you are logged into AWS and in `us-east-1`
 - [Stage5](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-client-vpn/02_LABINSTRUCTIONS/STAGE5.md)
 - [Stage6](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-client-vpn/02_LABINSTRUCTIONS/STAGE6.md)
 
+## Video Guides
+
+- [Stage0](https://youtu.be/800wtu3zXz4)
+- [Stage1](https://youtu.be/vYoE706c--8)
+- [Stage2](https://youtu.be/IgvlqzIKzGQ)
+- [Stage3](https://youtu.be/BjGt_kS9OgI)
+- [Stage4](https://youtu.be/om90u3pr1kI)
+- [Stage5](https://youtu.be/7CkuJwXZzl4)
+- [Stage6](https://youtu.be/gBy2QNEdgkE)
+
 ## Architecture Diagrams
 
 - [Stage1 - PNG](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-client-vpn/02_LABINSTRUCTIONS/STAGE1.png)

@@ -25,10 +25,9 @@ for `Peering connection name tag` choose `A4L-ON-PREMISES-TO-AWS`
 for `VPC (Requester)` choose `onpremVPC`  
 for `VPC (Accepter)` choose `awsVPC`  
 Scroll down and click `Create Peering Connection`  
-Click `OK`  
-Select the peering connection, then click `Actions` and then `Accept Request`  
-Click `Yes, Accept`  
-Click `Close`  
+...then click `Actions` and then `Accept Request`  
+Click `Accept Request`  
+ 
 
 # STAGE 2B - Create Routes on the On-premises side
 Move to the route tabes console https://console.aws.amazon.com/vpc/home?region=us-east-1#RouteTables:sort=routeTableId  
@@ -38,8 +37,7 @@ You're going to add a route pointing at the AWS side networking, using the VPC P
 Click `Edit Routes`  
 Click `Add Route`  
 For Destination enter `10.16.0.0/16`  
-Click the `Target` dropdown & click `Peering Connection` and select the `A4L-ON-PREMISES-TO-AWS` then click `Save routes`  
-Click `Close`  
+Click the `Target` dropdown & click `Peering Connection` and select the `A4L-ON-PREMISES-TO-AWS` then click `Save Changes`  
 The Onpremises network can now route to the AWS Network, but as data transfer requires bi-directional traffic flow, you need to do the same at the other side.
 
 
@@ -51,8 +49,7 @@ You're going to add a route pointing at the AWS side networking, using the VPC P
 Click `Edit Routes`  
 Click `Add Route`  
 For Destination enter `192.168.10.0/24`  
-Click the `Target` dropdown & click `Peering Connection` and select the `A4L-ON-PREMISES-TO-AWS` then click `Save routes`  
-Click `Close`  
+Click the `Target` dropdown & click `Peering Connection` and select the `A4L-ON-PREMISES-TO-AWS` then click `Save Changes`  
 
 Move to the route tabes console https://console.aws.amazon.com/vpc/home?region=us-east-1#RouteTables:sort=routeTableId  
 Locate the `awsPrivateRT` route table and select it using the checkbox.  
@@ -61,8 +58,7 @@ You're going to add a route pointing at the AWS side networking, using the VPC P
 Click `Edit Routes`  
 Click `Add Route`  
 For Destination enter `192.168.10.0/24`  
-Click the `Target` dropdown & click `Peering Connection` and select the `A4L-ON-PREMISES-TO-AWS` then click `Save routes`  
-Click `Close`  
+Click the `Target` dropdown & click `Peering Connection` and select the `A4L-ON-PREMISES-TO-AWS` then click `Save Changes`  
 
 
 # STAGE 2 - FINISH   

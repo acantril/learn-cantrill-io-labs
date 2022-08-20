@@ -2,6 +2,14 @@
 
 ![DEMOARCHITECTURE](https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/00-aws-simple-demos/aws-lambda-s3-events/02_LABINSTRUCTIONS/Architecture.png)
 
+# Video Guides for this Mini Project
+
+- [PART1](https://youtu.be/_7AKW8cSGU0)
+- [PART2](https://youtu.be/KQOS0ggsrfE)
+- [PLAYLIST](https://youtube.com/playlist?list=PLTk5ZYSbd9MjgSy227IkAB0GS4WAU5qcU)
+
+**This content is free, but I have a full range of training courses [HERE](https://learn.cantrill.io)**
+
 In this demo lesson you're going to create a simple event-driven image processing pipeline. The pipeline uses two S3 buckets, a source bucket and a processed bucket. When images are added to the source bucket a lambda function is triggered based on the PUT.  When invoked the lambda function receives the `event` and extracts the bucket and object information. Once those details are known, the lambda function, using the `PIL` module pixelates the image with `5` different variations (8x8, 16x16, 32x32, 48x48 and 64x64) and uploads them to the processed bucket.
 
 # Stage 1 - Create the S3 Buckets
@@ -77,7 +85,7 @@ Create a folder my_lambda_deployment
 Move into that folder
 create a folder called lambda  
 Move into that folder
-Create a file called `lamda_function.py` and paste in the code for the lambda `pixelator` function (https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/00-aws-simple-demos/aws-lambda-s3-events/01_LABSETUP/lambda/lambda_function.py) then save  
+Create a file called `lambda_function.py` and paste in the code for the lambda `pixelator` function (https://raw.githubusercontent.com/acantril/learn-cantrill-io-labs/master/00-aws-simple-demos/aws-lambda-s3-events/01_LABSETUP/lambda/lambda_function.py) then save  
 Download this file (https://files.pythonhosted.org/packages/f3/3b/d7bb231b3bc1414252e77463dc63554c1aeccffe0798524467aca7bad089/Pillow-9.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl) into that folder
 run `unzip Pillow-9.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl` and then `rm Pillow-9.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl`  
 These are the Pillow module files ... required for image manipulation in Python 3.9 (which is what the lambda function will be using)  
@@ -137,7 +145,7 @@ Move to the `CloudWatch Logs` tab
 Click the `Refresh` icon, locate and click `/aws/lambda/pixelator`  
 If there is a log stream in there, click the most recent one, if not, keep clicking the `Refresh` icon and then click the most recent log stream  
 Expand the line which begins with `{'Records': [{'eventVersion':` and you can see all of the event information about the lambda invocation, you should see the object name listed in `'object': {'key'` ...
-Go to the S3 COnsole tab for the `-processed` bucket  
+Go to the S3 Console tab for the `-processed` bucket  
 Click the `Refresh` icon  
 Select each of the pixelated versions of the image ... you should have 5 (`8x8`, `16x16`, `32x32`, `48x48` and `64x64`)  
 Click `Open`  

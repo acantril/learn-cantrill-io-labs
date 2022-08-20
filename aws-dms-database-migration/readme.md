@@ -16,6 +16,15 @@ This advanced demo consists of 5 stages :-
 
 ![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-dms-database-migration/ArchitectureEvolutionAll.png)
 
+## Video Guides
+
+- [STAGE 1](https://youtu.be/SUf0afVipm8)
+- [STAGE 2](https://youtu.be/Uzb0ggviNmk)
+- [STAGE 3-PART1](https://youtu.be/AmtW08cgRrU)
+- [STAGE 3-PART2](https://youtu.be/2-n3aBTBvc0)
+- [STAGE 4](https://youtu.be/49jQV4-mW2Q)
+- [STAGE 5](https://youtu.be/MSVwfUou5h0)
+
 ## Instructions
 
 - [Stage1](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-dms-database-migration/02_LABINSTRUCTIONS/STAGE1%20-%20Provision%20Environment%20and%20Review%20Architecture.md)
