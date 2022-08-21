@@ -45,5 +45,14 @@ for `Routing options` select `static`.
 for `Static IP prefixes` enter `192.168.8.0/21` (this is the IP range that the onprem network is using)
 Click `Create VPN Connection`  
 
+# Download VPN Connection configuration file
+
+With the `AWS-Site2SIteVPN` selected, wait for it to move into an `available` state.  
+then click `Download configuration`. 
+change the `vendor` to `pfsense`. 
+click `Download`. 
+You will be using the configuration file in the next stage.  
+
+
 
 
