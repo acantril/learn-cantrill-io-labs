@@ -10,6 +10,12 @@
 
 # Get IP Address for the onpremises Router
 
+Go to the 1-click deployment cloudformation template https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks?filteringStatus=active&filteringText=&viewNested=true&hideStacks=false  
+Click `infra` stack  
+Click `Outputs` tab  
+Note down the Router IP, you will need is soon  
+
+
 # Create customer Gateway Object
 
 # Create VGW and Attach to the AWS VPC
