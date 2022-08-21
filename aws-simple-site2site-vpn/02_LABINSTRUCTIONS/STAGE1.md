@@ -29,7 +29,6 @@ Click `Create customer gateway`
 Move to the `VPC` console, under `Virtual private network (VPN)` click `Virtual Private Gateways`  
 Click `Create virtual private gateway`  
 Under `Name tag` enter `awsVGW`  
-**note down the AWS side ASN 64512**
 Click `Create virtual private gateway`  
 Select `awsVGW`, click `Actions` and `Attach to VPC`  
 Click the `Available VPCs` dropdown, select `A4L-AWS` and click `Attach to VPC`  
@@ -41,7 +40,9 @@ Click `Create VPN connection`
 under `Name tag` enter `AWS-Site2SIteVPN`  
 under `Target gateway type` select `Virtual private gateway`  
 under `Virtual private gateway` click the dropdown and select `awsVGW`  
-under `Customer gateway ID` click the dropdown and select `A4L-onpremRouter`  
+under `Customer gateway ID` click the dropdown and select `A4L-onpremRouter` 
+for `Routing options` select `static`. 
+for `Static IP prefixes` enter `192.168.8.0/21` (this is the IP range that the onprem network is using)
 Click `Create VPN Connection`  
 
 
