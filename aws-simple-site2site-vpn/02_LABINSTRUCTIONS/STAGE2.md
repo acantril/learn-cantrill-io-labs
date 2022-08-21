@@ -18,6 +18,15 @@ Browse to https://onpremRouterPublicIPv4
 Enter the `Username` `admin`  
 Enter the `Password` you just copied down  
 Click `SIGN IN`  
+Click the `pfSense+` logo at the top left of the screen to bypass the wizard. 
+Click `Accept` on any copyright ot trademark notices (these might not show). 
+Click `Close` on any informational notices (these might not show). 
+
+# Configure Networking of pfSense router
+
+TBC
+
+
 
 # Create phase 1 tunnels
 
