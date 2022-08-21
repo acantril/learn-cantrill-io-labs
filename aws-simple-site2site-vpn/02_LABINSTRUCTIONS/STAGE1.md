@@ -28,11 +28,13 @@ Click `Create customer gateway`
 
 Move to the `VPC` console, under `Virtual private network (VPN)` click `Virtual Private Gateways`  
 Click `Create virtual private gateway`  
-Under `Name tag` enter `A4L-Site2Site`  
+Under `Name tag` enter `awsVGW`  
 Click `Create virtual private gateway`  
-Select `A4L-Site2Site`, click `Actions` and `Attach to VPC`  
+Select `awsVGW`, click `Actions` and `Attach to VPC`  
 Click the `Available VPCs` dropdown, select `A4L-AWS` and click `Attach to VPC`  
 
 # Create VPN Connection
 
+Move to the `VPC` console, under `Virtual private network (VPN)` click `Site-to-Site VPN Connections`  
+Click `Create VPN connection`  
 
