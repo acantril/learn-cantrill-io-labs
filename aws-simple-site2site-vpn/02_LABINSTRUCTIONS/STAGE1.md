@@ -18,7 +18,21 @@ Note down the Router IP, you will need is soon
 
 # Create customer Gateway Object
 
+Move to the `VPC` console, under `Virtual private network (VPN)` click `Customer Gateways`  
+Click `Create Customer Gateway`  
+For `Name tag` enter `A4L-onpremRouter`  
+For `IP address` enter the IP address you noted down above  
+Click `Create customer gateway`  
+
 # Create VGW and Attach to the AWS VPC
 
+Move to the `VPC` console, under `Virtual private network (VPN)` click `Virtual Private Gateways`  
+Click `Create virtual private gateway`  
+Under `Name tag` enter `A4L-Site2Site`  
+Click `Create virtual private gateway`  
+Select `A4L-Site2Site`, click `Actions` and `Attach to VPC`  
+Click the `Available VPCs` dropdown, select `A4L-AWS` and click `Attach to VPC`  
+
 # Create VPN Connection
+
 
