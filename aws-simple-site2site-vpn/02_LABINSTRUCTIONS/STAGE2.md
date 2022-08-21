@@ -14,9 +14,9 @@ Move to the EC2 console, Click `Instances` under `Instances`
 Select `onpremRouter`, note down the `Public IPv4 address`  
 right click, `monitor and troubleshoot` then `Get System Log`  
 Locate `ec2-user password changed to:` and note down the password of the `router`  
-Browse to https://onpremRouterPublicIPv4
+Browse to https://onpremRouterPublicIPv4  
 Enter the `Username` `admin`  
-Enter the `Password` you just copied down
+Enter the `Password` you just copied down  
 Click `SIGN IN`  
 
 
