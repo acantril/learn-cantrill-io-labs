@@ -13,7 +13,11 @@ The demo consists of 5 stages, each implementing additional components of the ar
 ![Architecture](TBC)
 
 ## 1-Click Install
-Make sure you are logged into AWS and in `us-east-1`, you will need to approve this [subscription](https://aws.amazon.com/marketplace/pp?sku=cphb99lr7icr3n9x6kc3102s5) it's a trial, so you won't be billed anything extra. Once approved, you can use the one click deployment below.
+
+- Make sure you are logged into AWS and in `us-east-1`
+- you will need to approve this [subscription](https://aws.amazon.com/marketplace/pp?sku=cphb99lr7icr3n9x6kc3102s5) it's a trial, so you won't be billed anything extra. 
+- You will need to have an SSH keypair created in `us-east-1` and select this when using the 1-click deployment below
+- Once approved, you can use the one click deployment below.
 
 - [SimpleSite2SiteVPN](TBC)
 
