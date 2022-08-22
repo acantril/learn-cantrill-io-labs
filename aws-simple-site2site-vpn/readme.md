@@ -38,7 +38,8 @@ The demo consists of 5 stages, each implementing additional components of the ar
 
 ## Architecture Diagrams
 
-- [Stage1](TBC)
-- [Stage2](TBC)
-- [Stage3](TBC)
-- [Stage4](TBC)
+- [Stage0](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-simple-site2site-vpn/02_LABINSTRUCTIONS/STAGE0.pdf)
+- [Stage1](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-simple-site2site-vpn/02_LABINSTRUCTIONS/STAGE1.pdf)
+- [Stage2](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-simple-site2site-vpn/02_LABINSTRUCTIONS/STAGE2.pdf)
+- [Stage3](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-simple-site2site-vpn/02_LABINSTRUCTIONS/STAGE3.pdf)
+- [Stage4](https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-simple-site2site-vpn/02_LABINSTRUCTIONS/STAGE4.pdf)
