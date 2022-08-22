@@ -47,9 +47,12 @@ Click `Create VPN Connection`
 
 # Download VPN Connection configuration file
 
-With the `AWS-Site2SIteVPN` selected, wait for it to move into an `available` state.  
-then click `Download configuration`. 
-change the `vendor` to `pfsense`. 
+With the `AWS-Site2SIteVPN` selected, wait for it to move into an `available` state.    
+then click `Download configuration`.   
+change the `vendor` to `pfsense`.   
+ensure platform is set to `pfSense`  
+ensure `Software` is set to `pfsense XXXX (GUI)` (2.2.5 or higher)  
+ensure `IKE version` is set to `ikev1`  
 click `Download`. 
 You will be using the configuration file in the next stage.  
 
