@@ -23,7 +23,7 @@ Click `Routes` again and notice how a route for the onprem network `192.168.8.0/
 # AWS Side Security Groups
 
 Go to the `VPC` console, under `security` click `Security Groups`.  
-Select the `Default A4L onprem SG` security group.  
+Select the `Default A4L aws SG` security group.  
 Click `Inbound Rules` and notice how there is no rule for the onpremises networks...   
 Click `Edit Inbound Rules`. 
 Click `Add rule`.
