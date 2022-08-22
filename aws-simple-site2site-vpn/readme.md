@@ -1,5 +1,7 @@
 # Advanced Demo - Simple Site2Site VPN
 
+![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-simple-site2site-vpn/Architecture.png)
+
 In this mini project you will implement a site to site VPN between AWS and a simulated on-premises business site running the pfSense router/NAT software.
 
 The demo consists of 5 stages, each implementing additional components of the architecture  
@@ -9,8 +11,6 @@ The demo consists of 5 stages, each implementing additional components of the ar
 - Stage 3 - Routing & Security
 - Stage 4 - Testing
 - Stage 6 - Cleanup
-
-![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-simple-site2site-vpn/Architecture.png)
 
 ## 1-Click Install
 
