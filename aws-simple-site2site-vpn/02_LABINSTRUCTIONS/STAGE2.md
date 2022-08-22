@@ -45,100 +45,100 @@ Click `VPN` => `IPSec'.
 
 # Create phase 1 tunnel to AWS AZ-1
 
-Click `+ Add P1`. 
-set `Description` to `AWS-Tunnel-AZ1`
-Ensure that `Diabled` is `unchecked`. 
-Set `Key Exchange Version` to `IKEv1`. 
-Set `Internet Protocol` to `IPv4`. 
-set `Interface` to `WAN`. 
-set `Remote Gateway` to be the IP address listed under `IPSec Tunnel #1`, `General information`, `Remote Gateway`  
-ensure `Authentication Method` is set to `Mutual PSK`. 
-ensure `Negotiation mode` is set to `Main`. 
-ensure `My Identifier` is set to `My IP Address`. 
-ensure `Peer Identifier` is set to `Peer IP Address`  
-set `Pre-Shared Key` to be the key listed under `IPSec Tunnel #1`, `Phase 1 proposal (Authentication)`, `Pre-Shared Key`
+Click `+ Add P1`.  
+set `Description` to `AWS-Tunnel-AZ1`  
+Ensure that `Diabled` is `unchecked`.  
+Set `Key Exchange Version` to `IKEv1`.  
+Set `Internet Protocol` to `IPv4`.  
+set `Interface` to `WAN`.  
+set `Remote Gateway` to be the IP address listed under `IPSec Tunnel #1`, `General information`, `Remote Gateway`   
+ensure `Authentication Method` is set to `Mutual PSK`.  
+ensure `Negotiation mode` is set to `Main`.  
+ensure `My Identifier` is set to `My IP Address`.  
+ensure `Peer Identifier` is set to `Peer IP Address`   
+set `Pre-Shared Key` to be the key listed under `IPSec Tunnel #1`, `Phase 1 proposal (Authentication)`, `Pre-Shared Key`  
 
-set `Encryption Algorithm` to be `AES` `128 Bits` `SHA1` `2(1024 bit)`. 
-set `Life Time` to be `28800`. 
+set `Encryption Algorithm` to be `AES` `128 Bits` `SHA1` `2(1024 bit)`.  
+set `Life Time` to be `28800`.  
 
-ensure `Dead Peer Detection` is `checked`. 
-ensure `NAT Traversal` is `Auto`. 
-ensure `Delay` is `10`. 
-ensure `Max failures` is set to `3`
+ensure `Dead Peer Detection` is `checked`.  
+ensure `NAT Traversal` is `Auto`.  
+ensure `Delay` is `10`.  
+ensure `Max failures` is set to `3`  
 
-Click `Save`. 
+Click `Save`.  
 
-# Configure IPSEC AWS AZ-1
+# Configure IPSEC AWS AZ-1 
 
-Click `Show Phase 2 Entries` under the `AWS-Tunnel-AZ1`. 
-Click `+ Add P2`. 
-For `Description` enter `IPSEC-Tunnel1-AWS-AZ1`
-ensure `Disabled` is `unchecked`. 
-ensure `Mode` is set to `Tunnel IPv4`. 
-set `Local Network` type to `Network`. 
-on the same line set `Address` to `192.168.10.0` and `/24`. 
-set `Remote Network` type to `Network`. 
-on the same line set `Address` to `10.16.0.0` and `/16`. 
-Ensure `Protocol` is set to `ESP`. 
-Ensure `AES` is checked and its dropdown is `128 bits`
-Ensure under `Hash Algorithms` `SHA1` is checked.
-Ensure `PFS key group` is set to `2 (1024 bit)`. 
-Ensure `Life Time` is `3600`. 
-for `Automatically ping host` set this to the private ip of `awsServerA` (you can get this from the EC2 console)
-Check `Enable periodic keep alive check`. 
-Click `Save`. 
+Click `Show Phase 2 Entries` under the `AWS-Tunnel-AZ1`.  
+Click `+ Add P2`.  
+For `Description` enter `IPSEC-Tunnel1-AWS-AZ1`  
+ensure `Disabled` is `unchecked`.  
+ensure `Mode` is set to `Tunnel IPv4`.  
+set `Local Network` type to `Network`.  
+on the same line set `Address` to `192.168.10.0` and `/24`.  
+set `Remote Network` type to `Network`.  
+on the same line set `Address` to `10.16.0.0` and `/16`.  
+Ensure `Protocol` is set to `ESP`.  
+Ensure `AES` is checked and its dropdown is `128 bits`  
+Ensure under `Hash Algorithms` `SHA1` is checked.  
+Ensure `PFS key group` is set to `2 (1024 bit)`.   
+Ensure `Life Time` is `3600`.   
+for `Automatically ping host` set this to the private ip of `awsServerA` (you can get this from the EC2 console)  
+Check `Enable periodic keep alive check`.   
+Click `Save`.   
 
 
 # Create phase 1 tunnel to AWS AZ-2
 
-Click `+ Add P1`. 
-set `Description` to `AWS-Tunnel-AZ2`
-Ensure that `Diabled` is `unchecked`. 
-Set `Key Exchange Version` to `IKEv1`. 
-Set `Internet Protocol` to `IPv4`. 
-set `Interface` to `WAN`. 
-set `Remote Gateway` to be the IP address listed under `IPSec Tunnel #2`, `General information`, `Remote Gateway`  
-ensure `Authentication Method` is set to `Mutual PSK`. 
-ensure `Negotiation mode` is set to `Main`. 
-ensure `My Identifier` is set to `My IP Address`. 
-ensure `Peer Identifier` is set to `Peer IP Address`  
-set `Pre-Shared Key` to be the key listed under `IPSec Tunnel #1`, `Phase 1 proposal (Authentication)`, `Pre-Shared Key`
+Click `+ Add P1`.  
+set `Description` to `AWS-Tunnel-AZ2`  
+Ensure that `Diabled` is `unchecked`.   
+Set `Key Exchange Version` to `IKEv1`.   
+Set `Internet Protocol` to `IPv4`.  
+set `Interface` to `WAN`.  
+set `Remote Gateway` to be the IP address listed under `IPSec Tunnel #2`, `General information`, `Remote Gateway`    
+ensure `Authentication Method` is set to `Mutual PSK`.   
+ensure `Negotiation mode` is set to `Main`.  
+ensure `My Identifier` is set to `My IP Address`.   
+ensure `Peer Identifier` is set to `Peer IP Address`    
+set `Pre-Shared Key` to be the key listed under `IPSec Tunnel #1`, `Phase 1 proposal (Authentication)`, `Pre-Shared Key`  
 
-set `Encryption Algorithm` to be `AES` `128 Bits` `SHA1` `2(1024 bit)`. 
-set `Life Time` to be `28800`. 
+set `Encryption Algorithm` to be `AES` `128 Bits` `SHA1` `2(1024 bit)`.  
+set `Life Time` to be `28800`.  
 
-ensure `Dead Peer Detection` is `checked`. 
-ensure `NAT Traversal` is `Auto`. 
-ensure `Delay` is `10`. 
-ensure `Max failures` is set to `3`
+ensure `Dead Peer Detection` is `checked`.   
+ensure `NAT Traversal` is `Auto`.   
+ensure `Delay` is `10`.   
+ensure `Max failures` is set to `3`  
 
-Click `Save`. 
+Click `Save`.  
 
 
-# Configure IPSEC AWS AZ-2
+# Configure IPSEC AWS AZ-2  
 
-Click `Show Phase 2 Entries` under the `AWS-Tunnel-AZ2`. 
-Click `+ Add P2`. 
-For `Description` enter `IPSEC-Tunnel2-AWS-AZ2`
-ensure `Disabled` is `unchecked`. 
-ensure `Mode` is set to `Tunnel IPv4`. 
-set `Local Network` type to `Network`. 
-on the same line set `Address` to `192.168.10.0` and `/24`. 
-set `Remote Network` type to `Network`. 
-on the same line set `Address` to `10.16.0.0` and `/16`. 
-Ensure `Protocol` is set to `ESP`. 
-Ensure `AES` is checked and its dropdown is `128 bits`
-Ensure under `Hash Algorithms` `SHA1` is checked.
-Ensure `PFS key group` is set to `2 (1024 bit)`. 
-Ensure `Life Time` is `3600`. 
-for `Automatically ping host` set this to the private ip of `awsServerA` (you can get this from the EC2 console)
-Check `Enable periodic keep alive check`. 
-Click `Save`. 
+Click `Show Phase 2 Entries` under the `AWS-Tunnel-AZ2`.   
+Click `+ Add P2`.   
+For `Description` enter `IPSEC-Tunnel2-AWS-AZ2`  
+ensure `Disabled` is `unchecked`.   
+ensure `Mode` is set to `Tunnel IPv4`.   
+set `Local Network` type to `Network`.   
+on the same line set `Address` to `192.168.10.0` and `/24`.   
+set `Remote Network` type to `Network`.   
+on the same line set `Address` to `10.16.0.0` and `/16`.   
+Ensure `Protocol` is set to `ESP`.  
+Ensure `AES` is checked and its dropdown is `128 bits`  
+Ensure under `Hash Algorithms` `SHA1` is checked.  
+Ensure `PFS key group` is set to `2 (1024 bit)`.   
+Ensure `Life Time` is `3600`.   
+for `Automatically ping host` set this to the private ip of `awsServerA` (you can get this from the EC2 console)  
+Check `Enable periodic keep alive check`.   
+Click `Save`.   
 
-# initially connect the VPN Tunnels and IPSec
+# initially connect the VPN Tunnels and IPSec  
 
-Click `Apple Changes`. 
-Click `Status` => `IPSec`. 
-Click `Connect P1 and P2s` next to both lines. 
+Click `Apple Changes`.   
+Click `Status` => `IPSec`.   
+Click `Connect P1 and P2s` next to both lines.   
 
 
