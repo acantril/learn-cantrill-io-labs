@@ -1,6 +1,6 @@
 # Advanced Demo - Simple Site2Site VPN
 
-TBC
+In this mini project you will implement a site to site VPN between AWS and a simulated on-premises business site running the pfSense router/NAT software.
 
 The demo consists of 5 stages, each implementing additional components of the architecture  
 
