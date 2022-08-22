@@ -53,4 +53,12 @@ Click `Edit Inbound Rules`.
 Click `Add rule`.
 Adjust to `All Traffic`, Source = Custom, enter `10.16.0.0/16` and `allow aws In`, then click `Save Rules`. 
 
+Go to the `VPC` console, under `security` click `Security Groups`.  
+Select the `onprem Router SG` security group.  
+Click `Inbound Rules`    
+Click `Edit Inbound Rules`. 
+Click `Add rule`.
+Adjust to `All Traffic`, Source = Custom, enter `S2VPN-onpremSH` and `allow private subnets to use VPN`, then click `Save Rules`. 
+
+
 
