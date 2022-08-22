@@ -27,7 +27,17 @@ Click `Close` on any informational notices (these might not show).
 In pfSense click `Interfaces` => `Assignments`. 
 You will see WAN & ena0. 
 CLick the `+ Add` next to the avaulable interfaces, this should change to LAN, click `Save` if shown. 
+Click `Interfaces` => `LAN`. 
+Check `Enable interface`. 
+for `IPv4 Configuration Type` set to `DHCP`. 
+click `Save`. 
+Click `Apply Changes` 
+
+
 This means the pfSense router now has WAN (public) and LAN (private) interfaces.  
+
+
+# VPN
 
 For all of the steps below **make sure you have your VPN configuration file downloaded and ready, this will give you your specific values to input**. 
 
