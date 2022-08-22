@@ -20,6 +20,20 @@ Clikc `Edit Route Propegation`.
 Check `Enable` for `awsVGW`, then click `Save` 
 Click `Routes` again and notice how a route for the onprem network `192.168.8.0/21` has been added via route propegation.  
 
+
+# Onprem Side Routing
+
+Because we're using a VGW ... we have two options, either adding routes manually or enabling route propegation so that any VGW learned routes will be added to the route table automatically - this is the option we will use for this mini project.  
+
+Go to the `VPC` console, under `Virtual private cloud` click `Route Tables`.  
+Select the `rt-onprem-private` route table.  
+Click `Routes` then `Edit Routes`  
+Click `Add Route`  
+Enter `10.16.0.0/16` in the destination box.  
+In the target box, select `Network Interface` then select `onpremRouter Private ENI`  
+Click `Save Changes`   
+
+
 # AWS Side Security Groups
 
 Go to the `VPC` console, under `security` click `Security Groups`.  
