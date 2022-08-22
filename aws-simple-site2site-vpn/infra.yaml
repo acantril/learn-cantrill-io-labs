@@ -13,7 +13,7 @@ Parameters:
     Type: 'String'
     Default: 'ami-04bc6d4450ef0ebc7'
   KeyPairName:
-    Description: KeyPair for onpremServer INSTANCES
+    Description: KeyPair for onpremServer
     Type: AWS::EC2::KeyPair::KeyName
 Resources:
   awsVPC:
@@ -413,6 +413,12 @@ Resources:
       Tags:
       - Key: Name
         Value: onprem Router SG
+      SecurityGroupIngress: 
+        - Description: 'Allow tcp/443 from anywhere'
+          IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: '0.0.0.0/0'
   onpremRouterSGSelfReference:
     Type: "AWS::EC2::SecurityGroupIngress"
     Properties:
