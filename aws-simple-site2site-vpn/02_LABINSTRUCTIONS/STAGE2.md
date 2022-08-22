@@ -125,8 +125,10 @@ for `Automatically ping host` set this to the private ip of `awsServerA` (you ca
 Check `Enable periodic keep alive check`. 
 Click `Save`. 
 
-
+# initially connect the VPN Tunnels and IPSec
 
 Click `Apple Changes`. 
+Click `Status` => `IPSec`. 
+Click `Connect P1 and P2s` next to both lines. 
 
 
