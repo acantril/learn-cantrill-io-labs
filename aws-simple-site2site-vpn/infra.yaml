@@ -1,4 +1,4 @@
-Description:  Advanced Demo - Simple Site2Site VPN (apply in us-east-1), you need to agree to this before running https://aws.amazon.com/marketplace/pp?sku=cphb99lr7icr3n9x6kc3102s5
+Description:  Advanced Demo - Simple Site2Site VPN (apply in us-east-1), you need to agree to this before running https://aws.amazon.com/marketplace/pp?sku=cphb99lr7icr3n9x6kc3102s5. you will also need a valid SSH key configured in us-east-1.
 Parameters:
   LatestAmiId:
     Description: AMI for Instances (default is latest AmaLinux2)
@@ -12,6 +12,9 @@ Parameters:
     Description: AMI for pfSense firewall
     Type: 'String'
     Default: 'ami-04bc6d4450ef0ebc7'
+  KeyPairName:
+    Description: KeyPair for onpremServer INSTANCES
+    Type: AWS::EC2::KeyPair::KeyName
 Resources:
   awsVPC:
     Type: AWS::EC2::VPC
@@ -175,12 +178,26 @@ Resources:
     Type: AWS::EC2::VPCEndpoint
     Properties:
       RouteTableIds:
+        - !Ref awsRTCustom
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcId: !Ref awsVPC
+  awsVPCeCloudFormation:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: "True"
+      SubnetIds:
         - !Ref awsSnPrivateA
         - !Ref awsSnPrivateB
-      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
-      VpcId: !Ref onpremVPC
+      SecurityGroupIds:
+        - !Ref awsSG
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.cloudformation
+      VpcId: !Ref awsVPC 
   awsServerA:
     Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
     DependsOn: 
       - awsVPCeSSM
       - awsVPCeSSMEC2Messages
@@ -201,6 +218,21 @@ Resources:
           #!/bin/bash -xe
           yum update -y && yum upgrade -y
           yum -y install httpd  
+          systemctl enable httpd
+          systemctl start httpd
+          instanceId=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+          wget -O /var/www/html/cat.gif "https://learn-cantrill-labs.s3.amazonaws.com/aws-simple-site2site-vpn/cat.jpg"
+          echo "<html><head></head><body\">" >> /var/www/html/index.html
+          echo "<center><h1>Instance ID : $instanceId</h1></center><br>" >> /var/www/html/index.html
+          echo "<center><img src=\"cat.gif\"></center>" >> /var/www/html/index.html
+          echo "</body></html>" >> /var/www/html/index.html
+          # Step 4 - permissions 
+          usermod -a -G apache ec2-user   
+          chown -R ec2-user:apache /var/www
+          chmod 2775 /var/www
+          find /var/www -type d -exec chmod 2775 {} \;
+          find /var/www -type f -exec chmod 0664 {} \;   
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource awsServerA --region ${AWS::Region}
   awsENIServerPrivateA:
     Type: AWS::EC2::NetworkInterface
     Properties:
@@ -373,6 +405,20 @@ Resources:
       GroupId: !Ref onpremSG
       IpProtocol: '-1'
       SourceSecurityGroupId: !Ref onpremSG
+  onpremRouterSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref onpremVPC
+      GroupDescription: onprem Router SG
+      Tags:
+      - Key: Name
+        Value: onprem Router SG
+  onpremRouterSGSelfReference:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref onpremRouterSG
+      IpProtocol: '-1'
+      SourceSecurityGroupId: !Ref onpremRouterSG
   onpremVPCeSSM:
     Type: AWS::EC2::VPCEndpoint
     Properties:
@@ -439,7 +485,7 @@ Resources:
       SubnetId: !Ref onpremSnPrivate
       Description: onpremRouter PRIVATE INTERFACE
       GroupSet: 
-      - !Ref onpremSG
+      - !Ref onpremRouterSG
       SourceDestCheck: false
       Tags:
         -
@@ -451,7 +497,7 @@ Resources:
       SubnetId: !Ref onpremSnPublic
       Description: Router1 PUBLIC INTERFACE
       GroupSet: 
-      - !Ref onpremSG
+      - !Ref onpremRouterSG
       SourceDestCheck: false
       Tags:
         -
@@ -470,6 +516,7 @@ Resources:
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       InstanceType: "t3.medium"
       ImageId: !Ref Win2016AmiId
+      KeyName: !Ref KeyPairName
       IamInstanceProfile: !Ref onpremEC2InstanceProfile
       Tags:
         - Key: Name
