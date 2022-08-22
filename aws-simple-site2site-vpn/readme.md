@@ -2,12 +2,13 @@
 
 TBC
 
-The demo consists of 4 stages, each implementing additional components of the architecture  
+The demo consists of 5 stages, each implementing additional components of the architecture  
 
-- Stage 1 - TBC
-- Stage 2 - TBC  
-- Stage 3 - TBC
-- Stage 4 - TBC
+- Stage 1 - Create Site2Site VPN
+- Stage 2 - Configure onpremises Router  
+- Stage 3 - Routing & Security
+- Stage 4 - Testing
+- Stage 6 - Cleanup
 
 ![Architecture](TBC)
 
