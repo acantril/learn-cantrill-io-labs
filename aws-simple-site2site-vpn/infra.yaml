@@ -125,6 +125,10 @@ Resources:
                   - 'ec2messages:GetMessages'
                   - 'ec2messages:SendReply'
                 Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 's3:*'
+                Resource: '*'
   awsEC2InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
@@ -167,6 +171,14 @@ Resources:
         - !Ref awsSG
       ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
       VpcId: !Ref awsVPC 
+  awsVPCeS3:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds:
+        - !Ref awsSnPrivateA
+        - !Ref awsSnPrivateB
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcId: !Ref onpremVPC
   awsServerA:
     Type: AWS::EC2::Instance
     DependsOn: 
@@ -184,6 +196,11 @@ Resources:
       Tags:
         - Key: Name
           Value: awsServerA
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum update -y && yum upgrade -y
+          yum -y install httpd  
   awsENIServerPrivateA:
     Type: AWS::EC2::NetworkInterface
     Properties:
