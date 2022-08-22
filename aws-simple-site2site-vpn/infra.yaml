@@ -1,9 +1,13 @@
 Description:  Advanced Demo - Simple Site2Site VPN (apply in us-east-1), you need to agree to this before running https://aws.amazon.com/marketplace/pp?sku=cphb99lr7icr3n9x6kc3102s5
 Parameters:
   LatestAmiId:
-    Description: AMI for Misc Instances (default is latest AmaLinux2)
+    Description: AMI for Instances (default is latest AmaLinux2)
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  Win2016AmiId:
+    Description: AMI for Instances (default is latest WinServer2016)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-windows-latest/Windows_Server-2019-English-Full-Base'
   pfSenseAmiId:
     Description: AMI for pfSense firewall
     Type: 'String'
@@ -163,6 +167,35 @@ Resources:
         - !Ref awsSG
       ServiceName: !Sub com.amazonaws.${AWS::Region}.ssmmessages
       VpcId: !Ref awsVPC 
+  awsServerA:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - awsVPCeSSM
+      - awsVPCeSSMEC2Messages
+      - awsVPCeSSMMessages
+    Properties:
+      NetworkInterfaces:
+      - NetworkInterfaceId: !Ref awsENIServerPrivateA
+        DeviceIndex: 0
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      InstanceType: "t3.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref awsEC2InstanceProfile
+      Tags:
+        - Key: Name
+          Value: awsServerA
+  awsENIServerPrivateA:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref awsSnPrivateA
+      Description: awsServer PRIVATE INTERFACE
+      GroupSet: 
+      - !Ref awsSG
+      SourceDestCheck: true
+      Tags:
+        -
+          Key: Name
+          Value: awsServer Private A ENI
   onpremVPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -407,3 +440,36 @@ Resources:
         -
           Key: Name
           Value: onpremRouter Public ENI
+  onpremServer:
+    Type: AWS::EC2::Instance
+    DependsOn: 
+      - onpremVPCeSSM
+      - onpremVPCeSSMEC2Messages
+      - onpremVPCeSSMMessages
+    Properties:
+      NetworkInterfaces:
+      - NetworkInterfaceId: !Ref onpremENIServerPrivate
+        DeviceIndex: 0
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      InstanceType: "t3.medium"
+      ImageId: !Ref Win2016AmiId
+      IamInstanceProfile: !Ref onpremEC2InstanceProfile
+      Tags:
+        - Key: Name
+          Value: onpremServer
+  onpremENIServerPrivate:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref onpremSnPrivate
+      Description: onpremServer PRIVATE INTERFACE
+      GroupSet: 
+      - !Ref onpremSG
+      SourceDestCheck: true
+      Tags:
+        -
+          Key: Name
+          Value: onpremServer Private ENI
+Outputs:
+  onpremRouterIP:
+    Description: Public IPv4 Address for on-premises router
+    Value: !Ref onpremRouterEIP
