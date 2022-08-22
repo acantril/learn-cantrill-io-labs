@@ -39,6 +39,4 @@ Click `Edit Inbound Rules`.
 Click `Add rule`.
 Adjust to `All Traffic`, Source = Custom, enter `10.16.0.0/16` and `allow aws In`, then click `Save Rules`. 
 
-# Testing
 
-TBC ... need a cool way of doing this, instance ... website etc.
