@@ -10,7 +10,7 @@ The demo consists of 5 stages, each implementing additional components of the ar
 - Stage 4 - Testing
 - Stage 6 - Cleanup
 
-![Architecture](TBC)
+![Architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-simple-site2site-vpn/Architecture.png)
 
 ## 1-Click Install
 
