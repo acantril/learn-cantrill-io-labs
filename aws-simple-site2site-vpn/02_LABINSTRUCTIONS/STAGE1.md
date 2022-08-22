@@ -41,8 +41,8 @@ under `Name tag` enter `AWS-Site2SIteVPN`
 under `Target gateway type` select `Virtual private gateway`  
 under `Virtual private gateway` click the dropdown and select `awsVGW`  
 under `Customer gateway ID` click the dropdown and select `A4L-onpremRouter` 
-for `Routing options` select `static`. 
-for `Static IP prefixes` enter `192.168.8.0/21` (this is the IP range that the onprem network is using)
+for `Routing options` select `static`.  
+for `Static IP prefixes` enter `192.168.8.0/21` (this is the IP range that the onprem network is using)  
 Click `Create VPN Connection`  
 
 # Download VPN Connection configuration file
