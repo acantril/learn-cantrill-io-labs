@@ -19,7 +19,7 @@ The demo consists of 5 stages, each implementing additional components of the ar
 - You will need to have an SSH keypair created in `us-east-1` and select this when using the 1-click deployment below
 - Once approved, you can use the one click deployment below.
 
-- [SimpleSite2SiteVPN](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-simple-site2site-vpn/infra.yaml&stackName=S2SVPN)
+- [SimpleSite2SiteVPN](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-simple-site2site-vpn/infra.yaml&stackName=S2SVPN)  (**be sure to select a keypair**)
 
 ## Instructions
 
