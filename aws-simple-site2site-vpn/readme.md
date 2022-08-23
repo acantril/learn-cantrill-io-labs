@@ -31,6 +31,7 @@ The demo consists of 5 stages, each implementing additional components of the ar
 
 ## Video Guides
 
+- [STAGE2](https://youtu.be/v9PactTXMTQ)
 - [STAGE1](TBC)
 - [STAGE2](TBC)
 - [STAGE3](TBC)
