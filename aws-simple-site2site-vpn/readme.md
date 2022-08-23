@@ -32,11 +32,11 @@ The demo consists of 5 stages, each implementing additional components of the ar
 ## Video Guides
 
 - [STAGE0](https://youtu.be/v9PactTXMTQ)
-- [STAGE1](TBC)
-- [STAGE2](TBC)
-- [STAGE3](TBC)
-- [STAGE4](TBC)
-- [STAGE5](TBC)
+- [STAGE1](https://youtu.be/oizexSe2ajQ)
+- [STAGE2](https://youtu.be/2LZRxc7UZns)
+- [STAGE3](https://youtu.be/mUgXjnAJHFA)
+- [STAGE4](https://youtu.be/RjietVauypA)
+- [STAGE5](https://youtu.be/yMb1UXqwsCA)
 
 ## Architecture Diagrams
 
