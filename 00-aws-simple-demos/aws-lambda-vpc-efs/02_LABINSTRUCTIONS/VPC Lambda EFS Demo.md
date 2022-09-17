@@ -60,7 +60,7 @@ Open the Lambda console https://console.aws.amazon.com/lambda/home?region=us-eas
 Click `Create function`  
 Choose `Author from Scratch`  
 For `Function Name` choose `catdownloader`  
-For `Runtime` choose `Python 3.8`  
+For `Runtime` choose `Python 3.9`  
 Expand `Choose or create an execution role`  
 Check `Use an existing role`  
 choose `LAMBDAVPC-LambdaRole-` in the dropdown (there will be random at the end, that's ok)  
