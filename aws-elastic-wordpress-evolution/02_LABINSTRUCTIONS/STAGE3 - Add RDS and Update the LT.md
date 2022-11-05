@@ -134,15 +134,15 @@ mysql -h $DBEndpoint -u $DBUser -p$DBPassword $DBName < a4lWordPress.sql
 this command will substitute `localhost` in the config file for the contents of `$DBEndpoint` which is the RDS instance
 
 ```
-sudo sed -i "s/'localhost'/'$DBEndpoint'/g" /var/www/html/wp-config.php
+sed -i "s/'localhost'/'$DBEndpoint'/g" /var/www/html/wp-config.php
 ```
 
 
 # STAGE 3D - Stop the MariaDB Service
 
 ```
-sudo systemctl disable mariadb
-sudo systemctl stop mariadb
+systemctl disable mariadb
+systemctl stop mariadb
 ```
 
 

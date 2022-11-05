@@ -139,75 +139,75 @@ DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 ## Install updates
 
 ```
-sudo yum -y update
-sudo yum -y upgrade
+yum -y update
+yum -y upgrade
 
 ```
 
 ## Install Pre-Reqs and Web Server
 
 ```
-sudo yum install -y mariadb-server httpd wget
-sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
-sudo amazon-linux-extras install epel -y
-sudo yum install stress -y
+yum install -y mariadb-server httpd wget
+amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+amazon-linux-extras install epel -y
+yum install stress -y
 
 ```
 
 ## Set DB and HTTP Server to running and start by default
 
 ```
-sudo systemctl enable httpd
-sudo systemctl enable mariadb
-sudo systemctl start httpd
-sudo systemctl start mariadb
+systemctl enable httpd
+systemctl enable mariadb
+systemctl start httpd
+systemctl start mariadb
 ```
 
 ## Set the MariaDB Root Password
 
 ```
-sudo mysqladmin -u root password $DBRootPassword
+mysqladmin -u root password $DBRootPassword
 ```
 
 ## Download and extract Wordpress
 
 ```
-sudo wget http://wordpress.org/latest.tar.gz -P /var/www/html
+wget http://wordpress.org/latest.tar.gz -P /var/www/html
 cd /var/www/html
-sudo tar -zxvf latest.tar.gz
-sudo cp -rvf wordpress/* .
-sudo rm -R wordpress
-sudo rm latest.tar.gz
+tar -zxvf latest.tar.gz
+cp -rvf wordpress/* .
+rm -R wordpress
+rm latest.tar.gz
 ```
 
 ## Configure the wordpress wp-config.php file 
 
 ```
-sudo cp ./wp-config-sample.php ./wp-config.php
-sudo sed -i "s/'database_name_here'/'$DBName'/g" wp-config.php
-sudo sed -i "s/'username_here'/'$DBUser'/g" wp-config.php
-sudo sed -i "s/'password_here'/'$DBPassword'/g" wp-config.php
+cp ./wp-config-sample.php ./wp-config.php
+sed -i "s/'database_name_here'/'$DBName'/g" wp-config.php
+sed -i "s/'username_here'/'$DBUser'/g" wp-config.php
+sed -i "s/'password_here'/'$DBPassword'/g" wp-config.php
 ```
 
 ## Fix Permissions on the filesystem
 
 ```
-sudo usermod -a -G apache ec2-user   
-sudo chown -R ec2-user:apache /var/www
-sudo chmod 2775 /var/www
-sudo find /var/www -type d -exec chmod 2775 {} \;
-sudo find /var/www -type f -exec chmod 0664 {} \;
+usermod -a -G apache ec2-user   
+chown -R ec2-user:apache /var/www
+chmod 2775 /var/www
+find /var/www -type d -exec chmod 2775 {} \;
+find /var/www -type f -exec chmod 0664 {} \;
 ```
 
 ## Create Wordpress User, set its password, create the database and configure permissions
 
 ```
-sudo echo "CREATE DATABASE $DBName;" >> /tmp/db.setup
-sudo echo "CREATE USER '$DBUser'@'localhost' IDENTIFIED BY '$DBPassword';" >> /tmp/db.setup
-sudo echo "GRANT ALL ON $DBName.* TO '$DBUser'@'localhost';" >> /tmp/db.setup
-sudo echo "FLUSH PRIVILEGES;" >> /tmp/db.setup
-sudo mysql -u root --password=$DBRootPassword < /tmp/db.setup
-sudo rm /tmp/db.setup
+echo "CREATE DATABASE $DBName;" >> /tmp/db.setup
+echo "CREATE USER '$DBUser'@'localhost' IDENTIFIED BY '$DBPassword';" >> /tmp/db.setup
+echo "GRANT ALL ON $DBName.* TO '$DBUser'@'localhost';" >> /tmp/db.setup
+echo "FLUSH PRIVILEGES;" >> /tmp/db.setup
+mysql -u root --password=$DBRootPassword < /tmp/db.setup
+rm /tmp/db.setup
 ```
 
 ## Test Wordpress is installed
