@@ -102,7 +102,7 @@ ensure `Authentication Method` is set to `Mutual PSK`.
 ensure `Negotiation mode` is set to `Main`.  
 ensure `My Identifier` is set to `My IP Address`.   
 ensure `Peer Identifier` is set to `Peer IP Address`    
-set `Pre-Shared Key` to be the key listed under `IPSec Tunnel #1`, `Phase 1 proposal (Authentication)`, `Pre-Shared Key`  
+set `Pre-Shared Key` to be the key listed under `IPSec Tunnel #2`, `Phase 1 proposal (Authentication)`, `Pre-Shared Key`  
 
 set `Encryption Algorithm` to be `AES` `128 Bits` `SHA1` `2(1024 bit)`.  
 set `Life Time` to be `28800`.  
