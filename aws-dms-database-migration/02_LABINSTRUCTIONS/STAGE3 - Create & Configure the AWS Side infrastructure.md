@@ -60,7 +60,7 @@ Enter `awsCatWeb` for the Name of the instance.
 Clck `Amazon Linux` and ensure `Amazon Linux 2 AMI (HVM) ...... SSD Volume Type` is selected.  
 Ensuring the architecture is set to `64-bit (x86)` below.    
 Choose the `Free Tier eligable` instance (should be t2.micro or t3.micro)  
-Scroll down and choose `Choose `Proceed without key pair (not recommended)` in the dropdown  
+Scroll down and choose `Proceed without key pair (not recommended)` in the dropdown  
 Next to `Network Settings` click `Edit`  
 For `VPC` pick `awsVPC`  
 For `Subnet` pick `aws-PublicA`  
@@ -116,7 +116,7 @@ move to the webroot folder by typing `cd /var/www/`
 run a `scp -rp html ec2-user@privateIPofawsCatWeb:/home/ec2-user` and answer `yes` to the authenticity warning.  
 this will copy the wordpress local files from `CatWeb` (on-premises) to `awsCatWeb` (aws)
 
-**now move back to the `CatWeb` server, if you dont have it open still, reconnect as per below**
+**now move back to the `awsCatWeb` server, if you dont have it open still, reconnect as per below**
 
 Select the `awsCatWeb` instance, right click, `Connect`  
 Select `Session Manager` and click `Connect`  
