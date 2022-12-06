@@ -34,8 +34,8 @@ A full range of Video guided versions are available in my courses at https://lea
 
 ## TEXT ONLY MINI PROJECTS
 
+- [Implement Hybrid Directory - On-premises & AWS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-activedirectory)
 
 ## UNDER CONSTRUCTION OR BROKEN PROJECTS (DON'T USE) - fixes in progress
 
-- [Implement Hybrid Directory - On-premises & AWS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-activedirectory)
 - [Patching AWS and On-premises using Systems Manager Patch Manager](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-patch-manager)
