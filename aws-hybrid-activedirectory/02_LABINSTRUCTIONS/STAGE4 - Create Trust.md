@@ -17,7 +17,7 @@ Make sure `Do not require Kerberos preauthentication` is UNCHECKED
 
 # STAGE 4B - ONPREM Configure DNS Conditional Forwarders for ONPREM  
 
-OPen https://console.aws.amazon.com/directoryservicev2/home?region=us-east-1#!/directories  
+Open https://console.aws.amazon.com/directoryservicev2/home?region=us-east-1#!/directories  
 Select the managed microsoft AD  
 Note down the `DNS Addresses` (2 IPs)  
 Note down `Directory DNS Name`  
@@ -123,6 +123,7 @@ Select `ad.animals4life.org` (on prem domain)
 Click `OK`  
 Type `Admin`  
 Click `Check Names`  
+Enter `admin@ad.animals4life.org` and `YOUR_DOMAIN_ADMIN_PASSWORD` for enter network credentials
 Make sure the line with Logon Name `Admin` is selected  
 Click `OK`, `OK`, `OK`   
 The On prem admin user is now an Admin of the AWS Directory  

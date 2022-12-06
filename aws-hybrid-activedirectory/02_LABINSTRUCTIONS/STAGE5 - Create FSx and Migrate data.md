@@ -14,7 +14,7 @@ Select `32GiB`
 
 Under `networking & Security`  
 Select `AWS-VPC` in the Virtual Private Cloud (VPC) Dropdown  
-For Security Groups Select `InstanceSG`  
+For Security Groups Select `HYBRIDDIR-*-InstanceSG-*`  
 For preferred Subnets  
 Select `AWS-PRIVATE-A` and `AWS-PRIVATE-B`  
 Under `Windows authentication` select `AWS Managed Microsoft Active Directory`  

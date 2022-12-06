@@ -47,7 +47,7 @@ Remove all existing security groups
 Check the SG with the description of `HYBRIDDIR-AWSPC-*`
 Expand the `Advanced Details` section
 Under `Domain join directory` select `aws.animals4life.org`
-Under `IAM Role` select `EC2 Instance Profile`
+Under `IAM Role` select `HYBRIDDIR-ONPREMVPC-*-EC2InstanceProfile-*`
 Click `Review and Launch`
 Click `Launch Instance`
 
