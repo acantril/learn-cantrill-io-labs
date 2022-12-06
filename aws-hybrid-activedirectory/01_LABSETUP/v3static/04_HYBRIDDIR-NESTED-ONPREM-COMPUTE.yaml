@@ -1,0 +1,960 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  This template is intended to be installed into an existing VPC with two public subnets
+  and an Active Directory domain. It will create an auto-scaling group of RD Gateway
+  instances in the public VPC subnets. **WARNING** This template creates Amazon EC2
+  Windows instance and related resources. You will be billed for the AWS resources
+  used if you create a stack from this template. (qs-1qup6raf2)
+Metadata:
+  QuickStartDocumentation:
+    EntrypointName: "Parameters for launching into an existing VPC (domain-joined)"
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Network configuration
+        Parameters:
+          - VPCID
+          - PublicSubnet1ID
+          - PublicSubnet2ID
+          - RDGWCIDR
+      - Label:
+          default: Amazon EC2 configuration
+        Parameters:
+          - KeyPairName
+          - RDGWInstanceType
+          - LatestAmiId
+      - Label:
+          default: Microsoft Active Directory configuration
+        Parameters:
+          - DomainDNSName
+          - DomainNetBIOSName
+          - DomainMemberSGID
+          - DomainAdminUser
+          - DomainAdminPassword
+      - Label:
+          default: Microsoft Remote Desktop Gateway configuration
+        Parameters:
+          - NumberOfRDGWHosts
+      - Label:
+          default: AWS Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3KeyPrefix
+          - QSS3BucketRegion
+    ParameterLabels:
+      DomainAdminPassword:
+        default: Domain admin password
+      DomainAdminUser:
+        default: Domain admin user name
+      DomainDNSName:
+        default: Domain DNS name
+      DomainMemberSGID:
+        default: Domain member security group ID
+      DomainNetBIOSName:
+        default: Domain NetBIOS name
+      KeyPairName:
+        default: Key pair name
+      LatestAmiId:
+        default: SSM parameter to grab latest AMI ID
+      NumberOfRDGWHosts:
+        default: Number of RDGW hosts
+      PublicSubnet1ID:
+        default: Public subnet 1 ID
+      PublicSubnet2ID:
+        default: Public subnet 2 ID
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket Region
+      RDGWInstanceType:
+        default: Remote Desktop Gateway instance type
+      RDGWCIDR:
+        default: Allowed Remote Desktop Gateway external access CIDR
+      VPCID:
+        default: VPC ID
+Parameters:
+  DomainAdminPassword:
+    Description: Password for the domain admin user. Must be at least 8 characters containing letters, numbers and symbols.
+    Type: String
+    MinLength: '8'
+    MaxLength: '32'
+    AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    NoEcho: 'true'
+  DomainAdminUser:
+    Description: User name for the domain administrator. This parameter is separate from the
+      default administrator account.
+    Type: String
+    Default: Admin
+    MinLength: '5'
+    MaxLength: '25'
+    AllowedPattern: '[a-zA-Z0-9]*'
+  DomainNetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Description: NetBIOS name of the domain (up to 15 characters) for users of earlier versions of Windows (for example, EXAMPLE).
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String
+  DomainDNSName:
+    Description: Fully qualified domain name (FQDN) such as example.com.
+    Type: String
+    MinLength: '2'
+    MaxLength: '255'
+    AllowedPattern: '[a-zA-Z0-9\-]+\..+'
+  DomainMemberSGID:
+    Description: ID of the domain member security group (for example, sg-7f16e910).
+    Type: AWS::EC2::SecurityGroup::Id
+  KeyPairName:
+    Description: Public/private key pairs allow you to securely connect to your instance after it launches.
+    Type: AWS::EC2::KeyPair::KeyName
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-windows-latest/Windows_Server-2016-English-Full-Base
+  NumberOfRDGWHosts:
+    AllowedValues:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+    Default: '1'
+    Description: Enter the number of Remote Desktop Gateway hosts to create.
+    Type: String
+  PublicSubnet1ID:
+    Description: ID of the public subnet 1 that you want to provision the first Remote Desktop Gateway into (for example, subnet-a0246dcd).
+    Type: AWS::EC2::Subnet::Id
+  PublicSubnet2ID:
+    Description: ID of the public subnet 2 you want to provision the second Remote Desktop Gateway into (for example, subnet-e3246d8e).
+    Type: AWS::EC2::Subnet::Id
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      hyphen (-).
+    Default: aws-quickstart
+    Description: Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+    Default: quickstart-microsoft-rdgateway/
+    Description: S3 key prefix that is used to simulate a directory for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). 
+      See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: "'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is 
+    hosted. Keep the default Region unless you are customizing the template. 
+    Changing this Region updates code references to point to a new Quick Start location. 
+    When using your own bucket, specify the Region. 
+    See https://aws-quickstart.github.io/option1.html.'"
+    Type: String
+  RDGWInstanceType:
+    Description: Amazon EC2 instance type for the Remote Desktop Gateway instances.
+    Type: String
+    Default: t3.2xlarge
+    AllowedValues:
+      - t2.small
+      - t2.medium
+      - t2.large
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+      - t3.2xlarge
+      - t3a.micro
+      - t3a.small
+      - t3a.medium
+      - t3a.large
+      - t3a.xlarge
+      - t3a.2xlarge
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - m5a.large
+      - m5a.xlarge
+      - m5a.2xlarge
+  RDGWCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
+    Description: Allowed CIDR Block for external access to the Remote Desktop Gateways.
+    Type: String
+  VPCID:
+    Description: ID of the VPC (for example, vpc-0343606e).
+    Type: AWS::EC2::VPC::Id
+Rules:
+  SubnetsInVPC:
+    Assertions:
+      - Assert: !EachMemberIn
+          - !ValueOfAll
+            - AWS::EC2::Subnet::Id
+            - VpcId
+          - !RefAll 'AWS::EC2::VPC::Id'
+        AssertDescription: All subnets must be in the VPC.
+  CheckSupportedInstances:
+    RuleCondition: !Contains
+      - - m4.large
+        - m4.xlarge
+        - m4.2xlarge
+        - m4.4xlarge
+      - !Ref 'RDGWInstanceType'
+    Assertions:
+      - Assert: !Not
+          - !Contains
+            - - eu-west-3
+            - !Ref 'AWS::Region'
+        AssertDescription: M4 instances are not available in the Paris region.
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+Resources:
+  DomainJoinSecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub 'DomainJoinSecrets-${AWS::StackName}'
+      Description: Secrets to join AD domain.
+      SecretString: !Sub '{"username":"${DomainNetBIOSName}\\${DomainAdminUser}","password":"${DomainAdminPassword}"}'
+  SetupConfigurationDoc:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Automation
+      Content: 
+        schemaVersion: "0.3"
+        description: "Configure instances on launch."
+        assumeRole: "{{AutomationAssumeRole}}"
+        parameters:
+          InstanceId:
+            description: "ID of the instance."
+            type: "String" 
+          ASGName:
+            description: "Auto Scaling group name."
+            type: "String"
+          LCHName:
+            description: "Life cycle hook name."
+            type: "String"
+          DomainDNSName: 
+            default: "example.com"
+            description: "Fully qualified domain name (FQDN) of the forest root domain (for example, example.com)."
+            type: "String"
+          DomainNetBIOSName:
+            default: "example"
+            description: "NetBIOS name of the domain (up to 15 characters) for users of earlier versions of Windows (for example, EXAMPLE)."
+            type: "String"
+          QSS3BucketName:
+            default: "aws-quickstart"
+            description: "Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html."
+            type: "String"
+          QSS3KeyPrefix:
+            default: "quickstart-microsoft-rdgateway/"
+            description: "S3 key prefix that is used to simulate a directory for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). 
+      See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html."
+            type: "String"
+          URLSuffix:
+            default: "amazonaws.com"
+            description: "AWS URL suffix."
+            type: "String"
+          AutomationAssumeRole:
+            default: ""
+            description: "(Optional) The ARN of the role that allows automation to perform the actions on your behalf."
+            type: "String" 
+        mainSteps:
+          - name: waitUntilInstanceStateRunning
+            action: aws:waitForAwsResourceProperty
+            timeoutSeconds: 600
+            inputs:
+              Service: ec2
+              Api: DescribeInstanceStatus
+              InstanceIds:
+                - "{{InstanceId}}"
+              PropertySelector: "$.InstanceStatuses[0].InstanceState.Name"
+              DesiredValues:
+                - running
+          - name: assertInstanceStateRunning
+            action: aws:assertAwsResourceProperty
+            inputs:
+              Service: ec2
+              Api: DescribeInstanceStatus
+              InstanceIds:
+                - "{{InstanceId}}"
+              PropertySelector: "$.InstanceStatuses[0].InstanceState.Name"
+              DesiredValues:
+                - running
+          - name: "InstallDSCmodules"
+            action: aws:runCommand
+            onFailure: "step:abandonHookAction"
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds: 
+                - "{{InstanceId}}"
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: "true"
+                CloudWatchLogGroupName: !Sub "/QuickStart/rdgateway/${AWS::StackName}/SetupConfiguration"
+              Parameters:
+                commands: 
+                  - |
+                     <#
+                         .SYNOPSIS
+                         install-dsc-modules.ps1
+                     
+                         .DESCRIPTION
+                         This script downloads and installs the required PowerShell modules to create and configure Active Directory Domain Controllers. 
+                         It also creates a self signed certificate to be uses with PowerShell DSC.
+                         
+                         .EXAMPLE
+                         .\install-dsc-modules
+                     #>
+                     
+                     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                     
+                     Write-Output 'Installing NuGet Package Provider'
+                     Try {
+                         Install-PackageProvider -Name 'NuGet' -MinimumVersion '2.8.5' -Force -ErrorAction Stop
+                     } Catch [System.Exception] {
+                         Write-Output "Failed to install NuGet Package Provider $_"
+                         Exit 1
+                     }
+                     
+                     Write-Output 'Setting PSGallery Respository to trusted'
+                     Try {
+                         Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted' -ErrorAction Stop
+                     } Catch [System.Exception] {
+                         Write-Output "Failed to set PSGallery Respository to trusted $_"
+                         Exit 1
+                     }
+                     
+                     Write-Output 'Installing the needed Powershell DSC modules for this Quick Start'
+                     $Modules = @(
+                         @{
+                             Name = 'ActiveDirectoryDsc'
+                             Version = '6.0.1'
+                         },
+                         @{
+                             Name = 'ComputerManagementDsc'
+                             Version = '8.4.0'
+                         }
+                     )
+                     
+                     Foreach ($Module in $Modules) {
+                         Try {
+                             Install-Module -Name $Module.Name -RequiredVersion $Module.Version -ErrorAction Stop
+                         } Catch [System.Exception] {
+                             Write-Output "Failed to Import Modules $_"
+                             Exit 1
+                         }
+                     }
+          - name: "GenerateDomainJoinMof"
+            action: aws:runCommand
+            onFailure: "step:abandonHookAction"
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds: 
+                - "{{InstanceId}}"
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: "true"
+                CloudWatchLogGroupName: !Sub "/QuickStart/rdgateway/${AWS::StackName}/SetupConfiguration"
+              Parameters:
+                commands: 
+                  - !Sub |
+                     [CmdletBinding()]
+                     # Incoming Parameters for Script, CloudFormation\SSM Parameters being passed in
+                     param()
+                     
+                     # Creating Configuration Data Block that allows plain test password 
+                     # for DSC Configuration Processing
+                     $ConfigurationData = @{
+                         AllNodes = @(
+                             @{
+                                 NodeName="*"
+                                 PSDscAllowPlainTextPassword = $true
+                                 PSDscAllowDomainUser = $true
+                             },
+                             @{
+                                 NodeName = 'localhost'
+                             }
+                         )
+                     }
+                     
+                     Configuration DomainJoin {
+                         $ss = ConvertTo-SecureString -String 'stringdoesntmatter' -AsPlaintext -Force
+                         $Credentials = New-Object PSCredential('${DomainJoinSecrets}', $ss)
+                     
+                         Import-Module -Name PSDesiredStateConfiguration
+                         Import-Module -Name ComputerManagementDsc
+                         
+                         Import-DscResource -Module PSDesiredStateConfiguration
+                         Import-DscResource -Module ComputerManagementDsc
+                     
+                         Node 'localhost' {
+                     
+                             Computer JoinDomain {
+                                 Name = $env:COMPUTERNAME
+                                 DomainName = '{{DomainDNSName}}'
+                                 Credential = $Credentials
+                             }
+                         }
+                     }
+                     
+                     DomainJoin -OutputPath 'C:\AWSQuickstart\DomainJoin' -ConfigurationData $ConfigurationData
+          - name: "applyDomainJoin"
+            action: aws:runCommand
+            onFailure: step:abandonHookAction
+            inputs:
+              DocumentName: AWS-ApplyDSCMofs
+              InstanceIds: 
+                - "{{InstanceId}}"
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: "true"
+                CloudWatchLogGroupName: !Sub "/QuickStart/rdgateway/${AWS::StackName}/SetupConfiguration"
+              Parameters:
+                MofsToApply:
+                  - "C:\\AWSQuickstart\\DomainJoin\\localhost.mof"
+                ServicePath:
+                  - default
+                MofOperationMode:
+                  - Apply
+                ModuleSourceBucketName:
+                  - "NONE"
+                AllowPSGalleryModuleSource:
+                  - "True"
+                RebootBehavior:
+                  - "AfterMof"
+                UseComputerNameForReporting:
+                  - "False"
+                EnableVerboseLogging:
+                  - "False"
+                EnableDebugLogging:
+                  - "False"
+          - name: "installRDP"
+            action: aws:runCommand
+            onFailure: "step:abandonHookAction"
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds: 
+                - "{{InstanceId}}"
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: "true"
+                CloudWatchLogGroupName: !Sub "/QuickStart/rdgateway/${AWS::StackName}/SetupConfiguration"
+              Parameters:
+                commands: 
+                  - |
+                     Write-Output 'Installing RD Gateway components'
+                     Try {
+                       Install-WindowsFeature RDS-Gateway,RSAT-RDS-Gateway
+                     } Catch [System.Exception] {
+                       Write-Output "Failed to install RD Gateway components $_"
+                       Exit 1
+                     }
+          - name: "configurerdgw"
+            action: "aws:runCommand"
+            onFailure: "step:abandonHookAction"
+            inputs:
+              DocumentName: "AWS-RunRemoteScript"
+              InstanceIds:
+              - "{{InstanceId}}"
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: "true"
+                CloudWatchLogGroupName: !Sub '/QuickStart/rdgateway/${AWS::StackName}/SetupConfiguration'
+              Parameters:
+                sourceType: "S3"
+                sourceInfo: 
+                  !Sub 
+                    - '{"path": "https://${S3Bucket}.s3.${S3Region}.{{URLSuffix}}/{{QSS3KeyPrefix}}scripts/Initialize-RDGW.ps1"}'
+                    - S3Bucket: !If
+                        - UsingDefaultBucket
+                        - !Sub '${QSS3BucketName}-${AWS::Region}'
+                        - !Ref QSS3BucketName
+                      S3Region: !If 
+                        - UsingDefaultBucket
+                        - !Ref AWS::Region
+                        - !Ref QSS3BucketRegion
+                commandLine: "./Initialize-RDGW.ps1 -DomainDNSName {{DomainDNSName}} -DomainNetBiosName {{DomainNetBIOSName}} -GroupName 'domain admins'"
+          - name: "completeHookAction"
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: autoscaling
+              Api: CompleteLifecycleAction
+              AutoScalingGroupName: "{{ASGName}}"
+              InstanceId: "{{InstanceId}}"
+              LifecycleActionResult: CONTINUE
+              LifecycleHookName: "{{LCHName}}"
+          - name: "abandonHookAction"
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: autoscaling
+              Api: CompleteLifecycleAction
+              AutoScalingGroupName: "{{ASGName}}"
+              InstanceId: "{{InstanceId}}"
+              LifecycleActionResult: ABANDON
+              LifecycleHookName: "{{LCHName}}"
+  RemoveConfigurationDoc:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Automation
+      Content:
+        schemaVersion: "0.3"
+        description: "Remove EC2 Instances from AD domain."
+        assumeRole: "{{AutomationAssumeRole}}"
+        parameters:
+          InstanceId:
+            description: "ID of the instance."
+            type: "String" 
+          ASGName:
+            description: "Auto Scaling group name."
+            type: "String"
+          LCHName:
+            description: "Life cycle hook name."
+            type: "String"
+          AutomationAssumeRole:
+            default: ""
+            description: "(Optional) The ARN of the role that allows automation to perform the actions on your behalf."
+            type: "String" 
+        mainSteps:
+          - name: "GenerateRemoveJoinMof"
+            action: aws:runCommand
+            onFailure: "step:abandonHookAction"
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds: 
+                - "{{InstanceId}}"
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: "true"
+                CloudWatchLogGroupName: !Sub "/QuickStart/rdgateway/${AWS::StackName}/RemoveConfiguration"
+              Parameters:
+                commands: 
+                  - !Sub |
+                      [CmdletBinding()]
+                      # Incoming Parameters for Script, CloudFormation\SSM Parameters being passed in
+                      param()
+                      
+                      $ConfigurationData = @{
+                          AllNodes = @(
+                              @{
+                                  NodeName="*"
+                                  PSDscAllowPlainTextPassword = $true
+                                  PSDscAllowDomainUser = $true
+                              },
+                              @{
+                                  NodeName = 'localhost'
+                              }
+                          )
+                      }
+                      
+                      Configuration RemoveDomain {
+                      
+                          $ss = ConvertTo-SecureString -String 'stringdoesntmatter' -AsPlaintext -Force
+                          $Credentials = New-Object PSCredential("${DomainJoinSecrets}", $ss)
+                          
+                      
+                          Import-Module -Name PSDesiredStateConfiguration
+                          Import-Module -Name ComputerManagementDsc
+                          Import-Module -Name ActiveDirectoryDsc
+                          
+                          Import-DscResource -Module PSDesiredStateConfiguration
+                          Import-DscResource -Module ComputerManagementDsc
+                          Import-DscResource -Module ActiveDirectoryDsc
+                      
+                      
+                          Node localhost {
+                              WindowsFeature RSAT-AD-PowerShell {
+                                  Name = 'RSAT-AD-PowerShell'
+                                  Ensure = 'Present'
+                              }
+                              
+                              ADComputer RemoveDomain {
+                                  ComputerName = $env:COMPUTERNAME
+                                  Ensure = 'Absent'
+                                  Credential = $Credentials
+                                  DependsOn = "[WindowsFeature]RSAT-AD-PowerShell"
+                              }
+                          }
+                      }
+                      
+                      RemoveDomain -OutputPath 'C:\AWSQuickstart\RemoveDomain' -ConfigurationData $ConfigurationData
+          - name: "RemoveFromDomain"
+            action: aws:runCommand
+            onFailure: step:abandonHookAction
+            inputs:
+              DocumentName: AWS-ApplyDSCMofs
+              InstanceIds: 
+                - "{{InstanceId}}"
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: "true"
+                CloudWatchLogGroupName: !Sub "/QuickStart/rdgateway/${AWS::StackName}/RemoveConfiguration"
+              Parameters:
+                MofsToApply:
+                  - "C:\\AWSQuickstart\\RemoveDomain\\localhost.mof"
+                ServicePath:
+                  - default
+                MofOperationMode:
+                  - Apply
+                ModuleSourceBucketName:
+                  - "NONE"
+                AllowPSGalleryModuleSource:
+                  - "True"
+                RebootBehavior:
+                  - "AfterMof"
+                UseComputerNameForReporting:
+                  - "False"
+                EnableVerboseLogging:
+                  - "False"
+                EnableDebugLogging:
+                  - "False"
+          - name: "completeHookAction"
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: autoscaling
+              Api: CompleteLifecycleAction
+              AutoScalingGroupName: "{{ASGName}}"
+              InstanceId: "{{InstanceId}}"
+              LifecycleActionResult: CONTINUE
+              LifecycleHookName: "{{LCHName}}"
+          - name: "abandonHookAction"
+            action: aws:executeAwsApi
+            isEnd: true
+            inputs:
+              Service: autoscaling
+              Api: CompleteLifecycleAction
+              AutoScalingGroupName: "{{ASGName}}"
+              InstanceId: "{{InstanceId}}"
+              LifecycleActionResult: ABANDON
+              LifecycleHookName: "{{LCHName}}"
+  RDGWHostRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/CloudWatchAgentServerPolicy'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMDirectoryServiceAccess'
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - s3:GetObject
+                Resource: !Sub
+                  - arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+                Effect: Allow
+              - Action:
+                  - s3:ListBucket
+                Resource: !Sub
+                  - arn:${AWS::Partition}:s3:::${S3Bucket}
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+                Effect: Allow
+          PolicyName: aws-quick-start-s3-policy
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - s3:GetObject
+                Resource: 
+                  - !Sub 'arn:${AWS::Partition}:s3:::aws-ssm-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::aws-windows-downloads-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::amazon-ssm-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::amazon-ssm-packages-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::${AWS::Region}-birdwatcher-prod/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::patch-baseline-snapshot-${AWS::Region}/*'
+                Effect: Allow
+          PolicyName: ssm-custom-s3-policy
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - secretsmanager:DescribeSecret
+                Resource: 
+                  - !Ref 'DomainJoinSecrets'
+          PolicyName: ssm-secrets-policy
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Effect: Allow
+        Version: '2012-10-17'
+  RDGWHostProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref 'RDGWHostRole'
+      Path: /
+  EventBridgeSSMAutoRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+                - ssm:StartAutomationExecution
+              Resource:
+                - !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${RemoveConfigurationDoc}:$DEFAULT'
+                - !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${SetupConfigurationDoc}:$DEFAULT'
+            - Effect: Allow
+              Action:
+                - iam:PassRole
+              Resource:
+                - !GetAtt ExecutionResourceRole.Arn
+              Condition: {"StringLikeIfExists": {"iam:PassedToService": "ssm.amazonaws.com"}}
+          PolicyName: "EventBridge_Invoke_SSM_Automation"
+      Path: /service-role/
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - events.amazonaws.com
+            Action: sts:AssumeRole
+  ExecutionResourceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - autoscaling:CompleteLifecycleAction
+                Resource: !Sub arn:${AWS::Partition}:autoscaling:*:${AWS::AccountId}:autoScalingGroup:*:autoScalingGroupName/${AWS::StackName}
+          PolicyName: asg-lch-complete
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ssm.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonSSMAutomationRole
+      Description: New IAM role to allow SSM access.
+  ALBResource:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Type: network
+      Subnets:
+        - !Ref 'PublicSubnet1ID'
+        - !Ref 'PublicSubnet2ID'
+  ALBTargetGroup3389:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 3389
+      Protocol: TCP
+      VpcId: !Ref 'VPCID'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '60'
+        - Key: stickiness.enabled
+          Value: 'true'
+  ALBTargetGroup443:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 443
+      Protocol: TCP
+      VpcId: !Ref 'VPCID'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '60'
+        - Key: stickiness.enabled
+          Value: 'true'
+  ALBTargetGroup3391:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 3391
+      Protocol: UDP
+      VpcId: !Ref 'VPCID'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '60'
+        - Key: stickiness.enabled
+          Value: 'true'
+  ALBListener3389:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref 'ALBResource'
+      Port: 3389
+      Protocol: TCP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref 'ALBTargetGroup3389'
+  ALBListener443:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref 'ALBResource'
+      Port: 443
+      Protocol: TCP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref 'ALBTargetGroup443'
+  ALBListener3391:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref 'ALBResource'
+      Port: 3391
+      Protocol: UDP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref 'ALBTargetGroup3391'
+  RDGWLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    DeletionPolicy: Delete
+    Properties:
+      LaunchTemplateData:
+        InstanceType: !Ref 'RDGWInstanceType'
+        ImageId: !Ref 'LatestAmiId'
+        SecurityGroupIds:
+          - !Ref RemoteDesktopGatewaySG
+          - !Ref DomainMemberSGID
+        IamInstanceProfile:
+          Name: !Ref 'RDGWHostProfile'
+        BlockDeviceMappings:
+          - DeviceName: /dev/sda1
+            Ebs:
+              VolumeSize: 50
+              VolumeType: gp2
+        KeyName: !Ref 'KeyPairName'
+        TagSpecifications:
+           - 
+            ResourceType: 'instance'
+            Tags:
+              - Key: "Name"
+                Value: "RDGW"
+  RDGWAutoScalingGroup:
+    DependsOn: ScaleUpEventBridgeResource
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Sub "${AWS::StackName}"
+      LaunchTemplate:
+        LaunchTemplateId: !Ref 'RDGWLaunchTemplate'
+        Version: !GetAtt 'RDGWLaunchTemplate.LatestVersionNumber'
+      VPCZoneIdentifier:
+        - !Ref 'PublicSubnet1ID'
+        - !Ref 'PublicSubnet2ID'
+      MinSize: !Ref 'NumberOfRDGWHosts'
+      MaxSize: !Ref 'NumberOfRDGWHosts'
+      Cooldown: '300'
+      DesiredCapacity: !Ref 'NumberOfRDGWHosts'
+      TargetGroupARNs:
+        - !Ref 'ALBTargetGroup3389'
+        - !Ref 'ALBTargetGroup443'
+        - !Ref 'ALBTargetGroup3391'
+      LifecycleHookSpecificationList:
+        - LifecycleTransition: autoscaling:EC2_INSTANCE_LAUNCHING
+          LifecycleHookName: DomainJoinHook
+          DefaultResult: ABANDON
+          HeartbeatTimeout: 1200
+        - LifecycleTransition: autoscaling:EC2_INSTANCE_TERMINATING
+          LifecycleHookName: DomainUnjoinHook
+          DefaultResult: ABANDON
+          HeartbeatTimeout: 600
+  RemoteDesktopGatewaySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable RDP access from the Internet
+      VpcId: !Ref 'VPCID'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: !Ref 'RDGWCIDR'
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: !Ref 'RDGWCIDR'
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref 'RDGWCIDR'
+        - IpProtocol: udp
+          FromPort: 3391
+          ToPort: 3391
+          CidrIp: !Ref 'RDGWCIDR'
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: !Ref 'RDGWCIDR'
+  ScaleUpEventBridgeResource:
+    Type: AWS::Events::Rule
+    Properties:
+      State: ENABLED
+      Description: Run configuration document that joins domain and configures RDGW.
+      EventPattern:
+        source:
+          - aws.autoscaling
+        detail-type:
+          - EC2 Instance-launch Lifecycle Action
+        detail:
+          AutoScalingGroupName:
+            - !Sub "${AWS::StackName}"
+      Targets:
+        - Arn: !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${SetupConfigurationDoc}:$DEFAULT'
+          Id: Windows-Scale-Out
+          RoleArn: !GetAtt EventBridgeSSMAutoRole.Arn
+          InputTransformer:
+            InputPathsMap:
+              InstanceId: $.detail.EC2InstanceId
+              ASGName: $.detail.AutoScalingGroupName
+              LCHName: $.detail.LifecycleHookName
+            InputTemplate: !Sub '{"AutomationAssumeRole":["${ExecutionResourceRole.Arn}"],"InstanceId":[<InstanceId>],"ASGName":[<ASGName>],"LCHName":[<LCHName>],"QSS3BucketName":["${QSS3BucketName}"],"QSS3KeyPrefix":["${QSS3KeyPrefix}"],"URLSuffix":["${AWS::URLSuffix}"], "DomainNetBIOSName":["${DomainNetBIOSName}"], "DomainDNSName":["${DomainDNSName}"]}'
+  ScaleDownEventBridgeResource:
+    Type: AWS::Events::Rule
+    Properties:
+      State: ENABLED
+      Description: Run removal document that unjoins domain.
+      EventPattern:
+        source:
+          - aws.autoscaling
+        detail-type:
+          - EC2 Instance-terminate Lifecycle Action
+        detail:
+          AutoScalingGroupName:
+            - !Sub "${AWS::StackName}"
+      Targets:
+        - Arn: !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${RemoveConfigurationDoc}:$DEFAULT'
+          Id: Windows-Scale-In
+          RoleArn: !GetAtt EventBridgeSSMAutoRole.Arn
+          InputTransformer:
+            InputPathsMap:
+              InstanceId: $.detail.EC2InstanceId
+              ASGName: $.detail.AutoScalingGroupName
+              LCHName: $.detail.LifecycleHookName
+            InputTemplate: !Sub '{"AutomationAssumeRole":["${ExecutionResourceRole.Arn}"],"InstanceId":[<InstanceId>],"ASGName":[<ASGName>],"LCHName":[<LCHName>]}'
+Outputs:
+  RDPURL:
+    Description: ELB DNS name to connect to RDP Gateway.
+    Value: !GetAtt 'ALBResource.DNSName'
+  RemoteDesktopGatewaySGID:
+    Value: !Ref 'RemoteDesktopGatewaySG'
+    Description: Remote Desktop Gateway security group ID.

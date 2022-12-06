@@ -1,0 +1,833 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: https://learn.cantrill.io - Advanced Demo - Hybrid Active Directory ONPREM NESTED AD
+Parameters:
+  ADServer1InstanceType:
+    Default: t3.large
+    Description: Amazon EC2 instance type for the first Active Directory Domain Controller instance
+    Type: String
+  ADServer1NetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: DC1
+    Description: NetBIOS name of the first Active Directory Domain Controller (up to 15 characters)
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String
+  ADServer1PrivateIP:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$
+    Default: 192.168.10.100
+    Description: Fixed private IP for the first Active Directory Domain Controller located in Availability Zone 1
+    Type: String
+  ADServer2InstanceType:
+    Default: t3.large
+    Description: Amazon EC2 instance type for the second Active Directory Domain Controller instance
+    Type: String
+  ADServer2NetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: DC2
+    Description: NetBIOS name of the second Active Directory Domain Controller (up to 15 characters)
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String
+  ADServer2PrivateIP:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$
+    Default: 192.168.11.100
+    Description: Fixed private IP for the second Active Directory Domain Controller located in Availability Zone 2
+    Type: String
+  CreateDefaultOUs:
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+    Default: 'No'
+    Description: Domain Elevated Accounts, Domain Users, Domain Computers, Domain Servers, Domain Service Accounts, and Domain Groups OUs and set the default users and computers containers to Domain Users and Domain Computers
+    Type: String
+  DataDriveSizeGiB:
+    Default: '10'
+    Description: Size of SYSVOL and NTDS data drive in GiB
+    Type: Number
+  DeletedObjectLifetime:
+    Default: '180'
+    Description: The number of days before a deleted object is removed from the Active Directory recycle bin, minimum number is 2
+    Type: Number
+  DomainAdminPassword:
+    AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    Description: Password for the account named above. Must be at least 8 characters containing letters, numbers and symbols
+    MaxLength: '32'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String
+  DomainAdminUser:
+    AllowedPattern: '[a-zA-Z0-9]*'
+    Default: Admin
+    Description: User name for the account that will be added as a Domain Administrator. This is separate from the default "Administrator" account
+    MaxLength: '25'
+    MinLength: '5'
+    Type: String
+  DomainDNSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+\..+'
+    Default: example.com
+    Description: Fully qualified domain name (FQDN) of the forest root domain e.g. example.com
+    MaxLength: '255'
+    MinLength: '2'
+    Type: String
+  DomainNetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: example
+    Description: NetBIOS name of the domain (up to 15 characters) for users of earlier versions of Windows e.g. EXAMPLE
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String
+  EbsEncryptionKmsKeyId:
+    Default: alias/aws/ebs
+    Description: The identifier of the AWS KMS key to use for Amazon EBS encryption. You can specify the KMS key using any of the following; Key ID, Key alias, Key ARN, Alias ARN
+    Type: String
+  KeyPairName:
+    Description: Public/private key pairs allow you to securely connect to your instance after it launches
+    Type: AWS::EC2::KeyPair::KeyName
+  PrivateSubnet1ID:
+    Description: ID of subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)
+    Type: AWS::EC2::Subnet::Id
+  PrivateSubnet2ID:
+    Description: ID of subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
+    Type: AWS::EC2::Subnet::Id
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3BucketRegion:
+    Default: us-east-1
+    Description: The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/)
+    Default: quickstart-microsoft-activedirectory/
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/)
+    Type: String
+  TombstoneLifetime:
+    Default: '180'
+    Description: The number of days before a deleted object is removed from Active Directory, minimum number is 2
+    Type: Number
+  VPCCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 192.168.8.0/21
+    Description: CIDR Block for the VPC
+    Type: String
+  VPCID:
+    Description: ID of the VPC (e.g., vpc-0343606e)
+    Type: AWS::EC2::VPC::Id
+  WINFULLBASE:
+    Default: /aws/service/ami-windows-latest/Windows_Server-2022-English-Full-Base
+    Description: System Manager parameter value for latest Windows Server AMI
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+  InstanceSGID:
+    Description: Default ONPREM Instance Security Group
+    Type: String
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+Resources:
+  STACKLOGS:
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: !Sub '/learncantrill/HYBRIDDIR-NESTED-AD/${AWS::StackName}'
+      RetentionInDays: 30
+  DHCPOptions:
+    DependsOn:
+      - DomainController1
+      - DomainController2
+    Type: AWS::EC2::DHCPOptions
+    Properties:
+      DomainName: !Ref 'DomainDNSName'
+      DomainNameServers:
+        - !Ref 'ADServer1PrivateIP'
+        - !Ref 'ADServer2PrivateIP'
+      Tags:
+        - Key: Domain
+          Value: !Ref 'DomainDNSName'
+  VPCDHCPOptionsAssociation:
+    Type: AWS::EC2::VPCDHCPOptionsAssociation
+    Properties:
+      VpcId: !Ref 'VPCID'
+      DhcpOptionsId: !Ref 'DHCPOptions'
+  AWSQuickstartActiveDirectoryDS:
+    Type: AWS::SSM::Document
+    Properties:
+      DocumentType: Automation
+      Tags:
+        - Key: StackName
+          Value: !Ref AWS::StackName
+      Content:
+        schemaVersion: '0.3'
+        description: 'Deploy AD with SSM Automation'
+        # Gathering parameters needed to configure DCs in the Quick Start
+        parameters:
+          VPCCIDR:
+            default: '10.0.0.0/16'
+            description: 'CIDR Block for the VPC'
+            type: 'String'
+          ADServer1NetBIOSName:
+            default: 'DC1'
+            description: 'NetBIOS name of the first Active Directory Domain Controller (up to 15 characters)'
+            type: 'String'
+          ADServer1PrivateIP:
+            default: '10.0.0.10'
+            description: 'Fixed private IP for the first Active Directory Domain Controller located in Availability Zone 1'
+            type: 'String'
+          ADServer2NetBIOSName:
+            default: 'DC2'
+            description: 'NetBIOS name of the second Active Directory Domain Controller (up to 15 characters)'
+            type: 'String'
+          ADServer2PrivateIP:
+            default: '10.0.32.10'
+            description: 'Fixed private IP for the second Active Directory Domain Controller located in Availability Zone 2'
+            type: 'String'
+          ADAdminSecParamName:
+            description: 'AWS Secrets Parameter Name that has Password and User namer for the built-in administrator'
+            type: 'String'
+          ADAltUserSecParamName:
+            description:
+              'AWS Secrets Parameter Name for the account that will be added as Domain Administrator. This is separate from the built-in Administrator
+              account'
+            type: 'String'
+          RestoreModeSecParamName:
+            description: 'AWS Secrets Parameter Name for the Active Directory Restore Mode Password'
+            type: 'String'
+          DomainDNSName:
+            default: 'example.com'
+            description: 'Fully qualified domain name (FQDN) of the forest root domain e.g. example.com'
+            type: 'String'
+          DomainNetBIOSName:
+            default: 'example'
+            description: 'NetBIOS name of the domain (up to 15 characters) for users of earlier versions of Windows e.g. EXAMPLE'
+            type: 'String'
+          CreateDefaultOUs:
+            default: 'No'
+            description:
+              'Create Domain Elevated Accounts, Domain Users, Domain Computers, Domain Servers, Domain Service Accounts, and Domain Groups OUs'
+            type: 'String'
+          TombstoneLifetime:
+            default: '180'
+            description: The number of days before a deleted object is removed from the directory services
+            type: 'String'
+          DeletedObjectLifetime:
+            default: '180'
+            description: The number of days before a deleted object is removed from the directory services recycling bin
+            type: 'String'
+          QSS3BucketName:
+            default: 'aws-quickstart'
+            description:
+              'S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and
+              hyphens (-). It cannot start or end with a hyphen (-)'
+            type: 'String'
+          QSS3BucketRegion:
+            default: 'us-east-1'
+            description:
+              'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value'
+            type: 'String'
+          QSS3KeyPrefix:
+            default: 'quickstart-microsoft-activedirectory/'
+            description:
+              'S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens
+              (-), and forward slash (/)'
+            type: 'String'
+          StackName:
+            default: ''
+            description: 'Stack Name Input for cfn resource signal'
+            type: 'String'
+          URLSuffix:
+            default: 'amazonaws.com'
+            description: 'AWS URL suffix'
+            type: 'String'
+        mainSteps:
+          - name: dcsInstanceIds
+            action: aws:executeAwsApi
+            onFailure: step:signalfailure
+            inputs:
+              Service: ec2
+              Api: DescribeInstances
+              Filters:
+                - Name: tag:Name
+                  Values: ['{{ADServer1NetBIOSName}}', '{{ADServer2NetBIOSName}}']
+                - Name: tag:aws:cloudformation:stack-name
+                  Values: ['{{StackName}}']
+                - Name: instance-state-name
+                  Values: ['running']
+            outputs:
+              - Name: InstanceIds
+                Selector: $.Reservations..Instances..InstanceId
+                Type: StringList
+            nextStep: dc1InstanceId
+          - name: dc1InstanceId
+            action: aws:executeAwsApi
+            onFailure: step:signalfailure
+            inputs:
+              Service: ec2
+              Api: DescribeInstances
+              Filters:
+                - Name: tag:Name
+                  Values: ['{{ADServer1NetBIOSName}}']
+                - Name: tag:aws:cloudformation:stack-name
+                  Values: ['{{StackName}}']
+                - Name: instance-state-name
+                  Values: ['running']
+            outputs:
+              - Name: InstanceId
+                Selector: $.Reservations[0].Instances[0].InstanceId
+                Type: String
+            nextStep: dc2InstanceId
+          - name: dc2InstanceId
+            action: aws:executeAwsApi
+            onFailure: step:signalfailure
+            inputs:
+              Service: ec2
+              Api: DescribeInstances
+              Filters:
+                - Name: tag:Name
+                  Values: ['{{ADServer2NetBIOSName}}']
+                - Name: tag:aws:cloudformation:stack-name
+                  Values: ['{{StackName}}']
+                - Name: instance-state-name
+                  Values: ['running']
+            outputs:
+              - Name: InstanceId
+                Selector: $.Reservations[0].Instances[0].InstanceId
+                Type: String
+            nextStep: intializeInstance
+          - name: intializeInstance
+            action: aws:runCommand
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dcsInstanceIds.InstanceIds}}'
+              Parameters:
+                commands: |-
+                  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+                  $S3BucketName = '{{QSS3BucketName}}'
+                  $S3KeyPrefix = '{{QSS3KeyPrefix}}'
+                  $S3BucketRegion = '{{QSS3BucketRegion}}'
+
+                  $CustomModules = @(
+                      'Module-AD.psd1',
+                      'Module-AD.psm1'
+                  )
+
+                  $Modules = @(
+                      @{
+                          Name = 'NetworkingDsc'
+                          Version = '8.2.0'
+                      },
+                      @{
+                          Name = 'ActiveDirectoryDsc'
+                          Version = '6.0.1'
+                      },
+                      @{
+                          Name = 'ComputerManagementDsc'
+                          Version = '8.4.0'
+                      },
+                      @{
+                          Name = 'DnsServerDsc'
+                          Version = '3.0.0'
+                      }
+                  )
+
+                  Write-Output 'Creating AWSQuickstart Directory'
+                  Try {
+                      $Null = New-Item -Path 'C:\AWSQuickstart\Module-AD' -ItemType 'Directory' -ErrorAction Stop
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to create AWSQuickstart directory $_"
+                      Exit 1
+                  }
+
+                  $S3KeyPrefix = $S3KeyPrefix.Substring(0,$S3KeyPrefix.Length -1)
+                  Write-Output 'Downloading AD PowerShell Module'
+                  Foreach ($CustomModule in $CustomModules) {
+                      Try {
+                          $Null = Read-S3Object -BucketName $S3BucketName -Key "$($S3KeyPrefix)/scripts/Modules/Module-AD/$CustomModule" -File "C:\AWSQuickstart\Module-AD\$CustomModule" -Region $S3BucketRegion
+                      } Catch [System.Exception] {
+                          Write-Output "Failed to read and download $CustomModule.Name from S3 $_"
+                          Exit 1
+                      }
+                  }
+
+                  Write-Output 'Installing NuGet Package Provider'
+                  Try {
+                      $Null = Install-PackageProvider -Name 'NuGet' -MinimumVersion '2.8.5' -Force -ErrorAction Stop
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to install NuGet Package Provider $_"
+                      Exit 1
+                  }
+
+                  Write-Output 'Setting PSGallery Respository to trusted'
+                  Try {
+                      Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted' -ErrorAction Stop
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to set PSGallery Respository to trusted $_"
+                      Exit 1
+                  }
+
+                  Write-Output 'Installing the needed Powershell DSC modules for this Quick Start'
+                  Foreach ($Module in $Modules) {
+                      Try {
+                          Install-Module -Name $Module.Name -RequiredVersion $Module.Version -ErrorAction Stop
+                      } Catch [System.Exception] {
+                          Write-Output "Failed to Import Modules $_"
+                          Exit 1
+                      }
+                  } 
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: configureInstance
+          - name: configureInstance
+            action: aws:runCommand
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dcsInstanceIds.InstanceIds}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Import-Module -Name 'C:\AWSQuickstart\Module-AD\Module-AD.psm1' -Force
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to import AD PS Module $_"
+                      Exit 1
+                  }
+                  New-VolumeFromRawDisk
+                  Invoke-PreConfig
+                  Invoke-LcmConfig
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: configureDc1Mof
+          - name: configureDc1Mof
+            action: aws:runCommand
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dc1InstanceId.InstanceId}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Import-Module -Name 'C:\AWSQuickstart\Module-AD\Module-AD.psm1' -Force
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to import AD PS Module $_"
+                      Exit 1
+                  }
+                  $EniConfig = Get-EniConfig
+                  $DaSecret = Get-SecretInfo -Domain '{{DomainNetBIOSName}}' -SecretArn '{{ADAdminSecParamName}}'
+                  $RmSecret = Get-SecretInfo -Domain '{{DomainNetBIOSName}}' -SecretArn '{{RestoreModeSecParamName}}'
+                  $AltSecret = Get-SecretInfo -Domain '{{DomainNetBIOSName}}' -SecretArn '{{ADAltUserSecParamName}}'
+                  Set-DscConfiguration -AltAdminCredentials $AltSecret.Credentials -AltAdminUserName $AltSecret.Username -DaCredentials $DaSecret.DomainCredentials -DeploymentType 'FirstDc' -DomainDNSName '{{DomainDNSName}}' -DomainNetBIOSName '{{DomainNetBIOSName}}' -GatewayAddress $EniConfig.GatewayAddress -InstanceIP $EniConfig.IpAddress -InstanceNetBIOSName '{{ADServer1NetBIOSName}}' -LaCredentials $DaSecret.Credentials -MacAddress $EniConfig.MacAddress -RestoreModeCredentials $RmSecret.Credentials -SiteName '{{global:REGION}}' -VPCCIDR '{{VPCCIDR}}'
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: runDc1Mof
+          - name: runDc1Mof
+            action: aws:runCommand
+            onFailure: step:signalfailure
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dc1InstanceId.InstanceId}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Import-Module -Name 'C:\AWSQuickstart\Module-AD\Module-AD.psm1' -Force
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to import AD PS Module $_"
+                      Exit 1
+                  }
+                  Start-DscConfiguration 'C:\AWSQuickstart\ConfigInstance' -Wait -Verbose -Force
+                  Invoke-DscStatusCheck
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: configureDc2Mof
+          - name: configureDc2Mof
+            action: aws:runCommand
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dc2InstanceId.InstanceId}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Import-Module -Name 'C:\AWSQuickstart\Module-AD\Module-AD.psm1' -Force
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to import AD PS Module $_"
+                      Exit 1
+                  }
+                  $EniConfig = Get-EniConfig
+                  $DaSecret = Get-SecretInfo -Domain '{{DomainNetBIOSName}}' -SecretArn '{{ADAdminSecParamName}}'
+                  $RmSecret = Get-SecretInfo -Domain '{{DomainNetBIOSName}}' -SecretArn '{{RestoreModeSecParamName}}'
+                  Set-DscConfiguration -DaCredentials $DaSecret.DomainCredentials -DeploymentType 'SecondaryDC' -DomainDNSName '{{DomainDNSName}}' -DomainNetBIOSName '{{DomainNetBIOSName}}' -ExistingDcIP01 '{{ADServer1PrivateIP}}' -GatewayAddress $EniConfig.GatewayAddress -InstanceIP $EniConfig.IpAddress -InstanceIPDns $EniConfig.DnsIpAddress -InstanceNetBIOSName '{{ADServer2NetBIOSName}}' -MacAddress $EniConfig.MacAddress -RestoreModeCredentials $RmSecret.Credentials
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: runDc2Mof
+          - name: runDc2Mof
+            action: aws:runCommand
+            onFailure: step:signalfailure
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dc2InstanceId.InstanceId}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Import-Module -Name 'C:\AWSQuickstart\Module-AD\Module-AD.psm1' -Force
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to import AD PS Module $_"
+                      Exit 1
+                  }
+                  Start-DscConfiguration 'C:\AWSQuickstart\ConfigInstance' -Wait -Verbose -Force
+                  Invoke-DscStatusCheck
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: DisableFW
+          - name: DisableFW
+            action: aws:runCommand
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dcsInstanceIds.InstanceIds}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Get-NetFirewallProfile -ErrorAction Stop | Set-NetFirewallProfile -Enabled False -ErrorAction Stop
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to disable Windows Firewall $_"
+                      Exit 1
+                  }
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: DnsConfig
+          - name: DnsConfig
+            action: aws:runCommand
+            onFailure: step:signalfailure
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dc2InstanceId.InstanceId}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Import-Module -Name 'C:\AWSQuickstart\Module-AD\Module-AD.psm1' -Force
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to import AD PS Module $_"
+                      Exit 1
+                  }
+                  $DaSecret = Get-SecretInfo -Domain '{{DomainNetBIOSName}}' -SecretArn '{{ADAdminSecParamName}}'
+                  Set-DnsDscConfiguration -AD1Deployment -ADServer1NetBIOSName '{{ADServer1NetBIOSName}}' -ADServer2NetBIOSName '{{ADServer2NetBIOSName}}' -ADServer1PrivateIP '{{ADServer1PrivateIP}}' -ADServer2PrivateIP '{{ADServer2PrivateIP}}' -DomainDNSName '{{DomainDNSName}}' -DaCredentials $DaSecret.Credentials -VPCCIDR '{{VPCCIDR}}'
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+            nextStep: PostConfig
+          - name: PostConfig
+            action: aws:runCommand
+            inputs:
+              DocumentName: AWS-RunPowerShellScript
+              InstanceIds:
+                - '{{dcsInstanceIds.InstanceIds}}'
+              Parameters:
+                commands: |-
+                  Try {
+                      Import-Module -Name 'C:\AWSQuickstart\Module-AD\Module-AD.psm1' -Force
+                  } Catch [System.Exception] {
+                      Write-Output "Failed to import AD PS Module $_"
+                      Exit 1
+                  }
+                  Set-PostPromoConfig -S3BucketName '{{QSS3BucketName}}' -S3BucketRegion '{{QSS3BucketRegion}}' -S3KeyPrefix '{{QSS3KeyPrefix}}' -CreateDefaultOUs '{{CreateDefaultOUs}}' -TombstoneLifetime '{{TombstoneLifetime}}' -DeletedObjectLifetime '{{DeletedObjectLifetime}}'
+                  Invoke-Cleanup -VPCCIDR '{{VPCCIDR}}'
+              CloudWatchOutputConfig:
+                CloudWatchOutputEnabled: true
+                CloudWatchLogGroupName: !Ref 'STACKLOGS'
+          - name: CFNSignalEnd
+            action: aws:branch
+            inputs:
+              Choices:
+                - NextStep: signalsuccess
+                  Not:
+                    Variable: '{{StackName}}'
+                    StringEquals: ''
+                - NextStep: sleepend
+                  Variable: '{{StackName}}'
+                  StringEquals: ''
+          - name: signalsuccess
+            action: aws:executeAwsApi
+            isEnd: True
+            inputs:
+              Service: cloudformation
+              Api: SignalResource
+              LogicalResourceId: DomainController2
+              StackName: '{{StackName}}'
+              Status: SUCCESS
+              UniqueId: '{{dc2InstanceId.InstanceId}}'
+          - name: sleepend
+            action: aws:sleep
+            isEnd: True
+            inputs:
+              Duration: PT1S
+          - name: signalfailure
+            action: aws:executeAwsApi
+            inputs:
+              Service: cloudformation
+              Api: SignalResource
+              LogicalResourceId: DomainController2
+              StackName: '{{StackName}}'
+              Status: FAILURE
+              UniqueId: '{{dc2InstanceId.InstanceId}}'
+  ADServerRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W11
+            reason: "* required"
+    Properties:
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:s3:::aws-ssm-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::aws-windows-downloads-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::amazon-ssm-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::amazon-ssm-packages-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::${AWS::Region}-birdwatcher-prod/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::patch-baseline-snapshot-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::aws-ssm-distributor-file-${AWS::Region}/*'
+                  - !Sub 'arn:${AWS::Partition}:s3:::aws-ssm-document-attachments-${AWS::Region}/*'
+          PolicyName: SSMAgent
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !Sub
+                  - 'arn:${AWS::Partition}:s3:::${S3Bucket}'
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub
+                  - 'arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*'
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              - Effect: Allow
+                Action: ssm:StartAutomationExecution
+                Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${AWSQuickstartActiveDirectoryDS}:$DEFAULT
+              - Effect: Allow
+                Action: ssm:SendCommand
+                Resource:
+                  - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:*:document/AWS-RunRemoteScript
+                  - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:*:document/AWS-RunPowerShellScript
+              - Effect: Allow
+                Action: ssm:SendCommand
+                Resource: !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
+                Condition:
+                  StringEquals:
+                    'ssm:ResourceTag/aws:cloudformation:stack-name': !Ref AWS::StackName
+              - Sid: ReadOperations
+                Effect: Allow
+                Action:
+                  - ec2:DescribeInstances
+                  - ssm:DescribeInstanceInformation
+                  - ssm:ListCommands
+                  - ssm:ListCommandInvocations
+                Resource: '*'
+              - Effect: Allow
+                Action: cloudformation:SignalResource
+                Resource: !Sub 'arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${AWS::StackName}/*'
+          PolicyName: AWS-Mgmt-Quick-Start-Policy
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - secretsmanager:DescribeSecret
+                Resource:
+                  - !Ref 'ADAdminSecrets'
+                  - !Ref 'RestoreModeSecrets'
+                  - !Ref 'ADAltUserSecrets'
+          PolicyName: AWS-Mgd-AD-Secret-Policy
+      Path: /
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/CloudWatchAgentServerPolicy'
+      Tags:
+        - Key: StackName
+          Value: !Ref AWS::StackName
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+        Version: '2012-10-17'
+  ADServerProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref 'ADServerRole'
+      Path: /
+  ADAdminSecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub 'ADAdministratorSecret-${AWS::StackName}'
+      Description: Administrator Password for AD Quick Start
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "Administrator"}'
+        GenerateStringKey: 'password'
+        PasswordLength: 30
+        ExcludeCharacters: '"@/\'
+  RestoreModeSecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub 'RestoreModeSecrets-${AWS::StackName}'
+      Description: Restore Mode Password for AD Quick Start
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "Administrator"}'
+        GenerateStringKey: 'password'
+        PasswordLength: 30
+        ExcludeCharacters: '"@/\'
+  ADAltUserSecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub 'ADAltUserSecrets-${AWS::StackName}'
+      Description: Alternate AD Admin User from AD Quick Start
+      SecretString: !Sub '{ "username" : "${DomainAdminUser}", "password" : "${DomainAdminPassword}" }'
+  DomainController1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'WINFULLBASE'
+      IamInstanceProfile: !Ref 'ADServerProfile'
+      InstanceType: !Ref 'ADServer1InstanceType'
+      SubnetId: !Ref 'PrivateSubnet1ID'
+      Tags:
+        - Key: Name
+          Value: !Ref 'ADServer1NetBIOSName'
+        - Key: Domain
+          Value: !Ref 'DomainDNSName'
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 60
+            VolumeType: gp3
+            Encrypted: true
+            KmsKeyId: !Ref 'EbsEncryptionKmsKeyId'
+            DeleteOnTermination: true
+        - DeviceName: /dev/xvdf
+          Ebs:
+            VolumeSize: !Ref 'DataDriveSizeGiB'
+            VolumeType: gp3
+            Encrypted: true
+            KmsKeyId: !Ref 'EbsEncryptionKmsKeyId'
+            DeleteOnTermination: true
+      SecurityGroupIds:
+        - !Ref 'InstanceSGID'
+      PrivateIpAddress: !Ref 'ADServer1PrivateIP'
+      KeyName: !Ref 'KeyPairName'
+  DomainController2:
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT60M
+        Count: 1
+    DependsOn: DomainController1
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref 'WINFULLBASE'
+      IamInstanceProfile: !Ref 'ADServerProfile'
+      InstanceType: !Ref 'ADServer2InstanceType'
+      SubnetId: !Ref 'PrivateSubnet2ID'
+      Tags:
+        - Key: Name
+          Value: !Ref 'ADServer2NetBIOSName'
+        - Key: Domain
+          Value: !Ref 'DomainDNSName'
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 60
+            VolumeType: gp3
+            Encrypted: true
+            KmsKeyId: !Ref 'EbsEncryptionKmsKeyId'
+            DeleteOnTermination: true
+        - DeviceName: /dev/xvdf
+          Ebs:
+            VolumeSize: !Ref 'DataDriveSizeGiB'
+            VolumeType: gp3
+            Encrypted: true
+            KmsKeyId: !Ref 'EbsEncryptionKmsKeyId'
+            DeleteOnTermination: true
+      SecurityGroupIds:
+        - !Ref 'InstanceSGID'
+      PrivateIpAddress: !Ref 'ADServer2PrivateIP'
+      KeyName: !Ref 'KeyPairName'
+      UserData: !Base64
+        Fn::Join:
+          - ''
+          - - "<powershell>\n"
+            - 'Start-SSMAutomationExecution -DocumentName '
+            - !Sub '"${AWSQuickstartActiveDirectoryDS}"'
+            - ' -Parameter @{'
+            - '"VPCCIDR"='
+            - !Sub '"${VPCCIDR}"'
+            - ';"ADServer1NetBIOSName"='
+            - !Sub '"${ADServer1NetBIOSName}"'
+            - ';"ADServer1PrivateIP"='
+            - !Sub '"${ADServer1PrivateIP}"'
+            - ';"ADServer2NetBIOSName"='
+            - !Sub '"${ADServer2NetBIOSName}"'
+            - ';"ADServer2PrivateIP"='
+            - !Sub '"${ADServer2PrivateIP}"'
+            - ';"ADAdminSecParamName"='
+            - !Sub '"${ADAdminSecrets}"'
+            - ';"ADAltUserSecParamName"='
+            - !Sub '"${ADAltUserSecrets}"'
+            - ';"RestoreModeSecParamName"='
+            - !Sub '"${RestoreModeSecrets}"'
+            - ';"DomainDNSName"='
+            - !Sub '"${DomainDNSName}"'
+            - ';"DomainNetBIOSName"='
+            - !Sub '"${DomainNetBIOSName}"'
+            - ';"CreateDefaultOUs"='
+            - !Sub '"${CreateDefaultOUs}"'
+            - ';"TombstoneLifetime"='
+            - !Sub '"${TombstoneLifetime}"'
+            - ';"DeletedObjectLifetime"='
+            - !Sub '"${DeletedObjectLifetime}"'
+            - ';"QSS3BucketName"='
+            - !If [UsingDefaultBucket, !Sub '"${QSS3BucketName}-${AWS::Region}"', !Sub '"${QSS3BucketName}"']
+            - ';"QSS3BucketRegion"='
+            - !If [UsingDefaultBucket, !Sub '"${AWS::Region}"', !Sub '"${QSS3BucketRegion}"']
+            - ';"QSS3KeyPrefix"='
+            - !Sub '"${QSS3KeyPrefix}"'
+            - ';"StackName"='
+            - !Sub '"${AWS::StackName}"'
+            - ';"URLSuffix"='
+            - !Sub '"${AWS::URLSuffix}"'
+            - '}'
+            - "\n"
+            - "</powershell>\n"
+Outputs:
+  ADSecretsArn:
+    Description: Alternate AD User Secrets ARN
+    Value: !Ref 'ADAltUserSecrets'
+  DC1InstanceId:
+    Description: DomainController 1 instance ID
+    Value: !Ref 'DomainController1'
+  DC2InstanceId:
+    Description: DomainController 2 instance ID
+    Value: !Ref 'DomainController2'
+  DomainAdmin:
+    Description: Domain administrator account
+    Value: !Sub ${DomainNetBIOSName}\${DomainAdminUser}
+

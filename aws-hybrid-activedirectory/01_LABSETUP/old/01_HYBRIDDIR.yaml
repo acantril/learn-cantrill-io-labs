@@ -169,7 +169,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
       (-).
-    Default: learn-cantrill-labs
+    Default: aws-quickstart
     Description: Specify the S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
@@ -182,7 +182,7 @@ Parameters:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/).
-    Default: aws-hybrid-activedirectory/
+    Default: quickstart-microsoft-activedirectory/
     Description: Specify the S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
@@ -204,7 +204,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     DependsOn: ONPREMVPC
     Properties:
-      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/03_HYBRIDDIR-NESTED-ONPREM-AD-v3.yaml
+      TemplateURL: https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/03_HYBRIDDIR-NESTED-ONPREM-AD-v2.yaml
       Parameters:
         ADServer1InstanceType: !Ref ADServer1InstanceType
         ADServer2InstanceType: !Ref ADServer2InstanceType
