@@ -34,27 +34,22 @@ This will take some time to create 20-45 Minutes
 
 Move to https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:  
 Launch Instance  
-Click `Select` next to `Microsoft Windows Server 2019 Base`  
-Select `t3.medium`  
-Click `next configure instance details`  
-Click `Network` Dropdown `AWS-VPC`  
-In `Subnet` Dropdown set to `AWS-PUBLIC`  
-Under `Domain join directory` select `aws.animals4life.org`  
-Under `IAM Role` select `EC2 Instance Profile`  
-Click `Next Add Storage`  
-Click `Next Add Tags`  
-Click `Add Tag`  
-for `Key` type `Name`  
-for `Value` type `JumpBox-AWS`  
-Click `Next: Configure Security Group`  
-Click `Select An Existing Security Group`  
-Check the SG with the description of `Default A4L AWS SG`  
-Click `Review and Launch`  
-Click `Launch`  
-Choose `Existing key Pair`  
-choose `A4L`  
-Check the `Acknowledgement Box`  
-Click `Launch Instances`  
+Name the instance `JumpBox-AWS`
+Click `Windows` under the `Application and OS Images` section
+Select `Microsoft Windows Server 2019 Base`
+Select `t3.medium`
+Choose `A4L` key pair
+Under `Network settings` click `edit`
+In `VPC` Dropdown set to `AWS-VPC`
+In `Subnet` Dropdown set to `AWS-PUBLIC`
+Click `Select Existing Security Group`
+Remove all existing security groups
+Check the SG with the description of `HYBRIDDIR-AWSPC-*`
+Expand the `Advanced Details` section
+Under `Domain join directory` select `aws.animals4life.org`
+Under `IAM Role` select `EC2 Instance Profile`
+Click `Review and Launch`
+Click `Launch Instance`
 
 # STAGE 3C - Connect to the Jump Box
 
@@ -80,4 +75,3 @@ Open the active directory users and computers and verify you can connect to the 
 
 # Stage 3 - FINISH
 Once you have connected ... you can finish this part of the DEMO
-
