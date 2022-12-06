@@ -1,10 +1,10 @@
 # Advanced Hybrid Directory Demo
 
 # STAGE 6A - CREATE WORKSPACES 
-open [https://console.aws.amazon.com/workspaces/home?region=us-east-1#listworkspaces:](https://console.aws.amazon.com/workspaces/home?region=us-east-1#listworkspaces:)  
+open [https://us-east-1.console.aws.amazon.com/workspaces/v2/workspaces?region=us-east-1](https://us-east-1.console.aws.amazon.com/workspaces/v2/workspaces?region=us-east-1)  
 
-Click `Launch Workspaces`  
-Set `Directory` to `aws.animals4life.org`  
+Click `Create Workspaces`  
+Set `Directory` to `aws.animals4life.org` 
 Open the VPC Console ... and subnets  
 Locate the `Private` subnets in the `AWS VPC`  
 note down the CIDR's for the subnets `AWS-PRIVATE-A / AWS-PRIVATE-B / AWS-PRIVATE-C / AWS-PRIVATE-D`  
@@ -12,10 +12,14 @@ note down the CIDR's for the subnets `AWS-PRIVATE-A / AWS-PRIVATE-B / AWS-PRIVAT
 Subnet1 = 10.16.32.0/20  
 Subnet2 = 10.16.160.0/20  
 
-Click `Next Step`  
+Back on the Create Workspaces click `register`
+Enter two private subnets click `register` 
+
+Click `Next`  
 Next we need to provision a workspace for a given identity  
 
-Change the `Select trust from forest` Dropdown to `ad.animals4life.org` which is the on-premises directory.  
+Change the `Trusted Domains` Dropdown to `ad.animals4life.org` which is the on-premises directory.  
+Click `Next`
 Type `admin` in the search box and click `Search`   
 Check the box next to `ad.animals4life.org\Admin` and click `Add selected`  
 You will get an error ... because the on premises admin doesnt have a `First` or `Last` Name, or `email`  
@@ -23,21 +27,34 @@ Click `Close`
 
 Move across to the on-premises Jumpbox  
 Open `Active Directory Users and Computers`  
-Click `Users`  
-Double Click `Admin`  
-Add `Admin` as First name  
-Add `Admin` as Last Name  
-Add `YOUREMAIL` as the email  
-Click `OK`  
+Right Click `Users`
+Click `New` -> `User`
+Add `A4LAdmin` as First name, Last name, Full name and User logon Name
+Add `YOUREMAIL` as the email 
+Click `Next`
+Add `YOURPASSWORD`
+Uncheck `User must change password at next logon`
+Check `Password never expires` and `Allow user to change password`
+Click `Next`
+Click `Finish`  
+
+Add the new user to the correct groups
+Right Click your new `A4LAdmin`
+Select the `Member Of` tab
+Click `Add`
+Type `domain admins; enterprise admins` in the object name box
+Click `Check Names`
+Click `Ok`
 
 Go back to the AWS Console  
-Type `Admin` again, click search   
-Check the box next to `ad.animals4life.org\Admin`  
-Click `Add Selected`  
-Click `Next Step`  
+Type `A4LAdmin` again, click search   
+Check the box next to `A4LAdmin`  
+Click `Next`  
 Check the box next to `Standard With Windows 10`  
-Scroll down and click `next Step`  
-Click `Launch Workspaces`  
+Click `Next`  
+Click `Next` on WorkSpaces configuration
+Click `Next` on Customization - Optional
+Scroll to the bottom and click `Create Workspaces`  
 
 Wait for the state to change from `Pending` to `Available`  
 
@@ -47,7 +64,7 @@ go to https://clients.amazonworkspaces.com
 Download and install the client for your operating system  
 Once installed, it will ask for the `Registration Code` which is available from the options on the workspace in the AWS console, enter that.  
 Then .. wait for the workspace to finish provisioning  
-Login using `A4L\Admin` and the password you entered at the start when creating the stack.  
+Login using `A4L\A4LAdmin` and the password you entered at the start when creating the stack.  
 Connect to the workspace  
 Try accessing the DFS Namespace `\\ad.animals4life.org\private` and then clicking `a4lfiles`  
 it fails ....  

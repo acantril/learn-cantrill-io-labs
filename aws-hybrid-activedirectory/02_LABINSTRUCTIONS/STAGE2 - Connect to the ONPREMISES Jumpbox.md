@@ -71,9 +71,8 @@ Click Start ... type \\\FileServer\A4LFiles
 See that we have a (small) FileShare here  
 
 Create a text document  
-'What animal are the best.txt'  
+'What animals are the best.txt'  
 Add your favorite animals in there  
 
 # STAGE 2 - FINISH  
 Once you have connected ... you can finish this part of the DEMO  
-

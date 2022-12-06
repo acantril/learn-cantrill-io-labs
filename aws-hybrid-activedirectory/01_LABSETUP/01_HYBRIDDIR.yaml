@@ -32,7 +32,6 @@ Metadata:
           - DomainAdminPassword
           - DomainDNSName
           - DomainNetBIOSName
-          - DomainAdminPassword
       - Label:
           default: Template General
         Parameters:
