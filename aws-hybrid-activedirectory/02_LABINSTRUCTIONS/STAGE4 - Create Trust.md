@@ -6,8 +6,8 @@ It will allow you to grant access to the resources of one, from the other.
 
 # STAGE 4A - ONPREM Ensure That Kerberos Pre-authentication Is Enabled
 
-Connect to the JumpBox  (THE SIMULATED ONPREM ONE, NOT AWS)
-Connect to the Client Instance  
+Connect to JumpBox (**THE SIMULATED ONPREM ONE, NOT AWS**)
+From the JumpBox connect to the client instance using its private IP (you may already have this still connected). If you are connecting again, login as admin@ad.animals4life.org and the admin password you picked right at the start.  
 Load Active Directory Users and Computers  
 Select Users 
 Click Admin  
@@ -22,7 +22,7 @@ Select the managed microsoft AD
 Note down the `DNS Addresses` (2 IPs)  
 Note down `Directory DNS Name`  
 
-On the ONPREM Jumpbox  
+On the CLIENT MACHINE, still connected via the ONPREM Jumpbox  
 Click windows button  
 Type DNS  
 Open the DNS Management App  
@@ -66,8 +66,8 @@ Make sure `Do not require Kerberos preauthentication` is UNCHECKED
 
 # STAGE 4E - Configure the Trust in Your On-Premises Active Directory
 
-Connect to the JumpBox  
-Connect to the Client Instance  
+Either return to, or reconnect to JumpBox (**the onpremises one, NOT JUMPBOX-AWS**)
+Connect to the Client Instance (you should still be connected if not, make sure you login as admin@ad.animals4life.org)   
 open `Active Directory Domains and Trusts.`  
 Right click `ad.animals4life.org` and click `properties`  
 Click `Trusts`  
@@ -123,14 +123,15 @@ Select `ad.animals4life.org` (on prem domain)
 Click `OK`  
 Type `Admin`  
 Click `Check Names`  
+(**if you are prompted for login credentials**)  
 Enter `admin@ad.animals4life.org` and `YOUR_DOMAIN_ADMIN_PASSWORD` for enter network credentials
 Make sure the line with Logon Name `Admin` is selected  
 Click `OK`, `OK`, `OK`   
 The On prem admin user is now an Admin of the AWS Directory  
 This is using the trust  
 
-Logoff the JumpBox-AWS  
-Login as `admin@ad.animals4life.org`  
+Logoff the JumpBox-AWS, right now you are logged in using the AWS credentials admin@aws.animals4life.org    
+Login as `admin@ad.animals4life.org` (so you are logging into an AWS side server, using on-premises credentials)  
 
 Works!!  
 
