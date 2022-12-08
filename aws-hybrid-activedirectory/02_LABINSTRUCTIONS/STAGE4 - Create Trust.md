@@ -25,7 +25,7 @@ From the JumpBox connect to the client instance using its private IP.
 ...If you are connecting again, login as admin@ad.animals4life.org and the admin password you picked right at the start. 
 ```
 
-Load Active Directory Users and Computers  
+From the CLIENT server, Load Active Directory Users and Computers  
 Select Users 
 Click Admin  
 Right click , properties  
