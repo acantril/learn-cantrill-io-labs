@@ -6,7 +6,7 @@ It will allow you to grant access to the resources of one, from the other.
 
 # STAGE 4A - ONPREM Ensure That Kerberos Pre-authentication Is Enabled
 
-Connect to JumpBox (**THE SIMULATED ONPREM ONE, NOT AWS**)
+Connect to JumpBox (**THE SIMULATED ONPREM ONE, NOT AWS**)  
 From the JumpBox connect to the client instance using its private IP (you may already have this still connected). If you are connecting again, login as admin@ad.animals4life.org and the admin password you picked right at the start.  
 Load Active Directory Users and Computers  
 Select Users 
