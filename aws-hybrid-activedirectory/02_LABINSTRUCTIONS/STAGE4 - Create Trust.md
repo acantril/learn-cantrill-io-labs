@@ -7,8 +7,24 @@ It will allow you to grant access to the resources of one, from the other.
 # STAGE 4A - ONPREM Ensure That Kerberos Pre-authentication Is Enabled
 
 Connect to JumpBox (**THE SIMULATED ONPREM ONE, NOT AWS**)  
-From the JumpBox connect to the client instance using its private IP (you may already have this still connected). 
-...If you are connecting again, login as admin@ad.animals4life.org and the admin password you picked right at the start.  
+You should still have a connection open using remote desktop to JUMPBOX and from there to CLIENT. If you dont, follow the instructions below:  
+
+```
+Open https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=tag:Name
+Select JumpBox
+Locate the Public DNS (IPv4) for the Jumpbox and note down the DNS name
+Right Click and Select Connect Click 'RDP Client'
+Note down the username it should be Administrator (note this down as JumpBox Username)
+Click on Get Password
+Click on Choose file
+Locate the A4L.pem file you downloaded earlier and click Open
+Click on Decrypt Password and note down the password as JumpBox Password
+
+Connect to JUMPBOX using the username `Administrator` and the password you decrypted above.  
+From the JumpBox connect to the client instance using its private IP.  
+...If you are connecting again, login as admin@ad.animals4life.org and the admin password you picked right at the start. 
+```
+
 Load Active Directory Users and Computers  
 Select Users 
 Click Admin  
