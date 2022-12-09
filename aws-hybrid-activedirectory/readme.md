@@ -32,6 +32,18 @@ Make sure you are logged into AWS and in `us-east-1`
 
 - [HYBRIDDIR](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-hybrid-activedirectory/01_HYBRIDDIR.yaml&stackName=HYBRIDDIR)
 
+## Video Guides
+
+
+- [Stage1](https://youtu.be/_7jm6qAB77A)
+- [Stage2](https://youtu.be/T5jjoFExeFQ)
+- [Stage3](https://youtu.be/koX7ueF4wsw)
+- [Stage4](https://youtu.be/oaTisDILzUk)
+- [Stage5](https://youtu.be/ejcDksH0EPk)
+- [Stage6](https://youtu.be/i6YDt6YW8hc
+- [Stage7](https://youtu.be/hI7NByXI2EU)
+
+
 ## Architecture Diagrams
 
 - [Stage1](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-hybrid-activedirectory/02_LABINSTRUCTIONS/Architecture-STAGE1.png)
