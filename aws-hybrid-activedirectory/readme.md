@@ -40,7 +40,7 @@ Make sure you are logged into AWS and in `us-east-1`
 - [Stage3](https://youtu.be/koX7ueF4wsw)
 - [Stage4](https://youtu.be/oaTisDILzUk)
 - [Stage5](https://youtu.be/ejcDksH0EPk)
-- [Stage6](https://youtu.be/i6YDt6YW8hc
+- [Stage6](https://youtu.be/i6YDt6YW8hc)
 - [Stage7](https://youtu.be/hI7NByXI2EU)
 
 
