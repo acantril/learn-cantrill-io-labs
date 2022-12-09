@@ -31,10 +31,9 @@ A full range of Video guided versions are available in my courses at https://lea
 - [Implement a simple client VPN](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-client-vpn)
 - [Pixel Art Image Processing Workflow - Pixelator 3000](https://github.com/acantril/learn-cantrill-io-labs/tree/master/00-aws-simple-demos/aws-lambda-s3-events)
 - [Database Migration using DMS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-dms-database-migration)
+- [Implement Hybrid Directory - On-premises & AWS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-activedirectory)
 
 ## TEXT ONLY MINI PROJECTS
-
-- [Implement Hybrid Directory - On-premises & AWS](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-activedirectory)
 
 ## UNDER CONSTRUCTION OR BROKEN PROJECTS (DON'T USE) - fixes in progress
 
