@@ -17,7 +17,7 @@ This advanced demo consists of 6 stages :-
 In this stage you will cleanup all the resources created by this advanced demo.
 
 # STAGE6 VIDEO GUIDE 
-[STAGE6 VIDEO GUIDE](https://youtu.be/NKMGpWa4a6Y)
+[STAGE6 VIDEO GUIDE](https://youtu.be/iGTkY0EThBM)
 
 
 Move to the S3 console https://s3.console.aws.amazon.com/s3/home?region=us-east-1
