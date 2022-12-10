@@ -15,7 +15,7 @@ This advanced demo consists of 6 stages :-
 - STAGE 6 : Cleanup the account
 
 # STAGE2 VIDEO GUIDE 
-[STAGE2 VIDEO GUIDE](https://youtu.be/MicGrt0_KUg)
+[STAGE2 VIDEO GUIDE](https://youtu.be/KxOoBL_PkKQ)
 
 # STAGE 2A - CREATE THE Lambda Execution Role for Lambda
 
