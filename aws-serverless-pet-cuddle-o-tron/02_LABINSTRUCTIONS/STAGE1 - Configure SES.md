@@ -15,7 +15,7 @@ This advanced demo consists of 6 stages :-
 - STAGE 6 : Cleanup the account
 
 # STAGE1 VIDEO GUIDE 
-[STAGE1 VIDEO GUIDE](https://youtu.be/4bCv6gGE6yQ)
+[STAGE1 VIDEO GUIDE](https://youtu.be/ZSt1w_7sVvY)
 
 # STAGE 1A - VERIFY SES APPLICATION SENDING EMAIL ADDRESS
 
