@@ -32,12 +32,12 @@ No installs required for this Advanced Demo
 
 ## Video Guides
 
-- [Stage1](https://youtu.be/4bCv6gGE6yQ)  
-- [Stage2](https://youtu.be/MicGrt0_KUg)  
-- [Stage3](https://youtu.be/8lVPdrF97LI)  
-- [Stage4](https://youtu.be/mhFYhpobgOs)  
-- [Stage5](https://youtu.be/EH59wStuuik)  
-- [Stage6](https://youtu.be/NKMGpWa4a6Y)  
+- [Stage1](https://youtu.be/ZSt1w_7sVvY)  
+- [Stage2](https://youtu.be/KxOoBL_PkKQ)  
+- [Stage3](https://youtu.be/lGlZ5d7MXys)  
+- [Stage4](https://youtu.be/8BTUhDnRN0s)  
+- [Stage5](https://youtu.be/TkydHW3UKUY)  
+- [Stage6](https://youtu.be/iGTkY0EThBM)  
 
 ## Architecture Diagrams
 
