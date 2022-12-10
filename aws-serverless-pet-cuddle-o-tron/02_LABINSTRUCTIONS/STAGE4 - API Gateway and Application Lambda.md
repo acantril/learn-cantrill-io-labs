@@ -2,7 +2,7 @@
 In this _Advanced Demo_ you will be implementing a serverless reminder application.
 The application will load from an S3 bucket and run in browser
 .. communicating with Lambda and Step functions via an API Gateway Endpoint
-Using the application you will be able to configure reminders for 'pet cuddles' to be send using email and SMS.
+Using the application you will be able to configure reminders for 'pet cuddles' to be sent using email.
 
 This advanced demo consists of 6 stages :-
 
@@ -53,25 +53,7 @@ You need to locate the `YOUR_STATEMACHINE_ARN` placeholder and replace this with
 Click `Deploy` to save the lambda function and configuration.     
 
 
-# STAGE 4C - CONFIGURE THE LAMBDA FUNCTION (Using the preview/NEW UI)
-
-Under `Aliases` click `Latest` 
-Click the `Code` Tab  
-Open this link in a new tab https://learn-cantrill-labs.s3.amazonaws.com/aws-serverless-pet-cuddle-o-tron/api_lambda.py
-depending on your browser it might download the .py file, if so, open it in either your code editor, or notepad on windows, or textedit on a mac and copy it all into your clipboard
-Move back to the Lambda console.  
-Select the existing lambda code and delete it.  
-Paste the code into the lambda fuction.  
-This is the function which will provide compute to API Gateway.  
-It's job is to be called by API Gateway when its used by the serverless front end part of the application (loaded by S3)
-It accepts some information from you, via API Gateway and then it starts a state machine execution - which is the logic of the application.  
-
-You need to locate the `YOUR_STATEMACHINE_ARN` placeholder and replace this with the State Machine ARN you noted down in the previous step.  
-
-Click `Deploy as latest`  
-
-
-# STAGE 4D - CREATE API
+# STAGE 4C - CREATE API
 
 Now we have the api_lambda function created, the next step is to create the API Gateway, API and Method which the front end part of the serverless application will communicate with.  
 Move to the API Gateway console https://console.aws.amazon.com/apigateway/main/apis?region=us-east-1  
@@ -84,7 +66,7 @@ For `API name*` enter `petcuddleotron`
 for `Endpoint Type` pick `Regional` 
 Click `create API`  
 
-# STAGE 4E - CREATE RESOURCE
+# STAGE 4D - CREATE RESOURCE
 
 Click the `Actions` dropdown and Click `Create Resource`  
 Under resource name enter `petcuddleotron`  
@@ -94,7 +76,7 @@ This relaxes the restrictions on things calling on our API with a different DNS 
 **if you DONT check this box, the API will fail**   
 Click `Create Resource`  
 
-# STAGE 4F - CREATE METHOD
+# STAGE 4E - CREATE METHOD
 
 Ensure you have the `/petcuddleotron` resource selected, click `Actions` dropdown and click `create method`  
 In the small dropdown box which appears below `/petcuddleotron` select `POST` and click the `tick` symbol next to it.  
@@ -112,7 +94,7 @@ Click `Save`
 You may see a dialogue stating `You are about to give API Gateway permission to invoke your Lambda function:`. AWS is asking for your OK to adjust the `resource policy` on the lambda function to allow API Gateway to invoke it.  This is a different policy to the `execution role policy` which controls the permissions lambda gets.  
 
 
-# STAGE 4G - DEPLOY API  
+# STAGE 4F - DEPLOY API  
 
 Now the API, Resource and Method are configured - you now need to deploy the API out to API gateway, specifically an API Gateway STAGE.  
 Click `Actions` Dropdown and `Deploy API`  
