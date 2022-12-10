@@ -2,7 +2,7 @@
 In this _Advanced Demo_ you will be implementing a serverless reminder application.
 The application will load from an S3 bucket and run in browser
 .. communicating with Lambda and Step functions via an API Gateway Endpoint
-Using the application you will be able to configure reminders for 'pet cuddles' to be send using email and SMS.
+Using the application you will be able to configure reminders for 'pet cuddles' to be sent using email.
 
 This advanced demo consists of 6 stages :-
 
@@ -111,7 +111,6 @@ Ok to test the application
 Enter an amount of time until the next cuddle ...I suggest `120` seconds
 Enter a message, i suggest `HUMAN COME HOME NOW`  
 then enter the `PetCuddleOTron Customer Address` in the email box, this is the email which you verified right at the start as the customer for this application.  
-then enter your cell/mobile number in full international format in the next box
 
 **before you do the next step and click the button on the application, if you want to see how the application works do the following**
 open a new tab to the `Step functions console` https://console.aws.amazon.com/states/home?region=us-east-1#/statemachines  
@@ -120,7 +119,7 @@ Click on the `Logging` tab, you will see no logs
 CLick on the `Executions` tab, you will see no executions..
 
 Move back to the web application tab (s3 bucket)  
-then click on `LEVEL3 : ALL THE THINGS` to send both an email and SMS reminder
+then click on `Email Minion` Button to send an email.  
 
 Got back to the Step functions console
 make sure the `Executions` Tab is selected
@@ -131,9 +130,7 @@ The step function is now executing and it has its own state ... its a serverless
 Keep waiting, and after 120 seconds the visual will update showing the flow through the state machine
 
 - Timer .. waits 120 seconds
-- ChoiceState ... moves to the parallel state because you clicked on the `LEVEL3 ALL THE THINGS` button to send email and SMS
-- Then `ParallelSMS` uses SNS directly to send a text message
-- `ParallelEmail` invokes the lambda function to send an email
+- `Email` invokes the lambda function to send an email
 - `NextState` in then moved through, then finally `END`
 
 Scroll to the top, click `ExeuctionInput` and you can see the information entered on the webpage.
@@ -152,7 +149,7 @@ At this point thats everything .. you now have a fully functional serverless app
 - Communicates via `JS` to API Gateway 
 - uses `api_lambda` as backing resource
 - runs a statemachine passing in parameters
-- state machine sends email, SMS or both
+- state machine sends email
 - state machine terminates
 
 No servers were harmed, or used even, in this production :)
