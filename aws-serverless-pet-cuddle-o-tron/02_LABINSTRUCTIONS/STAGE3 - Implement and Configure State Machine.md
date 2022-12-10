@@ -15,7 +15,7 @@ This advanced demo consists of 6 stages :-
 
 
 # STAGE3 VIDEO GUIDE 
-[STAGE3 VIDEO GUIDE](https://youtu.be/8lVPdrF97LI)
+[STAGE3 VIDEO GUIDE](https://youtu.be/lGlZ5d7MXys)
 
 # STAGE 3A - CREATE STATE MACHINE ROLE
 In this stage of the demo you need to create an IAM role which the state machine will use to interact with other AWS services.  
