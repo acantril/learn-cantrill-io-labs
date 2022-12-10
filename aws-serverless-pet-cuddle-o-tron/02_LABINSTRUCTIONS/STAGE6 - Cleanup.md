@@ -37,15 +37,10 @@ Check the box next to `api_lambda`, click `Actions`, Click `Delete`, Click `Dele
 Move to the Step Functions console https://console.aws.amazon.com/states/home?region=us-east-1#/statemachines  
 Check the box next to `PetCuddleOTron`, CLick `Delete`, then `Delete state machine`  
 
-
-Move to the Pinpoint console https://us-east-1.console.aws.amazon.com/pinpoint/home?region=us-east-1#/sms-account-settings/phoneNumbers  
-Check the box next to the origination number you created in stage 1.  
-Click `Remove Phone Number`, conform and click `Delete`  
-
+**optional,it might save time if you want to use SES in the future, and it doesn't cost anything to keep these active**
 Go to the SES console and verified identities https://us-east-1.console.aws.amazon.com/ses/home?region=us-east-1#/verified-identities  
 Select one of the indentities, Click `Delete`, then click `Confirm`  
 Pick the other verified identity, Click `Delete`, then click `Confirm`  
-
 
 Move to the cloudformation console https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks?filteringText=&filteringStatus=active&viewNested=true&hideStacks=false  
 Check the box next to `SMROLE` , click `Delete` then `Delete Stack`  
