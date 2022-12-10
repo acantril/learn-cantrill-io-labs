@@ -2,7 +2,7 @@
 In this _Advanced Demo_ you will be implementing a serverless reminder application.
 The application will load from an S3 bucket and run in browser
 .. communicating with Lambda and Step functions via an API Gateway Endpoint
-Using the application you will be able to configure reminders for 'pet cuddles' to be send using email and SMS.
+Using the application you will be able to configure reminders for 'pet cuddles' to be sent using email.
 
 This advanced demo consists of 6 stages :-
 
@@ -49,20 +49,13 @@ Paste in your clipboard
 Click the `Refresh` icon on the right side area ... next to the visual map of the state machine.  
 Look through the visual overview and the ASL .. and make sure you understand the flow through the state machine.  
 
-The state machine starts ... and then waits for a certain time period based on the `Timer` state. This is controlled by the web front end you will deploy soon.  
-Then the `ChoiceState` is used, and this is a branching part of the state machine. Depending on the option picked in the UI, it either moves to :-
-
-- EmailOnly : Which sends an email reminder
-- SMSOnly : Which sends only an SMS reminder
-- EmailandSMS : which is a parallel state which runs both `ParallelEmail` and `ParallelSMS` which does both.  
+The state machine starts ... and then waits for a certain time period based on the `Timer` state. This is controlled by the web front end you will deploy soon. Then the `email` is used Which sends an email reminder
 
 The state machine will control the flow through the serverless application.. once stated it will coordinate other AWS services as required.  
 
 # STAGE 3C - CONFIGURE STATE MACHINE 
 In the state machine ASL (the code on the left) locate the `EmailOnly` definition.  
 Look for `EMAIL_LAMBDA_ARN` which is a placeholder, replace this with the email_reminder_lambda ARN you noted down in the previous step. This is the ARN of the lambda function you created.
-Next, locate the `ParallelEmail` definition.  
-Look for the `EMAIL_LAMBDA_ARN` which is a placeholder, replace this with the email_reminder_lambda ARN you noted down in the previous step. This is the ARN of the lambda function you created.  
 
 Scroll down to the bottom and click `next` 
 For `State machine name` use `PetCuddleOTron`  
