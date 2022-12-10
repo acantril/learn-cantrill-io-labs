@@ -19,7 +19,7 @@ You will download the source files for the front end, configure them to connect 
 Finally, you will run some application tests to verify its functionality.  
 
 # STAGE5 VIDEO GUIDE 
-[STAGE5 VIDEO GUIDE](https://youtu.be/EH59wStuuik)
+[STAGE5 VIDEO GUIDE](https://youtu.be/TkydHW3UKUY)
 
 
 # STAGE 5A - CREATE THE S3 BUCKET
