@@ -113,7 +113,7 @@ You now have :-
 
 - SES Configured
 - An Email Lambda function to send email using SES
-- A State Machine configured which can send EMAIL, SMS or BOTH after a certain time period when invoked.
+- A State Machine configured which can send EMAIL after a certain time period when invoked.
 - An API, Resource & Method, which use a lambda function for backing deployed out to the PROD stage of API Gateway
 
 In STAGE5 of this advanced demo you will configure the client side of the application (loaded from S3, running in a browser) so that it communicates to API Gateway.  
