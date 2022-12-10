@@ -14,7 +14,7 @@ This advanced demo consists of 6 stages :-
 - STAGE 6 : Cleanup the account
 
 # STAGE4 VIDEO GUIDE 
-[STAGE4 VIDEO GUIDE](https://youtu.be/mhFYhpobgOs)
+[STAGE4 VIDEO GUIDE](https://youtu.be/8BTUhDnRN0s)
 
 
 In this stage you will be creating the front end API for the serverless application.  
