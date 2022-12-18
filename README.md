@@ -9,6 +9,8 @@ These demos are available in three ways:-
 - as part of [https://learn.cantrill.io](https://learn.cantrill.io) courses - including theory lessons and guided videos.
 - **some** of the popular mini projects have been upgraded with video guides on this repo (people buying my courses supports this)
 
+**💰💰 You can be paid to create new mini projects for this repo ... [click here](https://github.com/acantril/learn-cantrill-io-labs/blob/master/get-paid-to-create-projects.md) for more info 💰💰**  
+
 The free versions here are fully functional, with instructions & architecture diagrams and are maintained by me.
 
 All demos have a structure ...
