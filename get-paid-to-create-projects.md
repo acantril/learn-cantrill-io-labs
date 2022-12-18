@@ -5,7 +5,7 @@ I've maintained this [collection of technical mini-projects](https://github.com/
 
 ### So, what's the deal
 
-You submit an idea (i.e. a brief) for a project to me, and I review it. Based on its complexity, it will be categorised into a **SIMPLE**, **INTERMEDIATE** or **ADVANCED** project. If it's something worth doing, I will fund its development. I will pay you **$1,000** for a **simple**, **$2000** for an **intermediate** and **$3,000** for an **advanced** project (in bitcoin, when completed, verified and submitted to the above repo)
+You submit an idea (i.e. a brief) for a project to me, and I review it. Based on its complexity, it will be categorised into a **SIMPLE**, **INTERMEDIATE** or **ADVANCED** project. If it's something worth doing, I will fund its development. I will pay you **$1,000** for a **simple**, **$2000** for an **intermediate** and **$3,000** for an **advanced** project (value in USD, paid in bitcoin, when completed, verified and submitted to the above repo)
 
 ### What you need to deliver
 
