@@ -11,9 +11,9 @@ You submit an idea (i.e. a brief) for a project to me, and I review it. Based on
 
 Here are three examples of mini projects, these are AWS ones, but you get the idea:
 
-[Simple](https://github.com/acantril/learn-cantrill-io-labs/tree/master/00-aws-simple-demos/aws-lambda-s3-events)
-[Intermediate](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-serverless-pet-cuddle-o-tron)
-[Advanced](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-bgpvpn)
+[Simple](https://github.com/acantril/learn-cantrill-io-labs/tree/master/00-aws-simple-demos/aws-lambda-s3-events)  
+[Intermediate](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-serverless-pet-cuddle-o-tron)  
+[Advanced](https://github.com/acantril/learn-cantrill-io-labs/tree/master/aws-hybrid-bgpvpn)  
 
 Delivery of the mini projects will be via a[ Pull Request](https://medium.com/geekculture/a-quick-guide-to-create-a-pull-request-on-github-80fc081b8a80) into the above repo
 
