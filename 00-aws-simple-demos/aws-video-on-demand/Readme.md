@@ -406,3 +406,8 @@ Distributions must be disabled before they can be deleted. Disabling them can ta
 Once that’s done (the <kbd>Delete</kbd> button will be clickable), select your distribution again and click <kbd>Delete</kbd>
 
 ![Untitled](images/Untitled%2018.png)
+
+Go to the IAM Console => Roles  
+
+Search for `function` and locate the role for the cattube lambda function, select it and delete it.  
+Search for `MediaConvert` and locate the MediaConvert default role you created earlier, select it and delete it.  
