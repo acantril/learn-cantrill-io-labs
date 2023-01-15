@@ -10,7 +10,7 @@ We will be creating this environment in the ap-southeast-2 region, so all links 
 
 ## Stage 1 - Creating the source video bucket
 
-Head to the S3 dashboard: [https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2)
+Head to the S3 dashboard: [https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1](https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1)
 
 This bucket will be used as the trigger for the media conversion pipeline. Don’t forget, bucket names are unique per region, so if the examples I give below are taken, just pick something else.
 
@@ -24,7 +24,7 @@ Leave everything else as default and click <kbd>Create bucket</kbd>
 
 ## Stage 2 - Creating the destination video bucket
 
-Head to the S3 dashboard: [https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2)
+Head to the S3 dashboard: [https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1](https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1)
 
 This bucket will be used as the destination for converted videos, as well as the origin for Cloudfront. Don’t forget, bucket names are unique per region, so if the examples I give below are taken, just pick something else.
 
@@ -38,7 +38,7 @@ Leave everything else as default and click <kbd>Create bucket</kbd>
 
 ## Stage 3 - Creating the MediaConvert queue
 
-Head to the MediaConvert console, and go to the Queues page: [https://ap-southeast-2.console.aws.amazon.com/mediaconvert/home?region=ap-southeast-2#/queues/list](https://ap-southeast-2.console.aws.amazon.com/mediaconvert/home?region=ap-southeast-2#/queues/list)
+Head to the MediaConvert console, and go to the Queues page: [https://us-east-1.console.aws.amazon.com/mediaconvert/home?region=us-east-1#/queues/list](https://us-east-1.console.aws.amazon.com/mediaconvert/home?region=us-east-1#/queues/list)
 
 Click on <kbd>Create queue</kbd>
 
@@ -48,7 +48,7 @@ Click on <kbd>Create queue</kbd>
 
 ## Stage 4 - Create the Lambda function
 
-Head to the Lambda console: [https://ap-southeast-2.console.aws.amazon.com/lambda/home?region=ap-southeast-2#/functions](https://ap-southeast-2.console.aws.amazon.com/lambda/home?region=ap-southeast-2#/functions)
+Head to the Lambda console: [https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1#/functions](https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1#/functions)
 
 Click <kbd>Create function</kbd>
 
@@ -245,7 +245,7 @@ Once all of your configuration is done, click on <kbd>Show job JSON</kbd>
 
 ![Untitled](images/Untitled%204.png)
 
-Copy the entire output, and replace the content of the `job.json` in your Lambda function. Don’t forget to click <kbd>Deploy</kbd>.
+If you wanted to use this config, you would, and replace the content of the `job.json` in your Lambda function. But we won't be doing this so just cancel out of this screen.
 
 ## Stage 5 - IAM roles
 
@@ -305,7 +305,7 @@ Note: "Origin access control settings" replaces (or is at least the new / better
 
 ![Untitled](images/Untitled%208.png)
 
-Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2&region=ap-southeast-2](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2&region=ap-southeast-2)
+Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1&region=us-east-1](https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1&region=us-east-1)
 
 Go into the **destination** bucket we created earlier, then the **Permissions** tab, then down to **Bucket policy**. Click on <kbd>Edit</kbd>.
 
@@ -317,7 +317,7 @@ Then click <kbd>Save changes</kbd>
 
 ## Stage 7 - Set up S3 event notifications
 
-Head to the S3 dashboard: [https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2)
+Head to the S3 dashboard: [https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1](https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1)
 
 Go into the **source** bucket we created earlier, then to the **Properties** tab, down to **Event notifications**, and click <kbd>Create event notification</kbd>
 
@@ -345,7 +345,7 @@ Head to the **source** bucket in S3, click on <kbd>Upload</kbd>, then <kbd>Add f
 
 **Note:** Our Python script doesn’t handle spaces in video files. For the sake of simplicity I haven’t included that functionality, so make sure your video file doesn’t contain spaces in the file name.
 
-Once you've uploaded the file, you can check the status of your job (the Lambda function triggers the job asynchronously), head to the MediaConvert Jobs page here: [https://ap-southeast-2.console.aws.amazon.com/mediaconvert/home?region=ap-southeast-2#/jobs/list](https://ap-southeast-2.console.aws.amazon.com/mediaconvert/home?region=ap-southeast-2#/jobs/list)
+Once you've uploaded the file, you can check the status of your job (the Lambda function triggers the job asynchronously), head to the MediaConvert Jobs page here: [https://us-east-1.console.aws.amazon.com/mediaconvert/home?region=us-east-1#/jobs/list](https://us-east-1.console.aws.amazon.com/mediaconvert/home?region=us-east-1#/jobs/list)
 
 ![Untitled](images/Untitled%2012.png)
 
@@ -361,7 +361,7 @@ Assuming all is working, you can now improve on this by adding more output file 
 
 ## Stage 9 - Clean up
 
-Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2&region=ap-southeast-2](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2&region=ap-southeast-2)
+Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1&region=us-east-1](https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1&region=us-east-1)
 
 Select your source bucket, and click <kbd>Empty</kbd>
 
@@ -379,7 +379,7 @@ Enter the bucket name in the confirmation window, and click <kbd>Delete</kbd>
 
 Do the same for your destination bucket.
 
-Head to the MediaConvert queues page: [https://ap-southeast-2.console.aws.amazon.com/mediaconvert/home?region=ap-southeast-2#/queues/list](https://ap-southeast-2.console.aws.amazon.com/mediaconvert/home?region=ap-southeast-2#/queues/list)
+Head to the MediaConvert queues page: [https://us-east-1.console.aws.amazon.com/mediaconvert/home?region=us-east-1#/queues/list](https://us-east-1.console.aws.amazon.com/mediaconvert/home?region=us-east-1#/queues/list)
 
 Select your `catqueue` and click <kbd>Delete queue</kbd>
 
@@ -387,7 +387,7 @@ Click <kbd>Delete</kbd> in the popup window
 
 Note: You cannot delete the “Default” queue, so just ignore that.
 
-Head to the Lambda console: [https://ap-southeast-2.console.aws.amazon.com/lambda/home?region=ap-southeast-2#/functions](https://ap-southeast-2.console.aws.amazon.com/lambda/home?region=ap-southeast-2#/functions)
+Head to the Lambda console: [https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1#/functions](https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1#/functions)
 
 Select the “cattube-converter-function” and click Actions → Delete
 
