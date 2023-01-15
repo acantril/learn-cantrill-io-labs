@@ -231,7 +231,7 @@ Click on <kbd>Create job</kbd>, then on the next page under **Input 1**, set the
 
 ![Untitled](images/Untitled%202.png)
 
-Then under **Output groups, File Group Settings**, set the **Destination** to “S3://test/test”. Again, our script replaces this, but it can’t be blank.
+Then under **Output groups, Click `Add`, choose `File Group`, Click `Select`. File Group Settings**, set the **Destination** to “S3://test/test”. Again, our script replaces this, but it can’t be blank.
 
 ![Untitled](images/Untitled%203.png)
 
