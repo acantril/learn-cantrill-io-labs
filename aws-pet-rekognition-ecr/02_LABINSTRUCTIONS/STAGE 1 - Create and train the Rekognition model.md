@@ -15,10 +15,11 @@ Click on the "Get started" button.
 
 A pop-up window will appear, asking you to create an S3 bucket to store all the data related to the model that you will be training. Save the name of the bucket that will be created, it will have the following format: `custom-labels-console-us-east-1-<random string>`. You will need it in the cleanup stage. Click on the "Create S3 bucket" button to create the S3 bucket.
 
-In the left-hand menu, click on "Projects" and create a project with the name "skynet-cat-and-dogs".
+In the left-hand menu, click on "Projects" and create a project with the name "skynet-cats-and-dogs".
 Click on the "Create dataset" button and select the following options:
  - Configuration options: Start with a single dataset
  - Training dataset details: Upload images from your computer
+ - Click Create Dataset  
 
 In the following screen, you will be able to upload the images that will be used to train the model. These images are available in the cat_dogs_training_data.zip file.
 
