@@ -4,6 +4,10 @@
 
 We will be setting up a DynamoDB table full of cats that are waiting to be adopted. When the `adopted` field is updated to `true`, a Lambda will be triggered that will send an email to the adoption center telling them that “[cat abc] has been adopted!”
 
+# Video Guide
+
+A full video companion for this mini project is [available here](https://www.youtube.com/watch?v=WgqdkaTaC4M)
+
 # Instructions
 
 ## Stage 1 - Creating the DynamoDB table
