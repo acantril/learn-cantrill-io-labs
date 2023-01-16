@@ -35,8 +35,6 @@ In the terminal window, enter the following commands:
    - `sudo su - ec2-user`
    - `unzip app.zip`
 
-Paste the commands that you previously copied from the ECR repository in order.
-
 Next we are going to build and push the Docker image to the ECR repository. To do so, we need to use the URI of the repository that you copied in the previous step. Enter the following commands:
    - Build the Docker image: `docker build -t skynet .`
    - Tag the Docker image: `docker tag skynet:latest <ECR URI>:latest`
