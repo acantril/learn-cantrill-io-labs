@@ -24,10 +24,6 @@ We need the URI of the repository that we just created. It will have the followi
 
 The `<AWS Account ID>` is the ID of your AWS account. You can find it in the upper-right corner of the AWS console.
 
-Navigate to the list of ECR repositories and copy the URI of the repository that you just created. You should have something similar to this:
-
-`<AWS Account ID>.dkr.ecr.us-east-1.amazonaws.com/skynet-repo`
-
 Navigate to the EC2 console: https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceState
 
 Click `Instances` in the left menu.
