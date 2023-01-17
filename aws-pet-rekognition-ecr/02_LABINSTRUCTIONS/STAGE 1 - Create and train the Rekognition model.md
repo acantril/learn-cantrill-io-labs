@@ -37,9 +37,7 @@ To label the cat and dog images, select the images and click on "Assign image-le
 
 If so, you are ready to start training the model. Click on the top-right "Train model" button. In the next screen, click on the "Train model" button and then click again on the "Train model" button that appears in the pop-up window.
 
-The training process can take approximately 40-60 minutes to complete, so you can start the stages 2 and 3A while the model is being trained.
-
-To check the progress of the training, take a look at the "Model status" column. It will change the status to TRAINING_COMPLETED once the training is complete.
+To check the progress of the training, take a look at the "Model status" column. It will change the status to TRAINING_COMPLETED once the training is complete. The training process can take approximately 40-60 minutes to complete, so you can start the stages 2 and 3A while the model is being trained.
 
 Once the training is complete, we need to **start the model**. To do so, click in the model name to see the details of the model. Click on the "Use the model" tab and then click on the **"Start" button**. Click again on the "Start" button that appears in the pop-up window.
 
