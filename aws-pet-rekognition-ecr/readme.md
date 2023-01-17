@@ -16,6 +16,10 @@ Apply the template below and wait for `CREATE_COMPLETE` before continuing
 
 - [PETREKOGNITIONECR](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/APPCFN.yaml&stackName=PETREKOGNITIONECR)
 
+## Pre-requisites
+
+Deploy the CloudFormation stack using the link provided in the `1-Click Install` section.
+
 ## Instructions
 
 - [Stage1](./02_LABINSTRUCTIONS/STAGE%201%20-%20Create%20and%20train%20the%20Rekognition%20model.md)

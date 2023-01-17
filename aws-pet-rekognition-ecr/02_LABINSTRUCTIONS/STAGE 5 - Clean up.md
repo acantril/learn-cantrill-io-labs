@@ -56,7 +56,7 @@ Click "Delete" button.
 
 Type the name of the bucket and click "Delete bucket" button.
 
-We also need to empty the bucket created by the Cloudformation stack so it can be deleted by the stack in the next step. The name of the bucket is the one you got from the output "S3BucketName" from the Cloudformation stack you deployed.
+We also need to empty the bucket created by the Cloudformation stack so it can be deleted by the stack in the next step. The name of the bucket is the one you got from the **output "S3BucketName"** from the Cloudformation stack you deployed.
 
 For this bucket do:
 
