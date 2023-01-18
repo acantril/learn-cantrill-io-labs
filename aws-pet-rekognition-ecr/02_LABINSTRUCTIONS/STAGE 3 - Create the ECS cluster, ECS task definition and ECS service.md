@@ -8,6 +8,12 @@ In this part of the DEMO, you will be creating a few things:-
 - An ECS task definition to define the application.
 - An ECS service to deploy the application.
 
+**before you begin, we need to start the machine learning model**  
+
+Go to the rekognition tan, click in the model name to see the details of the model. Click on the "Use the model" tab and then click on the **"Start" button**. Click again on the "Start" button that appears in the pop-up window.
+
+Lastly, copy and save the **ARN** of the model that you will find in the same screen. You will need it in a later stage.
+
 # STAGE 3 - Create the ECS cluster, ECS task definition and ECS service
 
 ## STAGE 3A - Create the ECS cluster
