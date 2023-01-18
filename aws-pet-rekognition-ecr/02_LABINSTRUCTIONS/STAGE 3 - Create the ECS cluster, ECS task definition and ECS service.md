@@ -14,6 +14,8 @@ Go to the rekognition tan, click in the model name to see the details of the mod
 
 Lastly, copy and save the **ARN** of the model that you will find in the same screen. You will need it in a later stage.
 
+You can continue with STAGE3 while the model is starting.  
+
 # STAGE 3 - Create the ECS cluster, ECS task definition and ECS service
 
 ## STAGE 3A - Create the ECS cluster
