@@ -21,11 +21,24 @@ Click on the "Create dataset" button and select the following options:
  - Training dataset details: Upload images from your computer
  - Click Create Dataset
 
-In the following screen, you will be able to upload the images that will be used to train the model. These images are available in the cat_dogs_training_data.zip file.
+In the following screen, you will be able to upload the images that will be used to train the model. These images are contained in the following files:-
 
-Unzip the file. You will see four folders: `training_data_1`, `training_data_2`, `training_data_3` and `training_data_4`.
+- [Cats-part1](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Cat-Dataset-part1.zip)
+- [Cats-part2](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Cat-Dataset-part2.zip)
+- [Cats-part3](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Cat-Dataset-part3.zip)
+- [Cats-part4](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Cat-Dataset-part4.zip)
+- [Cats-part5](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Cat-Dataset-part5.zip)
+- [Cats-part6](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Cat-Dataset-part6.zip)
+- [Dogs-part1](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Dog-Dataset-part1.zip)
+- [Dogs-part2](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Dog-Dataset-part2.zip)
+- [Dogs-part3](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Dog-Dataset-part3.zip)
+- [Dogs-part4](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Dog-Dataset-part4.zip)
+- [Dogs-part5](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Dog-Dataset-part5.zip)
+- [Dogs-part6](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Dog-Dataset-part6.zip)
 
-Click on the top-right "Actions" button and then click on "Add images to training dataset" to start uploading the images. Currently, the AWS console allows you to upload 30 images at a time, so you will need to do it in four attempts. To do so, upload in four different attempts all the images from the `training_data_1`, `training_data_2`, `training_data_3` and `training_data_4` folders.
+Unzip the files. You should see a total of 12 foldeds.  
+
+Click on the top-right "Actions" button and then click on "Add images to training dataset" to start uploading the images. Currently, the AWS console allows you to upload 30 images at a time, so you will need to do it in multiple attempts. To begin, upload all the images for the cats ...in 6 upload operations.
 
 Once you have uploaded all the images, you should see a total of 100 unlabeled images in the left-hand panel.
 
