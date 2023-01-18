@@ -37,18 +37,54 @@ In the following screen, you will be able to upload the images that will be used
 - [Dogs-part6](https://learn-cantrill-labs.s3.amazonaws.com/aws-pet-rekognition-ecr/Dog-Dataset-part6.zip)
 
 Unzip the files. You should see a total of 12 foldeds.  
+Currently, the AWS console allows you to upload 30 images at a time, so you will need to do it in multiple attempts. 
 
-Click on the top-right "Actions" button and then click on "Add images to training dataset" to start uploading the images. Currently, the AWS console allows you to upload 30 images at a time, so you will need to do it in multiple attempts. To begin, upload all the images for the cats ...in 6 upload operations.
 
-Once you have uploaded all the images, you should see a total of 100 unlabeled images in the left-hand panel.
+- Click on the top-right "Actions" button and then click on "Add images to training dataset" to start uploading the images. 
+- Click Choose files
+- Go inside the folder for the first part of the cat images
+- Select all the images
+- Click open
+- Then Click `Upload Images`
 
-Click on the top-right "Start labeling" button and then click on the "Add labels" button located on the left-hand panel.
+Wait until you see `You successfully saved the changes to your training dataset.`. Then repeat the process for the remaining 5 folders of Cat images (*we will be doing the dog images in a separate step*)
 
-A pop-up window will appear to create your labels. Click on "Add labels" and add the "cat" and "dog" labels. Click "Save".
+Once you have uploaded all `6` of the cat image folders, click `Start Labeling` then click `Add Labels`, and select `Add Labels`.  
+Add a label `cat` click `Add label` 
+and add another `dog`, click `Add label` then click `Save`  
 
-To label the cat and dog images, select the images and click on "Assign image-level labels" to assign the "cat" or "dog" label to them. Once all the images are labeled, click on "Save changes" and then click on "Finish Labeling". You should now see 100 labeled images (50 dogs and 50 cats).
+Select `Unlabeled` on the `Labels` list on the left, and go through each page of images :
 
-If so, you are ready to start training the model. Click on the top-right "Train model" button. In the next screen, click on the "Train model" button and then click again on the "Train model" button that appears in the pop-up window.
+- select all the images
+- Click `Assign Image-Level Labels`
+- Type `cat` and select the `cat` label and click `Assign`
+
+Move to the next page and Continue the above process for all pages of cat images.  
+Once you've finished you can click `Save Changes`  
+Once saved, you should have `0` unlabeled images.  
+
+Now it's time to repeat the process for the dog images within the dataset.  
+
+- Click on the top-right "Actions" button and then click on "Add images to training dataset" to start uploading the images. 
+- Click Choose files
+- Go inside the folder for the first part of the dog images
+- Select all the images
+- Click open
+- Then Click `Upload Images`
+
+Wait until you see `You successfully saved the changes to your training dataset.`. Then repeat the process for the remaining 5 folders of Dog images 
+
+Once finished, select `Unlabeled` from the labels menu on the bottom left. You should see all the dog images.  
+Click `Start Labelling`  and go through each page of images
+
+- select all the images
+- Click `Assign Image-Level Labels`
+- Type `dog` and select the `dog` label and click `Assign`
+
+Once you have done all pages, scroll to the top and click `Save Changes`.  
+Make sure you see `0` unlabelled images.  
+
+Click on the top-right "Train model" button. In the next screen, click on the "Train model" button and then click again on the "Train model" button that appears in the pop-up window.
 
 To check the progress of the training, take a look at the "Model status" column. It will change the status to TRAINING_COMPLETED once the training is complete. The training process can take approximately 40-60 minutes to complete, so you can start the stages 2 and 3A while the model is being trained.
 
