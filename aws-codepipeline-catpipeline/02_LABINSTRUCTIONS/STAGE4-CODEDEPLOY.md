@@ -32,49 +32,44 @@ This will take a few minutes to create, but you can continue on with the next pa
 ## Configure a Fargate cluster
 
 Move to the ECS console (https://us-east-1.console.aws.amazon.com/ecs/home?region=us-east-1#/getStarted)
-Clusters, Create a Cluster and it needs to be `Networking Only` (this will be using fargate)  
+Clusters, Create a Cluster.    
 Move on, and name the cluster `allthecatapps`
-We will be using the default VPC so there is no need to create one (don't check the box)
-Create the cluster. **if you get a error at this point, it may be the first time you are using ECS and thats ok** exit the creation process and then rerun it. There is service activation happening behind the scenes when you first use it, and it can prevent you creating a cluster. exiting and retrying solves 99% of these issues, for the 1% wait 10 minutes and then repeat.
-
+We will be using the default VPC so make sure it's selected and that all subnets in the VPC are listed.  
+Create the cluster. 
 
 ## Create Task and Container Definitions
 
 Go to the ECS Cluster (https://us-east-1.console.aws.amazon.com/ecs/home?region=us-east-1#/clusters)  
-Move to `Task Definitions` and create a task definition.  
-Select Fargate and move on.  
-Call it `catpipelinedemo` and for `operating system family` put `Linux`  
-Select `ecsTaskExecutionRole` under task role.  
-Pick `1GB` for task member and `0.5vCPU` for task CPU.  
-Add Container
-Container name `catpipeline`
-For image put the URL to your image in ECR
-	to get this, move to ECR console, repositories, click your repo, then click `Copy URI`
-Add a port mapping `80` `tcp`
-Add the container.
-Create (_if you get an error here, click back and then create again_)  
-View Task Definition & Click `JSON`, copy the json down somewhere as the `task definition json`  
+Move to `Task Definitions` and create a task definition.   
+Call it `catpipelinedemo`.  
+In `Container Details`, `Name` put `catpipeline`, then in `Image URI` move back to the ECR console and clikc `Copy URI` next to the latest image.  
+Scroll to the bottom and click `Next`  
+
+and for `operating system family` put `Linux/X86_64`   
+Pick `0.5vCPU` for task CPU and `1GB` for task memory.   
+Select `ecsTaskExecutionRole` under task role and task execution role.  
+Click `Next` and then `Create`.  
 
 
 ## DEPLOY TO ECS - CREATE A SERVICE
-Click Actions, Create Service.
+Click Deploy then `Create Service`.
 for `Launch type` pick `FARGATE`
 for `Service Name` pick `catpipelineservice`  
-for `Number of tasks` pick 2
-for `Deployment type` pick `rolling update`
-Next Step
-for `Cluster VPC*` pick the default VPC
-for `Subnets` select all subnets in the default VPC
-for `Auto-Assign public IP` choose `ENABLED`  
+for `Desired Tasks` pick 2
+Expand `Deployment Options`, then for `Deployment type` pick `rolling update`
+Expand `Networking`.  
+for `VPC` pick the default VPC
+for `Subnets` make sure all subnets are selected.  
+for `Security Group`, choose `User Existing Security Group` and ensure that `Default` and `catpipeline-SG` are selected.  
+for `public IP` choose `Turned On`  
 for `Load Balancer Type` pick `Application Load Balancer`
 for `Load balancer name` pick `catpipeline`  
-for `container to load balance` select 'catpipeline:80:80' and click `Add to load balancer`
-for `Production listener port` select `80:HTTP` from the dropdown
-for `Target group name` pick `catpipelineA-TG`  
-Next
-Next
-Create Service
-View Service
+for `container to load balance` select 'catpipeline:80:80'  
+select `Use an existing Listener` select `80:HTTP` from the dropdown
+for choose `Use an existing target group` and for `Target group name` pick `catpipelineA-TG` 
+Expand `Service auto scaling` and make sure it's **not** selected.  
+Click `create`  
+Wait for the service to finished deploying.  
 
 The service is now running with the :latest version of the container on ECR, this was done using a manual deployment
 
