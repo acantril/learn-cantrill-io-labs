@@ -101,7 +101,7 @@ Click Save & Confirm
 
 ## TEST
 
-in the local repo `catpipeline-codecommit` run `touch test.txt`  
+in the local repo edit the `index.html` file and add ` - WITH AUTOMATION` to the `h1` line text.  Save the file.  
 then run
 
 ```
@@ -114,7 +114,7 @@ watch the code pipeline console (https://us-east-1.console.aws.amazon.com/codesu
 
 make sure each pipeline step completes
 
-
+Go back to the tab with the application open via the load balancer, refresh and see how the text has changed.  
 
 
 
