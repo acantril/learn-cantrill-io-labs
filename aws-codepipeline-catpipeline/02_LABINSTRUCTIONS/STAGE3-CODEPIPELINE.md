@@ -43,6 +43,7 @@ This is the artifacts area for this pipeline, leave this tab open you will be us
 ## UPDATE THE BUILD STAGE
 
 Find your local copy of the catpipeline-codecommit repo and update the buildspec.yml file as below
+**(use a code editor and convert tabs to spaces, also check the indentation is correct)**  
 
 ```
 version: 0.2
