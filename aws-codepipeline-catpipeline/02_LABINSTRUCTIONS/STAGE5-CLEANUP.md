@@ -21,3 +21,11 @@ Remove Artefact Bucket
 
 ## IAM
 Remove Service Role Created during the advanced demo  
+
+## ECR
+
+Remove the repository
+
+## Security Group
+
+Remove the catpipeline-SG security group.
