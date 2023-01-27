@@ -100,6 +100,7 @@ Select to edit the raw `JSON` and delete the skeleton JSON, replacing it with
 }
 ```
 
+
 Move on and review the policy.  
 Name it `Codebuild-ECR` and create the policy
 This means codebuild can now access ECR.  
