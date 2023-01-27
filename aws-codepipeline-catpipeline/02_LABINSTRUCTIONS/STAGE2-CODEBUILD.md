@@ -108,7 +108,7 @@ This means codebuild can now access ECR.
 ## BUILDSPEC.YML
 
 Create a file in the local copy of the `catpipeline-codecommit-XXX` repo called `buildspec.yml`  
-Into this file add the following contents :-  
+Into this file add the following contents :-  (use a code editor and convert tabs to spaces, also check the indentation is correct)  
 
 ```
 version: 0.2
