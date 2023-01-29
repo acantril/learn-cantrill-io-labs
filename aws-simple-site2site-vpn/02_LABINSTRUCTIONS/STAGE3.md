@@ -56,7 +56,7 @@ Select the `onprem Router SG` security group.
 Click `Inbound Rules`    
 Click `Edit Inbound Rules`. 
 Click `Add rule`.
-Adjust to `All Traffic`, Source = Custom, enter `S2VPN-onpremSG` and `allow private subnets to use VPN`, then click `Save Rules`. 
+Adjust to `All Traffic`, Source = Custom, enter `S2SVPN-onpremSG` and `allow private subnets to use VPN`, then click `Save Rules`. 
 
 
 
