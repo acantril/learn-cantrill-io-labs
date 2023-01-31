@@ -44,7 +44,7 @@ In `VPC` Dropdown set to `AWS-VPC`
 In `Subnet` Dropdown set to `AWS-PUBLIC`
 Click `Select Existing Security Group`
 Remove all existing security groups
-Check the SG with the description of `HYBRIDDIR-AWSPC-*`
+Check the SG with the description of `HYBRIDDIR-AWSVPC-*`
 Expand the `Advanced Details` section
 Under `Domain join directory` select `aws.animals4life.org`
 Under `IAM Role` select `HYBRIDDIR-ONPREMVPC-*-EC2InstanceProfile-*`
