@@ -2,7 +2,7 @@
 
 In this part of the DEMO, you will be cleaning up the resources you created.
 
-## STAGE 7 - Clean up
+# STAGE 7 - Clean up
 
 Move the App Runner console: https://us-east-1.console.aws.amazon.com/apprunner/home?region=us-east-1
 
