@@ -16,7 +16,7 @@ Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1
 Click `Launch Templates` under `Instances` on the left menu  
 Click `Create Launch Template`  
 Under `Launch Template Name` enter `Wordpress`  
-Under `Templace version description` enter `Single server DB and App`  
+Under `Template version description` enter `Single server DB and App`  
 Check the `Provide guidance to help me set up a template that I can use with EC2 Auto Scaling` box  
 
 Under `Application and OS Images (Amazon Machine Image)` click `Quick Start`  
