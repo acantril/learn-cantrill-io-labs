@@ -37,7 +37,7 @@ Click `Databases`
 Click `Create Database`  
 Click `Standard Create`  
 Click `MySql`  
-Under `Version` select `MySQL 8.0.28` (best aurora compatability for snapshot migrations)  
+Under `Version` select `MySQL 8.0.23` (best aurora compatability for snapshot migrations)  
 
 Scroll down and select `Free Tier` under templates
 _this ensures there will be no costs for the database but it will be single AZ only_
