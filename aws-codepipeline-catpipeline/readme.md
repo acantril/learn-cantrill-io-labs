@@ -27,14 +27,14 @@ No installs required for this Advanced Demo
 
 ## Video Guides
 
-- [Stage0](https://youtu.be/7phmk5-iBDo) - INTRO
-- [Stage1](https://youtu.be/FmoXgFz4ODc)
-- [Stage2-PART1](https://youtu.be/gOiV10FXgq0)
-- [Stage2-PART2](https://youtu.be/g8TbqrNs4D0)
-- [Stage3](https://youtu.be/GmnOW1UmXpA)
-- [Stage4-PART1](https://youtu.be/ylY_yGHhVDk)
-- [Stage4-PART2](https://youtu.be/xSdJiTRkqr4)
-- [Stage5](https://youtu.be/JEsmwIPw25E)
+- [Stage0](https://youtu.be/U6CF-mJQT8c) - INTRO
+- [Stage1](https://youtu.be/l7_Zek4pM8A)
+- [Stage2-PART1](https://youtu.be/d7xAxQousBM)
+- [Stage2-PART2](https://youtu.be/loIQ3rQFEas)
+- [Stage3](https://youtu.be/7oyDvlmk5Ew)
+- [Stage4-PART1](https://youtu.be/Di4tplJtHgw)
+- [Stage4-PART2](https://youtu.be/9p_3HpzqWR4)
+- [Stage5](https://youtu.be/zzui6-G5B8Y)
 
 
 ## Architecture Diagrams
