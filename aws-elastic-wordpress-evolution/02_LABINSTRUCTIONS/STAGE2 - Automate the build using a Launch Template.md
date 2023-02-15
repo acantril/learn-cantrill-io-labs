@@ -22,7 +22,7 @@ Check the `Provide guidance to help me set up a template that I can use with EC2
 Under `Application and OS Images (Amazon Machine Image)` click `Quick Start`  
 Click `Amazon Linux`  
 in the `Amqzon Machine Image` dropdown, locate `Amazon Linux 2 AMI (HVM), SSD Volume TYpe` and set the Architecture to `64-bit (x86)`  
-Under `Instance Type` select whichever instance is free tier eligable from either `t3.micro` and `t2.micro`    
+Under `Instance Type` select whichever instance is free tier eligible from either `t3.micro` and `t2.micro`    
 Under `Key pair (login)` select `Don't include in launch template`  
 Under `networking Settings` `select existing security group` and choose `A4LVPC-SGWordpress`
 Leave storage volumes unchanged  
