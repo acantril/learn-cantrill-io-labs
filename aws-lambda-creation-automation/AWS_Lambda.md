@@ -96,7 +96,6 @@ NOTE: For almost all step below, an image is attached where necessary, which wil
 
 4. Insert the following python code in order to print the current date. Understanding of the python code is beyond the scope of this demo. Simply stating, this code will print todays date. You can find the script [here](lambda_function.py).
 
-        ```
         from datetime import date
 
         def lambda_handler(event, context):
@@ -109,7 +108,6 @@ NOTE: For almost all step below, an image is attached where necessary, which wil
             }
 
         lambda_handler(1, 1)
-        ```
 
 5. Once you have inserted the code, click on `DEPLOY` to save the changes and deploy the code to your Lambda function.
 
