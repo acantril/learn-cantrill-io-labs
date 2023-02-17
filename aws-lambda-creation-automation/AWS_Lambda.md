@@ -94,7 +94,7 @@ NOTE: For almost all step below, an image is attached where necessary, which wil
 
 ![lambda runtime](Images/lambda_runtime.png)
 
-4. Insert the following python code in order to print the current date. Understanding of the python code is beyond the scope of this demo. Simply stating, this code will print todays date.
+4. Insert the following python code in order to print the current date. Understanding of the python code is beyond the scope of this demo. Simply stating, this code will print todays date. You can find the script [here](lambda_function.py).
 
         ```
         from datetime import date
@@ -147,6 +147,9 @@ NOTE: For every change made to the lambda function, the code has to be deployed.
 2. Now its your time to experiment and learn.
 3. You will definitely encounter errors, but by falling you learn.
 
+# Add On
+In the above Part 1 we created our first lambda function via the AWS console. We can also create a lambda function via AWS CDK. To learn how to do this, you can read the article [here](AWS_Access_CDK.md).
+
 # Part 2: Automation of your AWS Lambda Function
 In this part of the lab we will firstly understand what we need to automate and why and how it can be easily done.
 
@@ -198,7 +201,7 @@ NOTE: For almost all step below, an image is attached where necessary, which wil
 
 3. Here you have asked github to do the following:
     1. On every push to the `main` branch on github, it has to run a job.
-    2. It will use the `AWS access key` and `AWS secret key` from github secrets to authenticate. To know more about AWS access keys, please read the documentation [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
+    2. It will use the `AWS access key` and `AWS secret key` from github secrets to authenticate. To know more about AWS access keys, please read the documentation [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html). Please refer the article [here](AWS_Access_CDK.md) to know how to obtain your access keys.
     3. This will then deploy all codes to function named `test-data` in the region `eu-central-1`.
     4. Provide the name of lambda at function_name, and the code which should be triggered at source. By default the Lambda function will search and execute the lambda_handler function. However this can be changed at the Lambda function console.
 
