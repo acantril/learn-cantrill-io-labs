@@ -82,7 +82,27 @@ We have installed and set up an AWS CDK Project. Lets now directly dive into how
 
 4. Thats it. We are now ready to deploy our lambda to AWS.
 
-    1. Lets check our difference to deploy by using the command as shown below.
+    1. Lets check our difference between AWS and locally to deploy by using the command as shown below.
 
             cdk diff
 
+    2. Finally you can deploy using the command shown below
+
+            cdk deploy
+
+6. In case of any error, please read through the logs, which will provide great feedback
+
+
+## Stage 4: Checking your AWS Lambda
+
+1. Once the deployment is complete, you can sign into the AWS Console.
+
+2. On the SEARCH bar on the top left side, please search for `LAMBDA`.
+
+![lambda intro](Images/lambda_intro.png)
+
+3. Make sure you are in the right region. To learn more about AWS Regions please read the documentaion [here](https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/select-region.html).
+
+![lambda region](Images/lambda_region.png)
+
+4. Now if you sort the list by `Last Modified`, you should be able to see your newly created Lambda function.
