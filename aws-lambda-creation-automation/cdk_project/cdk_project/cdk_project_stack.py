@@ -11,5 +11,5 @@ class CdkProjectStack(Stack):
 
         test_lambda = _lambda.Function(self, 'hellohandler',
                         runtime = _lambda.Runtime.PYTHON_3_7,
-                        code = _lambda.Code.from_asset('lambda'),
-                        handler = 'hello.handler')
+                        code = _lambda.Code.from_asset('lambda_cdk'),
+                        handler = 'lambda_cdk.lambda_function')
