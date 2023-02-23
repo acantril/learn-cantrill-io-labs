@@ -17,7 +17,7 @@ Resources:
         ExcludeCharacters: ""
         ExcludeLowercase: false
         ExcludeNumbers: false
-        ExcludePunctuation: false
+        ExcludePunctuation: true
         ExcludeUppercase: false
         IncludeSpace: false
         PasswordLength: 24
