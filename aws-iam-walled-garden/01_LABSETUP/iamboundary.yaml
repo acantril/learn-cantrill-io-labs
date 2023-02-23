@@ -1,0 +1,136 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  IAM user with a permission boundary
+
+Resources:
+
+  # Generate password for IAM user
+
+  IAMCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${AWS::StackName}/user"
+      Description: !Sub "IAM user initial password"
+      GenerateSecretString:
+        SecretStringTemplate: !Sub "{\"username\": \"${AWS::StackName}-user\"}"
+        GenerateStringKey: 'password'
+        ExcludeCharacters: ""
+        ExcludeLowercase: false
+        ExcludeNumbers: false
+        ExcludePunctuation: false
+        ExcludeUppercase: false
+        IncludeSpace: false
+        PasswordLength: 24
+        RequireEachIncludedType: true
+
+  # It is easier to demo with IAM user & group, but in reality this would be a role
+
+  IAMUser:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - !Ref IAMGroup
+      LoginProfile:
+        Password: !Sub "{{resolve:secretsmanager:${IAMCredentials}:SecretString:password}}"
+        PasswordResetRequired: false
+      PermissionsBoundary: !Ref IAMBoundary
+      UserName: !Sub "${AWS::StackName}-user"
+      # Path: !Sub "/${AWS::StackName}/${AWS::Region}/"
+
+  IAMGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: !Sub "${AWS::StackName}-group"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AdministratorAccess"
+      # Path: !Sub "/${AWS::StackName}/${AWS::Region}/"
+
+  # In reality you would be creating a role with permission boundary
+  
+  #  IAMRole:
+  #    Type: AWS::IAM::Role
+  #    Properties:
+  #      AssumeRolePolicyDocument:
+  #        Version: "2012-10-17"
+  #        Statement:
+  #          - Effect: Allow
+  #            Action: 'sts:AssumeRole'
+  #            Principal:
+  #              'AWS': !Sub "arn:aws:iam::${AWS::AccountId}:root"
+  #      Description: "AdministratorAccess role with permission boundary"
+  #      ManagedPolicyArns:
+  #        - "arn:aws:iam::aws:policy/AdministratorAccess"
+  #      MaxSessionDuration: 3600
+  #      PermissionsBoundary: !Ref IAMBoundary
+  #      RoleName: !Sub "${AWS::StackName}-role"
+  #      # Path: !Sub "/${AWS::StackName}/${AWS::Region}/"
+
+  # Permissions boundary policy should have
+  # - standard policy statements to force inheritance to any users or roles created
+  # - actual limitations to standard managed policies, i.e. namespacing, black listed services ...
+  
+  IAMBoundary:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub "${AWS::StackName}-boundary"
+      Description: IAM permission boundary with forced boundary inheritance
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: 'AllowUnlessOwnedBySomeoneElse'
+            Effect: Allow 
+            Action: '*'
+            Resource: '*'
+            Condition:
+              StringEqualsIfExists:
+                'aws:RequestTag/owner': ${aws:PrincipalTag/owner}
+                'aws:ResourceTag/owner': ${aws:PrincipalTag/owner}  
+          - Sid: 'DenyBoundaryModification'
+            Effect: Deny
+            Action:
+              - iam:CreatePolicyVersion
+              - iam:DeletePolicy
+              - iam:DeletePolicyVersion
+              - iam:SetDefaultPolicyVersion
+            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
+          - Sid: 'ForceBoundaryInheritance'
+            Effect: Deny 
+            Action:
+              - iam:CreateUser
+              - iam:CreateRole
+              - iam:PutUserPermissionsBoundary
+              - iam:PutRolePermissionsBoundary
+            Resource: '*'
+            Condition:
+              StringNotEquals:
+                'iam:PermissionsBoundary': !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
+          - Sid: 'DenyBoundaryRemoval'
+            Effect: Deny
+            Action:
+              - iam:DeleteUserPermissionsBoundary
+              - iam:DeleteRolePermissionsBoundary
+            Resource: '*'
+            Condition:
+              StringEquals:
+                'iam:PermissionsBoundary': !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
+          - Sid: 'DenyIAMChangesWithoutPrefix'
+            Effect: Deny
+            Action:
+              - iam:Add*
+              - iam:Attach*
+              - iam:Create*
+              - iam:Delete*
+              - iam:Detach*
+              - iam:Pass*
+            NotResource:
+              - !Sub "arn:*:iam::${AWS::AccountId}:group/${!aws:PrincipalTag/owner}-*"
+              - !Sub "arn:*:iam::${AWS::AccountId}:policy/${!aws:PrincipalTag/owner}-*"
+              - !Sub "arn:*:iam::${AWS::AccountId}:role/${!aws:PrincipalTag/owner}-*"
+              - !Sub "arn:*:iam::${AWS::AccountId}:user/${!aws:PrincipalTag/owner}-*"
+              - !Sub "arn:*:iam::${AWS::AccountId}:instance-profile/${!aws:PrincipalTag/owner}-*"
+
+Outputs:
+
+  Credentials:
+    Description: IAM credentials stored in Secrets Manager
+    Value: !Ref IAMCredentials
