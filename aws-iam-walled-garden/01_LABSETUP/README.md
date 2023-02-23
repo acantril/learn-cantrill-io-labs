@@ -1,5 +1,11 @@
 ### HERE WILL BE LAB SETUP ASSETS
 
+## Using AWS console
+
+### Lab setup
+
+### Lab cleanup
+
 ## Using command line
 
 ### Lab setup
