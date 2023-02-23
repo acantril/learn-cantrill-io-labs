@@ -38,7 +38,7 @@ $ aws secretsmanager get-secret-value --query 'SecretString' --output text \
 {"password":"THIS-IS-YOUR-PASSWORD","username":"walled-garden-lab-user"}
 ```
 
-Note `username` and `password` from above.
+Note `username` and `password` from above. Username is `${STACK}-user`.
 
 ### Lab cleanup
 
