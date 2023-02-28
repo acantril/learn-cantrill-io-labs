@@ -67,7 +67,7 @@ Note down the **********************Public IPv4 address**********************, w
 
 ## Stage 2 - Set up Elastic Disaster Recovery
 
-Switch to your destination **********region. As mentioned earlier, I’m using Tokyo (ap-northeast-1)
+Switch to your destination region. As mentioned earlier, I’m using Tokyo (ap-northeast-1)
 
 Head to the DRS console: https://ap-northeast-1.console.aws.amazon.com/drs/home
 
