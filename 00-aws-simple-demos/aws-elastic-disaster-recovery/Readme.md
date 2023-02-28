@@ -1,4 +1,4 @@
-# Elastic Disaster Recovery
+# Elastic Disaster Recovery (AWS DRS)
 
 # Overview
 
@@ -8,7 +8,6 @@ I’m going to be setting up my primary Nginx instance in Singapore (ap-southeas
 
 This demo will require some using SSH to connect to a server and run some commands.
 
-Note: I refer to Elastic Disaster Recovery as EDR in this demo, AWS *********sometimes********* refers to it as DRS. They are both the same service.
 
 # Instructions
 
@@ -70,7 +69,7 @@ Note down the **********************Public IPv4 address**********************, w
 
 Switch to your destination **********region. As mentioned earlier, I’m using Tokyo (ap-northeast-1)
 
-Head to the EDR console: https://ap-northeast-1.console.aws.amazon.com/drs/home
+Head to the DRS console: https://ap-northeast-1.console.aws.amazon.com/drs/home
 
 You should be prompted with the initial set up wizard
 
@@ -86,7 +85,7 @@ On the next page, leave all options as default and click <kbd>Next</kbd>
 
 On the last page, click <kbd>Create default</kbd>
 
-You should now be sent to the “Source servers” page. EDR is now waiting for agents (source servers) to connect so it can start replicating data.
+You should now be sent to the “Source servers” page. DRS is now waiting for agents (source servers) to connect so it can start replicating data.
 
 ## Stage 3 - Create temporary IAM access keys
 
@@ -116,7 +115,7 @@ On the next page, select “Command Line Interface (CLI)”, and check the confi
 
 Click <kbd>Next</kbd>
 
-Set the ******************************************Description tag value****************************************** to “Temporary EDR install key” and click <kbd>Create access key</kbd>
+Set the ******************************************Description tag value****************************************** to “Temporary DRS install key” and click <kbd>Create access key</kbd>
 
 Now make sure you copy and keep the ********************Access key******************** and **********************************Secret access key**********************************, you will need these for the next step
 
@@ -144,7 +143,7 @@ To confirm it’s working, visit the IP address of your instance in your browser
 
 Note: Make sure your browser doesn’t direct you to HTTPS, as that won’t work in our demo. Make sure you type in `http://54.151.248.177` (replacing that IP, with your instance IP).
 
-Now that our “application” is up and running, we’ll install the EDR agent. Back in your SSH console, run the following commands:
+Now that our “application” is up and running, we’ll install the DRS agent. Back in your SSH console, run the following commands:
 
 ```bash
 sudo yum install -y kernel-devel-`uname -r`
@@ -168,11 +167,11 @@ For sanity sake, this is my output:
 
 The script will start installing the AWS Replication Agent, this might take a couple of minutes.
 
-## Stage 5 - Configuring EDR recovery launch settings
+## Stage 5 - Configuring DRS recovery launch settings
 
 Switch to your destination **********region. As mentioned earlier, I’m using Tokyo (ap-northeast-1)
 
-Head to the EDR console: https://ap-northeast-1.console.aws.amazon.com/drs/home
+Head to the DRS console: https://ap-northeast-1.console.aws.amazon.com/drs/home
 
 You should see under ****************************Source Servers**************************** your instance from your source region, either currently syncing, or completed syncing
 
@@ -182,11 +181,11 @@ This took around 20 minutes to fully complete for me, although that will vary be
 
 If you head to the EC2 console: https://ap-northeast-1.console.aws.amazon.com/ec2/home
 
-You should see a new instance, created by Elastic Disaster Recovery. This instance handles the replication between your source server and EDR. This is ***not*** the server that will be used in a disaster / failover.
+You should see a new instance, created by Elastic Disaster Recovery. This instance handles the replication between your source server and DRS. This is ***not*** the server that will be used in a disaster / failover.
 
 ![Untitled](images/Untitled%2015.png)
 
-Head back to the EDR console: https://ap-northeast-1.console.aws.amazon.com/drs/home
+Head back to the DRS console: https://ap-northeast-1.console.aws.amazon.com/drs/home
 
 Once your source server is in the Ready state, click on the hostname
 
@@ -228,7 +227,7 @@ Once that’s done, click <kbd>Create template version</kbd>
 
 On the next page, click <kbd>View launch templates</kbd>
 
-Select the launch template created by EDR, then click <kbd>Actions</kbd> then <kbd>Set default version</kbd>
+Select the launch template created by DRS, then click <kbd>Actions</kbd> then <kbd>Set default version</kbd>
 
 ![Untitled](images/Untitled%2022.png)
 
@@ -238,7 +237,7 @@ In the config box that pops up, change the ********************************Templ
 
 Click <kbd>Set as default version</kbd>
 
-Now if we head back to the EDR console: https://ap-northeast-1.console.aws.amazon.com/drs/home?region=ap-northeast-1#/sourceServers
+Now if we head back to the DRS console: https://ap-northeast-1.console.aws.amazon.com/drs/home?region=ap-northeast-1#/sourceServers
 
 Then go back into our Source server, and back to the ******************************Launch settings****************************** tab, we will see all three options have changed
 
@@ -246,7 +245,7 @@ Then go back into our Source server, and back to the ***************************
 
 ## Stage 6 - Performing a test recovery
 
-Head to the EDR console: https://ap-northeast-1.console.aws.amazon.com/drs/home
+Head to the DRS console: https://ap-northeast-1.console.aws.amazon.com/drs/home
 
 Go to the ****************************Source servers**************************** page, select your source server, and click on <kbd>Initiate recovery job</kbd> and then <kbd>Initiate Recovery Drill</kbd>
 
@@ -282,7 +281,7 @@ That confirms the source server is successfully replicated to the destination re
 
 In the destination region (ap-northeast-1 for me)
 
-Head to the EDR console: https://ap-northeast-1.console.aws.amazon.com/drs/home
+Head to the DRS console: https://ap-northeast-1.console.aws.amazon.com/drs/home
 
 Go to ************************************Recovery instances************************************, select your instance, click <kbd>Actions</kbd>, then click <kbd>Terminate recovery instances</kbd>
 
