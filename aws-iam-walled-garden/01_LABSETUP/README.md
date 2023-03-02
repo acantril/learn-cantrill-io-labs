@@ -1,27 +1,29 @@
-### HERE WILL BE LAB SETUP ASSETS
 
-## Using AWS console
+# Please follow below instruction to setup and cleanup the lab setup from [console](#console) or [command line](#cmdline).
+
+
+## <a name="console"></a>Using AWS console
 
 ### Lab setup
 
-![](images/01-create-stack.png)
-![](images/02-select-template.png)
-![](images/03-stack-name.png)
-![](images/04-options.png)
-![](images/05-review.png)
-![](images/06-wait-for-complete.png)
-![](images/07-outputs.png)
-![](images/08-secrets-manager.png)
-![](images/09-secret.png)
-![](images/10-revealed.png)
+![Create a new Cloudformation stack](images/01-create-stack.png)
+![Select Cloudformation template](images/02-select-template.png)
+![Provide a new for the new stack](images/03-stack-name.png)
+![Stack Options](images/04-options.png)
+![Review and submit](images/05-review.png)
+![Wait until stack is built](images/06-wait-for-complete.png)
+![See the outputs](images/07-outputs.png)
+![Open AWS Secret Manager console](images/08-secrets-manager.png)
+![Find the secret entry](images/09-secret.png)
+![Reveal username and password](images/10-revealed.png)
 
 ### Lab cleanup
 
-![](images/11-delete.png)
+![Select stack to be deleted](images/11-delete.png)
 
-![](images/12-delete-progress.png)
+![Wait until stack deletion is completed](images/12-delete-progress.png)
 
-## Using command line
+## <a name="cmdline"></a>Using command line
 
 ### Lab setup
 
