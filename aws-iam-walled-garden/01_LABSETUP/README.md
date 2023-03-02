@@ -1,27 +1,80 @@
 
-# Please follow below instruction to setup and cleanup the lab setup from [console](#console) or [command line](#cmdline).
+# Please follow below instructions to setup & cleanup the lab setup from [console](#console) or [command line](#cmdline).
 
 
 ## <a name="console"></a>Using AWS console
 
 ### Lab setup
 
+Open the Cloudformation console and start creating a new stack.
+If you don't yet have any stacks on your account in given region this is how the console will look.
+Click "Create Stack" to move forward ...
+
 ![Create a new Cloudformation stack](images/01-create-stack.png)
+
+
+Check "Template is ready" & "Upload a template file". Then "Choose file", select `iamboundary.yaml` from this repository
+and click "Next" to move forward ...
+
 ![Select Cloudformation template](images/02-select-template.png)
+
+
+Give a new for the stack you are about to createi and click "Next" to move forward ... 
+*Note:* While stack names are region specific this stack will create IAM user and group,
+and name them based on your stack name. Because IAM entities are global, you can not create
+multiple stacks, into different regions, using the same stack name from this template.
+
 ![Provide a new for the new stack](images/03-stack-name.png)
+
+
+You don't need to setup any options for the stack. Scroll down and click "Next" to move forward ...
+
 ![Stack Options](images/04-options.png)
+
+
+On review step, remember to acknowledge stack might (it will) create IAM resources with custom names.
+Then you are ready to click "Submit" and start stack build ...
+
 ![Review and submit](images/05-review.png)
+
+
+Wait until the stack has "CREATE_COMPLETE" -status. 
+
 ![Wait until stack is built](images/06-wait-for-complete.png)
+
+
+After the stack has been created, check "Output" -tab and note the ARN for Credentials.
+
 ![See the outputs](images/07-outputs.png)
+
+
+Open AWS Secrets Manager -console and find the secret created from the Cloudformation stack.
+Click the link to view details ...
+
 ![Open AWS Secret Manager console](images/08-secrets-manager.png)
-![Find the secret entry](images/09-secret.png)
-![Reveal username and password](images/10-revealed.png)
+
+
+Scroll down to "Secret value" and click "Retrieve secret value" to reveal the IAM username and password.
+
+![Secret details](images/09-secret.png)
+
+
+Username will be derived from the stackname, e.g. `walled-garden-lab-user`, and password is a random string.
+The User in below screenshot doesn't exists any longer so don't waste your time trying to find which account it is for ;-)
+
+![Revealed username and password](images/10-revealed.png)
+
 
 ### Lab cleanup
 
+After you have done the lab, clean-up the setup by selecting the stack from Cloudformation console and clicking "Delete" ...
+
 ![Select stack to be deleted](images/11-delete.png)
 
+And wait until stack deletion has been completed.
+
 ![Wait until stack deletion is completed](images/12-delete-progress.png)
+
 
 ## <a name="cmdline"></a>Using command line
 
