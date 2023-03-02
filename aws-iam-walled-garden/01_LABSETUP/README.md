@@ -19,7 +19,7 @@ Check "Template is ready" & "Upload a template file". Then "Choose file", select
 
 
 Give a new for the stack you are about to createi and click "Next" to move forward ... 
-*Note:* While stack names are region specific this stack will create IAM user and group,
+**Note:** While stack names are region specific this stack will create IAM user and group,
 and name them based on your stack name. Because IAM entities are global, you can not create
 multiple stacks, into different regions, using the same stack name from this template.
 
