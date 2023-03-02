@@ -13,8 +13,7 @@ Click "Create Stack" to move forward ...
 ![Create a new Cloudformation stack](images/01-create-stack.png)
 
 
-Check "Template is ready" & "Upload a template file". Then "Choose file", select `iamboundary.yaml` from this repository
-and click "Next" to move forward ...
+Check "Template is ready" & "Upload a template file". Then "Choose file", select [iamboundary.yaml](./iamboundary.yaml) and click "Next" to move forward ...
 
 ![Select Cloudformation template](images/02-select-template.png)
 
