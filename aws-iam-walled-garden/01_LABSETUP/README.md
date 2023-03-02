@@ -1,5 +1,5 @@
 
-# Please follow below instructions to setup & cleanup the lab setup from [command line](#cmdline) or (AWS console](#console).
+# Please follow below instructions to setup & cleanup the lab from [command line](#cmdline) or [AWS console](#console).
 
 ## <a name="cmdline"></a>Using command line
 
