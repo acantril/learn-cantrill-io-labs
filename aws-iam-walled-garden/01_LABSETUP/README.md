@@ -4,7 +4,22 @@
 
 ### Lab setup
 
+![](images/01-create-stack.png)
+![](images/02-select-template.png)
+![](images/03-stack-name.png)
+![](images/04-options.png)
+![](images/05-review.png)
+![](images/06-wait-for-complete.png)
+![](images/07-outputs.png)
+![](images/08-secrets-manager.png)
+![](images/09-secret.png)
+![](images/10-revealed.png)
+
 ### Lab cleanup
+
+![](images/11-delete.png)
+
+![](images/12-delete-progress.png)
 
 ## Using command line
 
