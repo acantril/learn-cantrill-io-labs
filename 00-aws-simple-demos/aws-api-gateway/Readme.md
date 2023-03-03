@@ -272,6 +272,8 @@ Leave the Action Type as “Use action name”
 
 Set the “Action” to “Publish”
 
+Under Execution Role you need to put the ARN of the IAM role you just created for SNS.  
+
 Leave the rest of the form as is, and click <kbd>Save</kbd>
 
 ![Untitled](images/Untitled%2023.png)
