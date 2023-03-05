@@ -36,6 +36,9 @@ Resources:
       PermissionsBoundary: !Ref IAMBoundary
       UserName: !Sub "${AWS::StackName}-user"
       # Path: !Sub "/${AWS::StackName}/${AWS::Region}/"
+      Tags:
+      - Key: owner
+        Value: !Sub "${AWS::StackName}-user"
 
   IAMGroup:
     Type: AWS::IAM::Group
