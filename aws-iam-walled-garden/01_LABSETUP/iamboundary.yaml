@@ -88,34 +88,6 @@ Resources:
               StringEqualsIfExists:
                 'aws:RequestTag/owner': ${aws:PrincipalTag/owner}
                 'aws:ResourceTag/owner': ${aws:PrincipalTag/owner}  
-          - Sid: 'DenyBoundaryModification'
-            Effect: Deny
-            Action:
-              - iam:CreatePolicyVersion
-              - iam:DeletePolicy
-              - iam:DeletePolicyVersion
-              - iam:SetDefaultPolicyVersion
-            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
-          - Sid: 'ForceBoundaryInheritance'
-            Effect: Deny 
-            Action:
-              - iam:CreateUser
-              - iam:CreateRole
-              - iam:PutUserPermissionsBoundary
-              - iam:PutRolePermissionsBoundary
-            Resource: '*'
-            Condition:
-              StringNotEquals:
-                'iam:PermissionsBoundary': !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
-          - Sid: 'DenyBoundaryRemoval'
-            Effect: Deny
-            Action:
-              - iam:DeleteUserPermissionsBoundary
-              - iam:DeleteRolePermissionsBoundary
-            Resource: '*'
-            Condition:
-              StringEquals:
-                'iam:PermissionsBoundary': !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
           - Sid: 'DenyIAMChangesWithoutPrefix'
             Effect: Deny
             Action:
@@ -131,7 +103,34 @@ Resources:
               - !Sub "arn:*:iam::${AWS::AccountId}:role/${!aws:PrincipalTag/owner}-*"
               - !Sub "arn:*:iam::${AWS::AccountId}:user/${!aws:PrincipalTag/owner}-*"
               - !Sub "arn:*:iam::${AWS::AccountId}:instance-profile/${!aws:PrincipalTag/owner}-*"
-
+          - Sid: 'DenyBoundaryModification'
+            Effect: Deny
+            Action:
+              - iam:CreatePolicyVersion
+              - iam:DeletePolicy
+              - iam:DeletePolicyVersion
+              - iam:SetDefaultPolicyVersion
+            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
+          - Sid: 'DenyBoundaryRemoval'
+            Effect: Deny
+            Action:
+              - iam:DeleteUserPermissionsBoundary
+              - iam:DeleteRolePermissionsBoundary
+            Resource: '*'
+            Condition:
+              StringEquals:
+                'iam:PermissionsBoundary': !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
+          - Sid: 'ForceBoundaryInheritance'
+            Effect: Deny 
+            Action:
+              - iam:CreateUser
+              - iam:CreateRole
+              - iam:PutUserPermissionsBoundary
+              - iam:PutRolePermissionsBoundary
+            Resource: '*'
+            Condition:
+              StringNotEquals:
+                'iam:PermissionsBoundary': !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
 Outputs:
 
   Credentials:
