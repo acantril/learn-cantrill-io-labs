@@ -131,6 +131,30 @@ Resources:
             Condition:
               StringNotEquals:
                 'iam:PermissionsBoundary': !Sub "arn:aws:iam::${AWS::AccountId}:policy/${AWS::StackName}-boundary"
+
+  # For lab demo lets create 2 VPCs to show how the ownership is claimed with tag
+
+  # This we can access with IAM user ${AWS::StackName}-user
+  VPC1:
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: 10.0.1.0/24
+      Tags:
+      - Key: Name
+        Value: VPC1
+      - Key: owner
+        Value: !Sub "${AWS::StackName}-user"
+
+  # This is owned by someone else and can not be access with IAM user ${AWS::StackName}-user
+  VPC2:
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: 10.0.2.0/24
+      Tags:
+      - Key: Name
+        Value: VPC2
+      - Key: owner
+        Value: !Sub "${AWS::StackName}-notme"
 Outputs:
 
   Credentials:
