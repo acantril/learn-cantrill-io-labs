@@ -156,5 +156,53 @@ escape your walled garden by assuming unrestricted role you created.
 
 With this theoretical background we are ready to get started with lab exercise ...
 
-## Lab exercises
+## Lab exercise
 
+Login to your account AWS console with username and password you got from [lab setup](../01_LABSETUP/README.md).
+The Cloudformation template created you 2 VPCs. VPC1 has ```owner=YOUR_IAM_USERNAME``` (or more preciesly value
+of your IAM users owner-tag) tag on it. VPC2 is tagged to another owner.
+
+![VPC1 and VPC2 were created and tagged as part of lab setup](images/10-YourVPCs.png)
+
+Now we are ready to start testing if 5 requirements above were implemented. Lets start with 
+
+> Limit access to resources owned by given user, group or role (1)
+
+Select VPC1 and verify you can view it's attributes and add a secondary CIDR
+
+![Select VPC1 that is tagged as your property](images/11-SelectVPC1.png)
+
+Try adding 100.64.0.0/24 CIDR, verify it got added to the list and then click "Remove".
+
+![Try adding and deleting 100.64.0.0/24 CIDR](images/12-AddDeleteCIDR.png)
+
+All did work because you were the owner of VPC1. If you try to view attributes of VPC2
+you will get an error message because you are not the owner of it and therefore your
+access is denied.
+
+![You can not see details of resource owned by others](images/13-SelectVPC2.png)
+
+You will get similar error message if you try to modify VPC2 CIDR ranges.
+
+![Trying to modify CIDRs will result an error](images/14-AddCIDR.png)
+
+You are also denied of hijack VPC2 by changing the value of ```owner``` -tag
+that was the 2nd requirement of walled garden definition.
+
+> Deny hijacking resources owned by others (2)
+
+If you try changing existing ```owner``` -tag value, you will get an error. In addition to
+hijacking resources from others, this will also prevent you from giving away your resources to
+others.
+
+![You are not allowd to retag VPC2 to yourself](images/15-ReTag.png)
+
+Above 2 requirements create borders of walled garden. Remaining of this lab will demonstrate
+it isn't possible to remove or alter those borders even though you are able to create your
+own IAM policies and pricipals.
+
+> Allow creating and modifying IAM resources only within your "namespace" (3)
+
+> Deny modification or removal of permission boundary policy (4)
+
+> Force above rules to be inherited to every policy created or modified (5)
