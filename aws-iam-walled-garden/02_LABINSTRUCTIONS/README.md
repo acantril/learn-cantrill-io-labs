@@ -201,8 +201,34 @@ Above 2 requirements create borders of walled garden. Remaining of this lab will
 it isn't possible to remove or alter those borders even though you are able to create your
 own IAM policies and pricipals.
 
-> Allow creating and modifying IAM resources only within your "namespace" (3)
+![owner-tag of IAM user](images/20-IAMUser.png)
 
 > Deny modification or removal of permission boundary policy (4)
 
+![Permission boundary removal is denied](images/21-RemoveBoundary.png)
+![Expand permission boundary and try to edit it](images/22-EditPolicy.png)
+![Saving policy changes is denied](images/23-EditDenied.png)
+
 > Force above rules to be inherited to every policy created or modified (5)
+
+![Creating IAM user WITHOUT the same permission boundary as you have](30-CreateUserNoBoundary.png)
+
+![... Is denied](31-CreateUserError.png)
+
+![Creating IAM user WITH the same permission boundary as you have](32-CreateUserWithBoundary.png)
+
+![You must any new users with the same owner tag as you have](33-TagUser.png)
+
+![What-the-heck ... This is denied too](31-CreateUserError.png)
+
+> Allow creating and modifying IAM resources only within your "namespace" (3)
+
+![](34-Namespace.png)
+
+![](35-GroupAndBoundary.png)
+
+![](36-AlmostGood.png)
+
+![](37-ItMustBeYourGroup.png)
+
+![](38-Success.png)
