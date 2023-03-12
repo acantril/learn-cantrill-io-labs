@@ -2,7 +2,7 @@
 
 ## Step 2 - Create Lambda Functions
 
-### **Part-3:** Create IAM permissions policy for both lambda functions [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part3.md)
+### **Part-3:** Create IAM permissions policy for both lambda functions
 
 By default the lambda functions will get a basic execution role to only send logs to cloudwatch. In order to update or fetch data from the DynamoDB table `Voting_Table`, the lambda functions need the required privileges. You need to create IAM permissions policy and attach it to the execution role of both lambda functions. **Note:** If you have used a different name for the DynamoDB table, change the table name in the below policy accordingly. Also add the region and your account ID in the JSON policy.
 
@@ -16,7 +16,7 @@ By default the lambda functions will get a basic execution role to only send log
 
 ![Screenshots2](./Screenshots/Stage_1/Step_2/Part_3/2.png)
 
-- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor.
+- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. Update REGION and YOUR_AWS_ACCOUNTID
 
 ```
 {
@@ -50,7 +50,7 @@ By default the lambda functions will get a basic execution role to only send log
 #### Permissions policy for lambda function `voting-app-fetch-results`
 
 - Move to the IAM console. Click on **Policies** and then **Create Policy** to create another IAM policy.
-- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. 
+- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. Update REGION and YOUR_AWS_ACCOUNTID
 
 ```
 {

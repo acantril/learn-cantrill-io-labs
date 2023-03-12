@@ -46,7 +46,7 @@ By default the lambda functions will get a basic execution role to only send log
 
 - Move to the IAM console.
 - Click on **Policies** and then **Create Policy**
-- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor.
+- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. Update REGION and YOUR_AWS_ACCOUNTID
 
 ```
 {
@@ -72,7 +72,7 @@ By default the lambda functions will get a basic execution role to only send log
 #### Permissions policy for lambda function `voting-app-fetch-results`
 
 - Move to the IAM console. Click on **Policies** and then **Create Policy** to create another IAM policy.
-- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. 
+- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. Update REGION and YOUR_AWS_ACCOUNTID
 
 ```
 {
