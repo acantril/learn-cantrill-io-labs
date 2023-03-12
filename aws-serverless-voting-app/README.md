@@ -19,6 +19,8 @@ In this mini project you will create a completely serverless voting application 
 
 <a href="http://google.com/" target="_blank">Hello, google!</a>
 
+[my-link]{:target="_blank"} 
+[my-link]: http://google.com
 
 # Stage 2 - Create the Lambda Role
 
