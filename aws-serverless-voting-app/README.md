@@ -31,27 +31,33 @@ By default the lambda function gets a basic execution role to only send logs to 
 
 - Move to the IAM console.
 - Click on **Policies** and then **Create Policy**
-- In the Create POlicy page click on JSON and paste the following policy definition to the JSON editor. If you have used a different name for the DynamoDB table, change the table name in the policy accordingly.
+- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. **Note:** If you have used a different name for the DynamoDB table, change the table name in the policy accordingly. Also add the region and your account ID in the JSON policy.
 
 ```
 {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "VisualEditor0",
+            "Sid": "DynamoDBUpdatePermissions",
             "Effect": "Allow",
             "Action": [
                 "dynamodb:PutItem",
                 "dynamodb:UpdateItem"
             ],
-            "Resource": "arn:aws:dynamodb:us-west-1:483787893531:table/Voting_Table"
+            "Resource": "arn:aws:dynamodb:`<REGION>`:`<YOUR_AWS_ACCOUNTID>`:table/Voting_Table"
         }
     ]
 }
 ```
 
+- Click on **Next: Tags**
+- Click on **Next: Review**
+- For **Policy Name** enter `voting-app-dynamodb-update-policy`
+- Click on **Create Policy**
+- After the Policy is created you will get a success message
 
-voting-app-dynamodb-update-policy
+
+
 
 voting-app-scan-dynamodb-policy
 
