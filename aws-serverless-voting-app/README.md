@@ -18,9 +18,8 @@ In this mini project you will create a completely serverless voting application 
 
 ## Step 2 - Create Lambda Functions
 
-- **Create a Lambda function to fetch the vote from frontend and store it in DynamoDB table.**
-
+- **Create a Lambda function to fetch the vote from frontend and store it in DynamoDB table.** [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part1.md)
 - Move to the Lambda console and click on **Create Function** 
 - For **Function Name** enter `voting-app-store-vote`
-- For **Runtime** select `Python 3.9`
-- Leave all the other options as default and click on **Create Function**
+=> For **Runtime** select `Python 3.9`
+-> Leave all the other options as default and click on **Create Function**
