@@ -1,4 +1,6 @@
-# Serverless Voting Application with API Gateway,Lambda,DynamoDB
+# Serverless Voting Application
+
+In this mini project we will create a completely serverless voting application in 2 stages. First we will create the backend using API Gateway, Lambda functions and DynamoDB table.
 
 ![Architecture](Architecture-ServerlessVotingApp.png)
 
