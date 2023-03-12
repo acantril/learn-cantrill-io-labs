@@ -2,7 +2,7 @@
 
 ## Step 2 - Create Lambda Functions
 
-### **Part-1: Create a Lambda function to fetch the vote from frontend and store it in DynamoDB table.**
+### **Part-1: Create a Lambda function to get the users vote from frontend and store it in DynamoDB table.**
 
 - Move to the Lambda console and click on **Create Function** 
 

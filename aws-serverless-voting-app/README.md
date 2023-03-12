@@ -18,7 +18,7 @@ Choose a region where you want to deploy the application and use the same region
 
 ## Step 2 - Create Lambda Functions
 
-### **Part-1: Create a Lambda function to fetch the vote from frontend and store it in DynamoDB table.** [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part1.md)
+### **Part-1: Create a Lambda function to get the users vote from frontend and store it in DynamoDB table.** [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part1.md)
 
 - Move to the Lambda console and click on **Create Function** 
 - For **Function Name** enter `voting-app-store-vote`
@@ -28,13 +28,25 @@ Choose a region where you want to deploy the application and use the same region
 - Click on Deploy. You will get a success message.
 - **Note:** If you have used a different name for the DynamoDB table, change the **Table Name** in the code as well.
 
-### **Part-2:** Create an IAM permissions policy and attach it to the execution role of the lambda function `voting-app-store-vote` [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part2.md)
+### **Part-2: Create a Lambda function to fetch the results from DynamoDB table and send it back to Frontend.** [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part2.md)
 
-By default the lambda function gets a basic execution role to only send logs to cloudwatch. In order to update the DynamoDB table `Voting_Table` that was created in step-1, the function needs the required privileges. You will need to create an IAM permissions policy and attach it to the lambda execution role.
+- Create another lambda function. 
+- For **Function Name** enter `voting-app-fetch-results`
+- For **Runtime** select `Node.js 14.x`
+- Leave all the other options as default and click on **Create Function**
+- After the function is created, replace the function code with the code from [voting-app-fetch-results.js](./01_LABSETUP/voting-app-fetch-results.js)
+- Click on Deploy. You will get a success message.
+- **Note:** If you have used a different name for the DynamoDB table, change the **Table Name** in the code as well.
+
+### **Part-3:** Create IAM permissions policy for both lambda functions [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part3.md)
+
+By default the lambda functions will get a basic execution role to only send logs to cloudwatch. In order to update or fetch data from the DynamoDB table `Voting_Table`, the lambda functions need the required privileges. You need to create IAM permissions policy and attach it to the execution role of both lambda functions. **Note:** If you have used a different name for the DynamoDB table, change the table name in the below policy accordingly. Also add the region and your account ID in the JSON policy.
+
+#### Permissions policy for lambda function `voting-app-store-vote`
 
 - Move to the IAM console.
 - Click on **Policies** and then **Create Policy**
-- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. **Note:** If you have used a different name for the DynamoDB table, change the table name in the policy accordingly. Also add the region and your account ID in the JSON policy.
+- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor.
 
 ```
 {
@@ -57,8 +69,31 @@ By default the lambda function gets a basic execution role to only send logs to 
 - For **Policy Name** enter `voting-app-dynamodb-update-policy`
 - Click on **Create Policy**. After the Policy is created you will get a success message
 
+#### Permissions policy for lambda function `voting-app-fetch-results`
+
+- Move to the IAM console. Click on **Policies** and then **Create Policy** to create another IAM policy.
+- In the Create Policy page click on JSON and paste the following policy definition to the JSON editor. 
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DynamoDBScanPermissions",
+            "Effect": "Allow",
+            "Action": "dynamodb:Scan",
+            "Resource": "arn:aws:dynamodb:<REGION>:<YOUR_AWS_ACCOUNTID>:table/Voting_Table"
+        }
+    ]
+}
+```
+
+- Click on **Next: Tags** and then click on **Next: Review**
+- For **Policy Name** enter `voting-app-scan-dynamodb-policy`
+- Click on **Create Policy**. After the Policy is created you will get a success message
+
+### **Part-4:** Attach the IAM policies to the Lambda execution role. [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part4.md)
 
 
 
-voting-app-scan-dynamodb-policy
 
