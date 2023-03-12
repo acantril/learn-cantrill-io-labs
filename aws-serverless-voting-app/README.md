@@ -10,11 +10,11 @@ In this mini project you will create a completely serverless voting application 
 
 ## Step 1 - Create a DynamoDB table [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step1.md)
 
-- Move to the DynamoDB console to create a new table.
+- Move to the DynamoDB console to create a new table
 - For **Table Name** enter `Voting_Table`
 - For **Partition key** enter `vote_id` of type string
 - Leave all the other options as default and click on **Create Table**
-- After the DynamoDB table is created you will get a success message.
+- After the DynamoDB table is created you will get a success message
 
 ## Stage 2 - Create the Lambda Role
 

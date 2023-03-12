@@ -7,8 +7,8 @@
 - For **Partition key** enter `vote_id` of type string
 - Leave all the other options as default and click on **Create Table**
 
-[Screenshots](./02_LABINSTRUCTIONS/Stage1_Step1.1.png)
+![Screenshots1](./02_LABINSTRUCTIONS/Stage1_Step1.1.png)
 
 - After the DynamoDB table is created you will get a success message.
 
-[Screenshots](./02_LABINSTRUCTIONS/Stage1_Step1.2.png)
+![Screenshots2](./02_LABINSTRUCTIONS/Stage1_Step1.2.png)
