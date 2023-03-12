@@ -44,17 +44,15 @@ By default the lambda function gets a basic execution role to only send logs to 
                 "dynamodb:PutItem",
                 "dynamodb:UpdateItem"
             ],
-            "Resource": "arn:aws:dynamodb:`<REGION>`:`<YOUR_AWS_ACCOUNTID>`:table/Voting_Table"
+            "Resource": "arn:aws:dynamodb:<REGION>:<YOUR_AWS_ACCOUNTID>:table/Voting_Table"
         }
     ]
 }
 ```
 
-- Click on **Next: Tags**
-- Click on **Next: Review**
+- Click on **Next: Tags** and then click on **Next: Review**
 - For **Policy Name** enter `voting-app-dynamodb-update-policy`
-- Click on **Create Policy**
-- After the Policy is created you will get a success message
+- Click on **Create Policy**. After the Policy is created you will get a success message
 
 
 
