@@ -18,7 +18,7 @@
 
 ![Screenshots3](./Screenshots/Stage_1/Step_2/Part_1/3.png)
 
-- After the function is created, replace the function code with the code from [voting-app-store-vote.py](/01_LABSETUP/voting-app-store-vote.py)
+- After the function is created, replace the function code with the code from [voting-app-store-vote.py](/aws-serverless-voting-app/01_LABSETUP/voting-app-store-vote.py)
 
 ![Screenshots4](./Screenshots/Stage_1/Step_2/Part_1/4.png)
 
