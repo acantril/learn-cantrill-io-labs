@@ -18,7 +18,7 @@ In this mini project you will create a completely serverless voting application 
 
 ## Step 2 - Create Lambda Functions [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2.md)
 
-- **Part-1: Create a Lambda function to fetch the vote from frontend and store it in DynamoDB table.** 
+### **Part-1: Create a Lambda function to fetch the vote from frontend and store it in DynamoDB table.** 
 - Move to the Lambda console and click on **Create Function** 
 - For **Function Name** enter `voting-app-store-vote`
 - For **Runtime** select `Python 3.9`
@@ -26,6 +26,6 @@ In this mini project you will create a completely serverless voting application 
 - By default the lambda function gets a basic execution role to only send logs to cloudwatch.
 - In order to update the DynamoDB table you will need to create an IAM permissions policy and attach it to the lambda execution role, which grants only the required privileges to update the DynamoDB table `Voting_Table` that was created in step-1.
 
-- **Part-2: Create an IAM permissions policy and attach it to the execution role of the lambda function `voting-app-store-vote`**
+#### **Part-2: Create an IAM permissions policy and attach it to the execution role of the lambda function `voting-app-store-vote`**
 - 
 
