@@ -1,6 +1,6 @@
-# Stage-1 Serverless Voting Application
+# Stage 1 - Backend
 
-## Step-1 Screenshots
+## Step 1 - Create a DynamoDB table
 
 - Move to the DynamoDB console to create a new table.
 - For **Table Name** enter `Voting_Table`
