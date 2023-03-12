@@ -25,7 +25,8 @@ Choose a region where you want to deploy the application and use the same region
 - For **Runtime** select `Python 3.9`
 - Leave all the other options as default and click on **Create Function**
 - After the function is created, replace the function code with the code from [voting-app-store-vote.py](./01_LABSETUP/voting-app-store-vote.py)
-- **Note:** If you have used a different name for the DynamoDB table, change the table name in the code.
+- Click on Deploy. You will get a success message.
+- **Note:** If you have used a different name for the DynamoDB table, change the **Table Name** in the code as well.
 
 ### **Part-2:** Create an IAM permissions policy and attach it to the execution role of the lambda function `voting-app-store-vote` [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part2.md)
 
