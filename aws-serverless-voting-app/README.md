@@ -6,14 +6,20 @@ In this mini project you will create a completely serverless voting application 
 
 # Stage 1 - Backend
 
+- Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
+
 ## Step 1 - Create a DynamoDB table
 
+- Move to the DynamoDB console to create a new table.
+- For *Table Name* enter `Voting_Table`
+- For Partition key enter `vote_id` of type string
+- Leave all the other options as default and click on **Create Table**
 
 
-- Step 1 - Create a DynamoDB table
-
-Create the S3 Buckets
 
 
 # Stage 2 - Create the Lambda Role
 
+- Step 1 - Create a DynamoDB table
+
+Create the S3 Buckets
