@@ -8,19 +8,17 @@ In this mini project you will create a completely serverless voting application 
 
 - Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
 
-## Step 1 - Create a DynamoDB table
+## Step 1 - Create a DynamoDB table [Screenshots](./02_LABINSTRUCTIONS/Stage1_Step1.png)
 
 - Move to the DynamoDB console to create a new table.
-- For *Table Name* enter `Voting_Table`
-- For Partition key enter `vote_id` of type string
+- For **Table Name** enter `Voting_Table`
+- For **Partition key** enter `vote_id` of type string
 - Leave all the other options as default and click on **Create Table**
 
-[Stackoverflow The Key](https://stackoverflow.blog/2021/03/31/the-key-copy-paste/){:target="_blank" rel="noopener"}
+[Stackoverflow The Key](https://stackoverflow.blog/2021/03/31/the-key-copy-paste/)
 
-<a href="http://google.com/" target="_blank">Hello, google!</a>
+- [Stage1](./02_LABINSTRUCTIONS/STAGE%201%20-%20Create%20the%20ECR%20repository%20and%20create%20the%20Lambda%20function.md)
 
-[my-link]{:target="_blank"} 
-[my-link]: http://google.com
 
 # Stage 2 - Create the Lambda Role
 
