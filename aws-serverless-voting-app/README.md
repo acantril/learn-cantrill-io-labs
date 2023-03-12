@@ -15,7 +15,9 @@ In this mini project you will create a completely serverless voting application 
 - For Partition key enter `vote_id` of type string
 - Leave all the other options as default and click on **Create Table**
 
+[Stackoverflow The Key](https://stackoverflow.blog/2021/03/31/the-key-copy-paste/){:target="_blank" rel="noopener"}
 
+<a href="http://google.com/" target="_blank">Hello, google!</a>
 
 
 # Stage 2 - Create the Lambda Role
