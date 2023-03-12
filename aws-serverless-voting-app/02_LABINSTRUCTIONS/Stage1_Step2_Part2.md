@@ -1,4 +1,4 @@
-# Stage-1 Serverless Voting Application
+# Stage-1 Backend
 
 ## Step 2 - Create Lambda Functions
 

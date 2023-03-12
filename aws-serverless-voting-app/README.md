@@ -24,11 +24,34 @@ Choose a region where you want to deploy the application and use the same region
 - For **Function Name** enter `voting-app-store-vote`
 - For **Runtime** select `Python 3.9`
 - Leave all the other options as default and click on **Create Function**
-- By default the lambda function gets a basic execution role to only send logs to cloudwatch.
 
 ### **Part-2:** Create an IAM permissions policy and attach it to the execution role of the lambda function `voting-app-store-vote` [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part2.md)
 
-In order to update the DynamoDB table you will need to create an IAM permissions policy and attach it to the lambda execution role, which grants only the required privileges to update the DynamoDB table `Voting_Table` that was created in step-1.
+By default the lambda function gets a basic execution role to only send logs to cloudwatch. In order to update the DynamoDB table `Voting_Table` that was created in step-1, the function needs the required privileges. You will need to create an IAM permissions policy and attach it to the lambda execution role.
 
 - Move to the IAM console.
+- Click on **Policies** and then **Create Policy**
+- In the Create POlicy page click on JSON and paste the following policy definition to the JSON editor. If you have used a different name for the DynamoDB table, change the table name in the policy accordingly.
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem"
+            ],
+            "Resource": "arn:aws:dynamodb:us-west-1:483787893531:table/Voting_Table"
+        }
+    ]
+}
+```
+
+
+voting-app-dynamodb-update-policy
+
+voting-app-scan-dynamodb-policy
 

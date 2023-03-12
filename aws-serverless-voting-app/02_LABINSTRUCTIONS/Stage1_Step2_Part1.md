@@ -1,4 +1,4 @@
-# Stage-1 Serverless Voting Application
+# Stage-1 Backend
 
 ## Step 2 - Create Lambda Functions
 
@@ -15,11 +15,4 @@
 ![Screenshots2](Stage1_Step2_Part1.2.png)
 
 ![Screenshots3](Stage1_Step2_Part1.3.png)
-
-- By default the lambda function gets a basic execution role to only send logs to cloudwatch.
-- In order to update the DynamoDB table you will need to create an IAM permissions policy and attach it to the lambda execution role, which grants only the required privileges to update the DynamoDB table `Voting_Table` that was created in step-1.
-
-
-
-
 
