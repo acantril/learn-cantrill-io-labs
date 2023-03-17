@@ -8,7 +8,7 @@ Those are the details we will populate
 
 # SHARED VALUES
 
-ROUTER1_PRIVATE_IP                  =    	
+ROUTER1_PRIVATE_IP                  =   
 ROUTER2_PRIVATE_IP                  =   
 ONPREM BGP ASN                      = 65016  
 AWS BGP ASN                         = 64512  
