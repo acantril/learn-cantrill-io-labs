@@ -7,7 +7,7 @@ In this mini project you will create a completely serverless voting application 
 # Stage 1 - Backend
 
 - Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
-- [Click here to go back to Readme](/aws-serverless-voting-app/readme.md)
+- [Click here to go back to Readme](/aws-serverless-voting-app/README.md)
 
 ## Step 1 - Create a DynamoDB table
 
