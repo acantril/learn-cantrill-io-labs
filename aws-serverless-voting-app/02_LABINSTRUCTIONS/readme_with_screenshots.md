@@ -2,11 +2,12 @@
 
 In this mini project you will create a completely serverless voting application in two stages. First you will create the backend using API Gateway, Lambda functions and DynamoDB table. Then you will create the frontend application using ReactJS and deploy it to an S3 bucket for static website hosting which will be delivered using CloudFront CDN. Below is the architecture for this project.
 
-![Architecture](Architecture-ServerlessVotingApp.png)
+![Architecture](/aws-serverless-voting-app/Architecture-ServerlessVotingApp.png)
 
 # Stage 1 - Backend
 
-Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
+- Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
+- [Click here to go back to Readme](./02_LABINSTRUCTIONS/readme.md)
 
 ## Step 1 - Create a DynamoDB table
 
@@ -70,7 +71,7 @@ Choose a region where you want to deploy the application and use the same region
 
 ![Screenshots5](./Screenshots/Stage_1/Step_2/Part_2/5.png)
 
-### **Part-3:** Create IAM permissions policy for both lambda functions [View Screenshots](./02_LABINSTRUCTIONS/Stage1_Step2_Part3.md)
+### **Part-3:** Create IAM permissions policy for both lambda functions
 
 By default the lambda functions will get a basic execution role to only send logs to cloudwatch. In order to update or fetch data from the DynamoDB table `Voting_Table`, the lambda functions need the required privileges. You need to create IAM permissions policy and attach it to the execution role of both lambda functions. **Note:** If you have used a different name for the DynamoDB table, change the table name in the below policy accordingly. Also add the region and your account ID in the JSON policy.
 
