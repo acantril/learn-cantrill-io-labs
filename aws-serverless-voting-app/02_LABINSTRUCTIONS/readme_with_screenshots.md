@@ -36,7 +36,7 @@ In this mini project you will create a completely serverless voting application 
 
 ![Screenshots2](./Screenshots/Stage_1/Step_2/Part_1/2.png)
 
-- You will see a success message.
+- You will get a success message.
 
 ![Screenshots3](./Screenshots/Stage_1/Step_2/Part_1/3.png)
 
