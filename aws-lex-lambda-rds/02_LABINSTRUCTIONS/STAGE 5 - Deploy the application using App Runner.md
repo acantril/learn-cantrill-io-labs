@@ -44,4 +44,4 @@ In the **"Networking"** section select the following:
 
 Click on the **"Next"** button and then click on the **"Create & deploy"** button at the bottom of the page.
 
-It will take around 5 minutes for the service to be created and deployed. Once it is done, you will see the **"Status"** column with the value **"Running"**. Click on the service name to open the service details page.
+It will take around 5 minutes for the service to be created and deployed. Once it is done, you will see a green pop-up message at the top of the page saying that the service was deployed successfully. Move to the **"Service overview"** section and click on the **"Default domain"** link. This will open a new tab with the web application.

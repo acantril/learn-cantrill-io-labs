@@ -40,6 +40,8 @@ Select **"Upload a file from Amazon S3"** as the source of the layer.
 
 Enter the following URL in the **"Amazon S3 link URL"** field: https://learn-cantrill-labs.s3.amazonaws.com/aws-lex-lambda-rds/pymysql_layer.zip
 
+Select **"x86_64"** as the compatible architectures.
+
 Select **"Python 3.8"** as the compatible runtimes.
 
 Click the "Create" button.
@@ -57,6 +59,8 @@ Select **"Author from scratch"** as the blueprint.
 Enter **"animal-grooming-function"** as the name of the function.
 
 Select **"Python 3.8"** as the runtime.
+
+Señect **"x86_64"** as the architecture.
 
 In the permissions section, click change default execution role and then select **"Use an existing role"**. In the dropdown, select the one you got from the output named **"LambdaRoleName"** of the CloudFormation stack. It will have a name with the following format: `<Stack Name>-LambdaRoleName-<Random String>`.
 

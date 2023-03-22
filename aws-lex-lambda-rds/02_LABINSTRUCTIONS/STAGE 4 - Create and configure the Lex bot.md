@@ -157,6 +157,8 @@ Click on the **"animal-grooming-function"** function.
 
 Click on the **"Configuration"** tab.
 
+Select the **"Permissions"** option in the left-hand side menu.
+
 In the **"Resource-based policy statements"** section, click on the **"Add permissions"** button.
 
 Select the **"AWS service"** option and use the following values:

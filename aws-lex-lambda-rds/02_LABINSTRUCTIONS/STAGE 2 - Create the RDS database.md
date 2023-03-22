@@ -18,17 +18,25 @@ Select **"Standard create"** as the database creation method.
 
 Select **"MySQL"** as the engine type.
 
+Select **"MySQL 8.0.32"** as the engine version.
+
 Select **"Free tier"** as the template.
 
 Enter **"animal-grooming-db"** as the database name in the **"DB instance identifier"** field under the **"Settings"** section.
 
 Enter **"admin"** as the master username in the **"Master username"** field under the **"Settings"** section.
 
-Choose a password for the master user and enter it in the **"Master password"** field under the **"Settings"** section. Repeat the password in the **"Confirm master password"** field. Copy the password somewhere safe as you will need it later.
+Enter **"qU21OXk8**" as the database password for the master user in the **"Master password"** field under the **"Settings"** section. Repeat the password in the **"Confirm database password"** field.
 
-In the **"Storage"** section uncheck the **"Enable storage autoscaling"** checkbox.
+In the **"Instance configuration"** section select the **"Burstable classes (includes t classes)"** as the **"DB instance class"** and select the **"db.t3.micro"** instance type.
+
+In the **"Storage"** section uncheck the **"Enable storage autoscaling"** checkbox, set the **"Allocated storage"** to **"20"** and the **"Storage type"** to **"General Purpose (SSD) (gp2)"**.
 
 In the **"Connectivity"** section make the following changes:
+
+- Change the **"Compute resource"** to **"Don't connect to an EC2 compute resource"**.
+
+- Change the **"Network type"** to **"IPv4"**.
 
 - Change the **"Virtual private cloud (VPC)"** to the VPC that was created by the CloudFormation stack (it will have the name **"A4L-AWS"**).
 
