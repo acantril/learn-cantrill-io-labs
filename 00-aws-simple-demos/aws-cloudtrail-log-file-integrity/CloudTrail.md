@@ -4,7 +4,7 @@
 
 We’re going to be creating a CloudTrail Trail, logging to an S3 bucket, with Log file validation enabled.
 
-We’re then going to see how our AWS API calls appear in the log files, we’re going to check the checksum / hash of the log files, look at the log file hashes in the digest files, and then we will try modifying a log file ***and*** a digest file, to see how it breaks validity.
+We’re then going to see how our AWS API calls appear in the log files, we’re going to check the checksum / hash of the log files, look at the log file hashes in the digest files, and then we will try modifying a log file *and* a digest file, to see how it breaks validity.
 
 We will be creating this environment in the ap-southeast-4 (Melbourne) region, so all links to the console will be there. Make sure you change region if you’re deploying elsewhere.
 
@@ -14,7 +14,7 @@ We will be creating this environment in the ap-southeast-4 (Melbourne) region, s
 
 Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2)
 
-Go to **************Buckets************** and click on <kbd>Create bucket</kbd>
+Go to *Buckets* and click on <kbd>Create bucket</kbd>
 
 Under “Bucket Name” enter anything you like, for this demo I will use `demo-cloudtrail-logs`
 
@@ -26,7 +26,7 @@ Leave everything else as default and click <kbd>Create bucket</kbd>
 
 Head to the CloudTrail console: [https://ap-southeast-4.console.aws.amazon.com/cloudtrail](https://ap-southeast-4.console.aws.amazon.com/cloudtrail)
 
-Go to ************Trails************ and click <kbd>Create trail</kbd>
+Go to *Trails* and click <kbd>Create trail</kbd>
 
 ![Untitled](images/Untitled.png)
 
@@ -44,7 +44,7 @@ Leave all other settings as default and click <kbd>Next</kbd>
 
 ![Untitled](images/Untitled%201.png)
 
-On the next page, leave all the settings as default. For this demo we only care about management events (AWS API calls), ***not*** data events (S3 reads and writes for example)
+On the next page, leave all the settings as default. For this demo we only care about management events (AWS API calls), *not* data events (S3 reads and writes for example)
 
 Click <kbd>Next</kbd>
 
@@ -54,19 +54,19 @@ Click <kbd>Create trail</kbd>
 
 Head to the EC2 console: [https://ap-southeast-4.console.aws.amazon.com/ec2/home](https://ap-southeast-4.console.aws.amazon.com/ec2/home)
 
-Go to ********AMIs********
+Go to *AMIs*
 
 ![Untitled](images/Untitled%202.png)
 
 Head to the Lambda console: [https://ap-southeast-4.console.aws.amazon.com/lambda/home](https://ap-southeast-4.console.aws.amazon.com/lambda/home)
 
-Go to ******************Functions******************
+Go to *Functions*
 
 ![Untitled](images/Untitled%203.png)
 
 Head to the RDS console: [https://ap-southeast-4.console.aws.amazon.com/rds/home](https://ap-southeast-4.console.aws.amazon.com/rds/home)’
 
-Go to ******************Databases******************
+Go to *Databases*
 
 ![Untitled](images/Untitled%204.png)
 
@@ -74,7 +74,7 @@ All these actions don’t look like they’re doing anything, but each one is ge
 
 Obviously feel free to perform any other actions you like, such as creating a Lambda function, launching an EC2 instance, etc, however for this demo we won’t be doing any other actions, so you will need to clean these resources up yourself when you’re done.
 
-Once you’re done, wait *******one hour******* and then proceed to the next step. CloudTrail log digests are created each hour, so we’ll wait for that to complete before proceeding.
+Once you’re done, wait *one hour* and then proceed to the next step. CloudTrail log digests are created each hour, so we’ll wait for that to complete before proceeding.
 
 Note down roughly what time you performed these actions, so we know which log file to view in the next step.
 
@@ -82,7 +82,7 @@ Note down roughly what time you performed these actions, so we know which log fi
 
 Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2)
 
-Click on ****************Buckets**************** and go into your CloudTrail bucket you created earlier
+Click on *Buckets* and go into your CloudTrail bucket you created earlier
 
 ![Untitled](images/Untitled%205.png)
 
@@ -94,11 +94,11 @@ You will see CloudTrail creates a log file every ~5 minutes. I’m going to view
 
 Select the log file, and click <kbd>Download</kbd>
 
-### ************************************Viewing JSON files************************************
+### *Viewing JSON files*
 
 JSON files are relatively difficult to read as a human, so while it is possible, I’d recommend using a tool to format the JSON nicely.
 
-************************Command Line************************
+*Command Line*
 
 Using the `jq` tool, you can `cat` the downloaded log file and pipe it into `jq` like this:
 
@@ -135,7 +135,7 @@ Which will output:
 <truncated>
 ```
 
-**********************Web Browser**********************
+*Web Browser*
 
 The following website can be used to format JSON. 
 
@@ -143,13 +143,13 @@ Remember, always be careful with what sensitive data / output you’re entering 
 
 [https://jsonformatter.curiousconcept.com/#](https://jsonformatter.curiousconcept.com/#)
 
-************VSCode************
+*VSCode*
 
 If you use VSCode, you can install the [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension, which will format and colour the JSON file.
 
 ![Untitled](images/Untitled%207.png)
 
-**********************************Browser Extensions**********************************
+*Browser Extensions*
 
 I haven’t tested these personally, but there’s numerous browser extensions for JSON formatting
 
@@ -212,7 +212,7 @@ You can also see this is a “ReadOnly” event, meaning no changes were made to
 
 Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2)
 
-Click on ****************Buckets**************** and go into your CloudTrail bucket you created earlier
+Click on *Buckets* and go into your CloudTrail bucket you created earlier
 
 ![Untitled](images/Untitled%205.png)
 
@@ -224,7 +224,7 @@ Select the digest file that was created at the end of the hour, so for example t
 
 Just like you did for the CloudTrail log file, download the file and open it in whatever tool you’re using to view JSON files
 
-The CloudTrail **log** file I’m viewing is
+The CloudTrail *log* file I’m viewing is
 
 `1234567789012_CloudTrail_ap-southeast-4_20230315T0320Z_1iwuEXInvYIpo1Zq.json.gz`
 
@@ -264,11 +264,11 @@ At the beginning of the digest file we can also see a lot of meta data about the
 <truncated>
 ```
 
-First we’ll look at the hash value of the **************CloudTrail log************** we were viewing earlier, in the digest file it says that log file `AWSLogs/1234567789012/CloudTrail/ap-southeast-4/2023/03/15/1234567789012_CloudTrail_ap-southeast-4_20230315T0320Z_1iwuEXInvYIpo1Zq.json.gz` has the hash `3007368a401b56dab0576c7cc9c3acb4ff41d423c7d403242d15d3f4f49f21d2`
+First we’ll look at the hash value of the *CloudTrail log* we were viewing earlier, in the digest file it says that log file `AWSLogs/1234567789012/CloudTrail/ap-southeast-4/2023/03/15/1234567789012_CloudTrail_ap-southeast-4_20230315T0320Z_1iwuEXInvYIpo1Zq.json.gz` has the hash `3007368a401b56dab0576c7cc9c3acb4ff41d423c7d403242d15d3f4f49f21d2`
 
 Now to calculate the hash of that file, there’s a few ways to do it depending on your OS.
 
-**********Linux**********
+*Linux*
 
 Most Linux distributions will have `sha256sum` installed, which is a command line tool to calculate the SHA256 checksum of a file
 
@@ -277,7 +277,7 @@ sha256sum 1234567789012_CloudTrail_ap-southeast-4_20230315T0320Z_1iwuEXInvYIpo1Z
 3007368a401b56dab0576c7cc9c3acb4ff41d423c7d403242d15d3f4f49f21d2  1234567789012_CloudTrail_ap-southeast-4_20230315T0320Z_1iwuEXInvYIpo1Zq.json
 ```
 
-****MacOS****
+*MacOS*
 
 MacOS should have the `shasum` tool, which accepts the argument `-a 256` telling it to calculate the SHA256 checksum
 
@@ -286,7 +286,7 @@ MacOS should have the `shasum` tool, which accepts the argument `-a 256` telling
 3007368a401b56dab0576c7cc9c3acb4ff41d423c7d403242d15d3f4f49f21d2  1234567789012_CloudTrail_ap-southeast-4_20230315T0320Z_1iwuEXInvYIpo1Zq.json
 ```
 
-**************Windows**************
+*Windows*
 
 Windows has a built in tool that can be called from Command Prompt or PowerShell called `certutil`
 
@@ -298,7 +298,7 @@ SHA256 hash of .\1234567789012_CloudTrail_ap-southeast-4_20230315T0320Z_1iwuEXIn
 
 So in all three cases the checksum was the same, `3007368a401b56dab0576c7cc9c3acb4ff41d423c7d403242d15d3f4f49f21d2` which matches what is in the digest file, so we can be certain this log file hasn’t been modified.
 
-Let’s see what happens if we modified ********anything******** in the CloudTrail log, let’s throw Bill Gates under the bus and say **he** called the `ListFunctions20150331` API
+Let’s see what happens if we modified *anything* in the CloudTrail log, let’s throw Bill Gates under the bus and say *he* called the `ListFunctions20150331` API
 
 ```json
 {
@@ -334,11 +334,11 @@ Now if we check the SHA256 sum:
 
 The checksum is completely different.
 
-## Stage 5 - ********************************************************************Verifying the log and digest files********************************************************************
+## Stage 5 - *Verifying the log and digest files*
 
 For this stage you will need the AWS CLI, you can either [download](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) it locally here, or use the [AWS CloudShell](https://ap-southeast-2.console.aws.amazon.com/cloudshell/home). Don’t forget to specify the region that your CloudTrail trail exists in.
 
-The AWS CLI has the functionality to iterate through your log files between specified times, validate their checksum, **********as well as********** validate the checksums of the digest files. If we were to do this manually, it would be quite a bit harder: [https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-custom-validation.html#cloudtrail-log-file-custom-validation-sample-code](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-custom-validation.html#cloudtrail-log-file-custom-validation-sample-code)
+The AWS CLI has the functionality to iterate through your log files between specified times, validate their checksum, *as well as* validate the checksums of the digest files. If we were to do this manually, it would be quite a bit harder: [https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-custom-validation.html#cloudtrail-log-file-custom-validation-sample-code](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-custom-validation.html#cloudtrail-log-file-custom-validation-sample-code)
 
 The AWS CLI command you need to run is the following. Don’t forget to update the region, trail ARN and start / end times in UTC time):
 
@@ -385,13 +385,13 @@ Results found for 2023-03-15T05:00:48Z to 2023-03-15T06:00:00Z:
 23/23 log files valid
 ```
 
-So this is telling us that each log file ***and*** digest file created between 5AM and 6AM UTC was valid and unmodified. 
+So this is telling us that each log file *and* digest file created between 5AM and 6AM UTC was valid and unmodified. 
 
 Let’s modify a log file and see what happens when we check the validity. 
 
 Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2)
 
-Click on ****************Buckets**************** and go into your CloudTrail bucket you created earlier
+Click on *Buckets* and go into your CloudTrail bucket you created earlier
 
 ![Untitled](images/Untitled%205.png)
 
@@ -425,7 +425,7 @@ Now go back to the S3 console and click <kbd>Upload</kbd>
 
 Upload the CloudTrail log you just modified, and click <kbd>Upload</kbd>
 
-*******************************************Make sure you select the file ending in .gz*******************************************
+*Make sure you select the file ending in .gz*
 
 ![Untitled](images/Untitled%2013.png)
 
@@ -517,7 +517,7 @@ Now I’ve broken the digest validity, and the chain of trust that each digest f
 
 Head to the CloudTrail console: [https://ap-southeast-4.console.aws.amazon.com/cloudtrail](https://ap-southeast-4.console.aws.amazon.com/cloudtrail)
 
-Go to ************Trails************ and select the `demo` trail you created, and click <kbd>Delete</kbd>
+Go to *Trails* and select the `demo` trail you created, and click <kbd>Delete</kbd>
 
 ![Untitled](images/Untitled%2015.png)
 
@@ -525,7 +525,7 @@ In the confirmation box, click <kbd>Delete</kbd>
 
 Head to the S3 console: [https://s3.console.aws.amazon.com/s3/buckets](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-2&region=ap-southeast-2)
 
-**********Note:********** CloudTrail may add a few files to your bucket for a few minutes after your Trail has been deleted, so if you empty your bucket, and then go to delete it and it says there’s still objects in there, this will be why. Just wait a few minutes and try again.
+*Note:* CloudTrail may add a few files to your bucket for a few minutes after your Trail has been deleted, so if you empty your bucket, and then go to delete it and it says there’s still objects in there, this will be why. Just wait a few minutes and try again.
 
 Select your CloudTrail trail bucket, and click <kbd>Empty</kbd>
 
