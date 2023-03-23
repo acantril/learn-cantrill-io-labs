@@ -4,7 +4,7 @@
 
 We’re going to create two EC2 instances and diagnose a connectivity issue between the two, using VPC flow logs.
 
-I will be using ap-southeast-4 (Melbourne) for this demo, but you can use any region you like. VPC Flow Logs are available in ***all*** regions.
+I will be using ap-southeast-4 (Melbourne) for this demo, but you can use any region you like. VPC Flow Logs are available in *all* regions.
 
 # Instructions
 
@@ -12,7 +12,7 @@ I will be using ap-southeast-4 (Melbourne) for this demo, but you can use any re
 
 Head to the IAM console: [https://us-east-1.console.aws.amazon.com/iamv2/home](https://us-east-1.console.aws.amazon.com/iamv2/home)
 
-****************************************************************EC2 SSM Session Manager role****************************************************************
+*EC2 SSM Session Manager role*
 
 Go to Roles and click on <kbd>Create role</kbd>
 
@@ -32,7 +32,7 @@ Set the “Role Name” to `Demo-SSM-Role`
 
 Click <kbd>Create role</kbd>
 
-********************************************VPC Flow Logs role********************************************
+*VPC Flow Logs role*
 
 Go to Roles and click on <kbd>Create role</kbd>
 
@@ -127,7 +127,7 @@ This is going to open a new tab, and provide you with a shell to the instance, j
 
 In a new tab, head back to the EC2 console: : [https://ap-southeast-2.console.aws.amazon.com/ec2/home](https://ap-southeast-2.console.aws.amazon.com/ec2/home)
 
-Go to Instances, and select the *****other***** instance. You can compare the instance ID from the other tab / window to confirm you’re not connecting to the same instance twice.
+Go to Instances, and select the *other* instance. You can compare the instance ID from the other tab / window to confirm you’re not connecting to the same instance twice.
 
 Click on <kbd>Connect</kbd>
 
@@ -139,17 +139,17 @@ Now you should have two tabs, or two windows, with a shell to both of your newly
 
 ## Stage 4 - Test connectivity between the instances
 
-On both of the instance shells, run `ip a`. This is short for `ip address` and shows all of the IP addresses assigned to ***all*** interfaces. 
+On both of the instance shells, run `ip a`. This is short for `ip address` and shows all of the IP addresses assigned to *all* interfaces. 
 
 The IP on interface `eth0` is the same IP that is shown in the EC2 console
 
 ![Untitled](images/Untitled%2014.png)
 
-**Tip**: <kbd>ctrl</kbd> + <kbd>L</kbd> or entering the command `clear` will clear the screen to make things easier to read. So if you notice my terminal output disappearing, that is why.
+*Tip*: <kbd>ctrl</kbd> + <kbd>L</kbd> or entering the command `clear` will clear the screen to make things easier to read. So if you notice my terminal output disappearing, that is why.
 
 Now let’s try pinging the other instance. Grab the IP of the opposite instance and enter into the shell `ping <ip address> -c 3 -W 1` followed by the IP. In my case this is `ping 172.31.18.205 -c 3 -W 1`
 
-The `-c 3` tells ping to send 3 ping packets, then exit. By default ping will ping continuously forever (unless you exit, using <kbd>ctrl</kbd> + <kbd>c</kbd>. The `-W 1` tells ping to wait 1 second, and if it doesn’t hear a response, consider that packet timed out. Ping packets should rarely take over 1 second to return, even pinging a server on the other side of the world.
+The `-c 3` tells ping to send 3 ping packets, then exit. By default ping will ping continuously forever (unless you exit, using <kbd>ctrl</kbd> + <kbd>c</kbd>). The `-W 1` tells ping to wait 1 second, and if it doesn’t hear a response, consider that packet timed out. Ping packets should rarely take over 1 second to return, even pinging a server on the other side of the world.
 
 ![Untitled](images/Untitled%2015.png)
 
@@ -183,7 +183,7 @@ There’s a few places we can create the VPC flow log; the VPC itself, the subne
 
 Head to the VPC console: [https://ap-southeast-4.console.aws.amazon.com/vpc](https://ap-southeast-4.console.aws.amazon.com/vpc)
 
-Go to “Your VPCs”, select the VPC your instances are deployed in (for me, that’s the default VPC, yours ******should****** be the same unless you selected a different VPC in step 2)
+Go to “Your VPCs”, select the VPC your instances are deployed in (for me, that’s the default VPC, yours *should* be the same unless you selected a different VPC in step 2)
 
 Go to the “Flow Logs” tab and click <kbd>Create flow log</kbd>
 
@@ -207,7 +207,7 @@ Go back to your SSM Session Manager console (where you were running the ping com
 
 ![Untitled](images/Untitled%2020.png)
 
-For this next step we will need the ENI ID of the instance we are pinging ****from****. 
+For this next step we will need the ENI ID of the instance we are pinging *from*. 
 
 Head to the EC2 console: [https://ap-southeast-4.console.aws.amazon.com/ec2/home](https://ap-southeast-4.console.aws.amazon.com/ec2/home)
 
@@ -217,7 +217,7 @@ Go to Instances, and select the instance you were running the ping commands from
 
 Keep this ID handy for the next step
 
-**********Tip:********** You can also get the ENI ID from the instance itself, using the Instance Metadata Service (IMDS), by running this command:
+*Tip:* You can also get the ENI ID from the instance itself, using the Instance Metadata Service (IMDS), by running this command:
 
 ```json
 echo $(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/"$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs)"interface-id)
@@ -297,13 +297,13 @@ Let’s look for our broken pings now, search for the IP address you were pingin
 
 ![Untitled](images/Untitled%2025.png)
 
-We can see it was accepted, but there was no response packets, indicating the packet was blocked (or lost) elsewhere, but this tells us the security group on ****this**** ENI isn’t the problem.
+We can see it was accepted, but there was no response packets, indicating the packet was blocked (or lost) elsewhere, but this tells us the security group on *this* ENI isn’t the problem.
 
-Let’s check the ENI of the destination instance. Again, grab the ENI ID of the ***********destination*********** instance from the EC2 console
+Let’s check the ENI of the destination instance. Again, grab the ENI ID of the *destination* instance from the EC2 console
 
 ![Untitled](images/Untitled%2026.png)
 
-or by running the following command on the ***********destination*********** instance
+or by running the following command on the *destination* instance
 
 ```json
 echo $(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/"$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs)"interface-id)
@@ -317,7 +317,7 @@ Then search for the ENI ID of the destination instance
 
 ![Untitled](images/Untitled%2027.png)
 
-Search for the IP address of the ******source****** instance, and we can see the problem
+Search for the IP address of the *source* instance, and we can see the problem
 
 ![Untitled](images/Untitled%2028.png)
 
@@ -327,11 +327,11 @@ It’s being rejected at the destination ENI. Because we know both of these inst
 
 Head to the EC2 console: [https://ap-southeast-4.console.aws.amazon.com/ec2/home](https://ap-southeast-4.console.aws.amazon.com/ec2/home)
 
-Go to Instances and select the ***********destination*********** instance, then go to the “Security” tab
+Go to Instances and select the *destination* instance, then go to the “Security” tab
 
 ![Untitled](images/Untitled%2029.png)
 
-You can see the security group attached to this instance (and therefore the primary ENI) doesn’t have ***any*** inbound rules, meaning ***all*** new connections will be blocked. I say “new connections” because, as mentioned in Adrian’s courses, security groups are stateful, meaning if you make an outbound connection, any related return connections will be *******allowed*******.
+You can see the security group attached to this instance (and therefore the primary ENI) doesn’t have *any* inbound rules, meaning *all* new connections will be blocked. I say “new connections” because, as mentioned in Adrian’s courses, security groups are stateful, meaning if you make an outbound connection, any related return connections will be *allowed*.
 
 Let’s fix this up, click on the security group
 
@@ -357,7 +357,7 @@ Then click <kbd>Save rules</kbd>
 
 We’ve just allowed all ICMP traffic, which is what ping uses (it doesn’t by default use TCP or UDP), to any ENI that has this security group attached.
 
-If we go back to our session manager console on our ******source****** instance, we can see ping is now working
+If we go back to our session manager console on our *source* instance, we can see ping is now working
 
 ![Untitled](images/Untitled%2035.png)
 
@@ -369,7 +369,7 @@ Let’s see what happens if block ICMP at the Network ACL level
 
 Head to the EC2 console: [https://ap-southeast-4.console.aws.amazon.com/ec2/home](https://ap-southeast-4.console.aws.amazon.com/ec2/home)
 
-Go to Instances and select the ***********source*********** instance, then go to the “Networking” tab and click on the subnet
+Go to Instances and select the *source* instance, then go to the “Networking” tab and click on the subnet
 
 ![Untitled](images/Untitled%2036.png)
 
@@ -385,7 +385,7 @@ You will see that by default, network ACLs allow everything in and out.
 
 Click on <kbd>Add new rule</kbd>
 
-Enter the rule number as `1`, Network ACL rules are executed in order of rule number, lowest to highest, so if you were to set the rule number to `101` it would be ******behind****** the allow all rule, and would be ignored.
+Enter the rule number as `1`, Network ACL rules are executed in order of rule number, lowest to highest, so if you were to set the rule number to `101` it would be *behind* the allow all rule, and would be ignored.
 
 Set the “Type” to “All ICMP - IPv4”
 
@@ -419,27 +419,27 @@ Unfortunately there’s no way to tell based on these logs whether it’s the se
 
 Head to the EC2 console: https://ap-northeast-1.console.aws.amazon.com/ec2/v2/home
 
-Go to ********************Instances********************, and select both “demo” instances, then click <kbd>Instance state</kbd> and then <kbd>Terminate Instance</kbd>
+Go to *Instances*, and select both “demo” instances, then click <kbd>Instance state</kbd> and then <kbd>Terminate Instance</kbd>
 
 Be careful to only delete instances created in this demo
 
 ![Untitled](images/Untitled%2043.png)
 
-Go to ********************Security Groups******************** and select “launch-wizard-1” which was created back in stage 2, then click <kbd>Actions</kbd> then <kbd>Delete security groups</kbd>
+Go to *Security Groups* and select “launch-wizard-1” which was created back in stage 2, then click <kbd>Actions</kbd> then <kbd>Delete security groups</kbd>
 
 ![Untitled](images/Untitled%2044.png)
 
 Head to the VPC console: [https://ap-southeast-4.console.aws.amazon.com/vpc/home](https://ap-southeast-4.console.aws.amazon.com/vpc/home)
 
-Go to ******************Your VPCs******************, select the default VPC we used in stage 2, go to the ******************Flow Logs****************** tab, select the flow log we created, then click <kbd>Actions</kbd> then <kbd>Delete flow logs</kbd>
+Go to *Your VPCs*, select the default VPC we used in stage 2, go to the *Flow Logs* tab, select the flow log we created, then click <kbd>Actions</kbd> then <kbd>Delete flow logs</kbd>
 
 ![Untitled](images/Untitled%2045.png)
 
 Type “delete” in the confirmation box and click <kbd>Delete</kbd>
 
-**If** you did the stage 8 steps:
+*If* you did the stage 8 steps:
 
-Go to ************************Network ACLs************************, select the network ACL you modified (there is likely only one), go to ****************************Outbound rules**************************** and click <kbd>Edit outbound rules</kbd>
+Go to *Network ACLs*, select the network ACL you modified (there is likely only one), go to *Outbound rules* and click <kbd>Edit outbound rules</kbd>
 
 ![Untitled](images/Untitled%2046.png)
 
@@ -447,11 +447,11 @@ Click <kbd>Remove</kbd> next to the rule denying ICMP traffic
 
 ![Untitled](images/Untitled%2047.png)
 
-Be careful ***not*** to delete rule 100 which allows all traffic. Click <kbd>Save changes</kbd>
+Be careful *not* to delete rule 100 which allows all traffic. Click <kbd>Save changes</kbd>
 
 Head to the CloudWatch console: [https://ap-southeast-4.console.aws.amazon.com/cloudwatch/home](https://ap-southeast-4.console.aws.amazon.com/cloudwatch/home)
 
-Go to **Logs**, then **Log Groups**, then select the `VPC-Flow-Logs-Demo` log group, click <kbd>Actions<kbd> then <kbd>Delete log group(s)</kbd>
+Go to *Logs*, then *Log Groups*, then select the `VPC-Flow-Logs-Demo` log group, click <kbd>Actions<kbd> then <kbd>Delete log group(s)</kbd>
 
 ![Untitled](images/Untitled%2048.png)
 
@@ -459,7 +459,7 @@ Click <kbd>Delete</kbd> in the confirmation box
 
 Head to the IAM console: [https://us-east-1.console.aws.amazon.com/iamv2/home](https://us-east-1.console.aws.amazon.com/iamv2/home)
 
-Go to **********Roles**********, and search for “demo”. Select the two roles we created in stage 1, and click <kbd>Delete</kbd>
+Go to *Roles*, and search for “demo”. Select the two roles we created in stage 1, and click <kbd>Delete</kbd>
 
 ![Untitled](images/Untitled%2049.png)
 
