@@ -149,7 +149,7 @@ The IP on interface `eth0` is the same IP that is shown in the EC2 console
 
 Now let’s try pinging the other instance. Grab the IP of the opposite instance and enter into the shell `ping <ip address> -c 3 -W 1` followed by the IP. In my case this is `ping 172.31.18.205 -c 3 -W 1`
 
-The `-c 3` tells ping to send 3 ping packets, then exit. By default ping will ping continuously forever (unless you exit, using <kbd>ctrl</kbd> + <kbd>c</kbd>. The `-W 1` tells ping to wait 1 second, and if it doesn’t hear a response, consider that packet timed out. Ping packets should rarely take over 1 second to return, even pinging a server on the other side of the world.
+The `-c 3` tells ping to send 3 ping packets, then exit. By default ping will ping continuously forever (unless you exit, using <kbd>ctrl</kbd> + <kbd>c</kbd>). The `-W 1` tells ping to wait 1 second, and if it doesn’t hear a response, consider that packet timed out. Ping packets should rarely take over 1 second to return, even pinging a server on the other side of the world.
 
 ![Untitled](images/Untitled%2015.png)
 
