@@ -18,6 +18,11 @@ do {
     params.ExclusiveStartKey  = items.LastEvaluatedKey;
 } while(typeof items.LastEvaluatedKey != "undefined");
 
+if (scanResults.length == 0) {
+console.log('No Items were found - ',scanResults.length);
+scanResults = [{ votecount: 0, vote_id: 'Cat-1'},{ votecount: 0, vote_id: 'Cat-2'},{ votecount: 0, vote_id: 'Cat-3'}];
+}
+			
 /*
 Access-Control-Allow-Origin
 

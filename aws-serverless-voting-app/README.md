@@ -9,8 +9,6 @@ In this mini project you will create a completely serverless voting application 
 - Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
 - [View Step By Step Screenshots](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_with_screenshots.md)
 
-- [Opens in new tab](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_with_screenshots.md){:target="_blank"}
-
 ## Step 1 - Create a DynamoDB table
 
 - Move to the DynamoDB console to create a new table
@@ -96,6 +94,31 @@ By default the lambda functions will get a basic execution role to only send log
 - Click on **Create Policy**. After the Policy is created you will get a success message
 
 ### **Part-4:** Attach the IAM policies to the Lambda execution role.
+
+#### For lambda function `voting-app-store-vote`
+
+- Move to the Lambda console and click on the function `voting-app-store-vote`
+- Under Configuration, click on the Execution role name to open the IAM role in a new table
+- Under `Add permissions` click on `Attach Policies`
+- Search for the policy `voting-app-dynamodb-update-policy` and press enter
+- Select the policy and click on `Add permissions`
+- You will get a success message that the policy was attached to the role
+
+#### For lambda function `voting-app-fetch-results`
+
+- Repeat the same steps for the lambda function `voting-app-fetch-results`
+- Move to the Lambda console and click on the function `voting-app-fetch-results`
+- Under Configuration, click on the Execution role name to open the IAM role in a new table
+- Under `Add permissions` click on `Attach Policies`
+- Search for the policy `voting-app-scan-dynamodb-policy` and press enter
+- Select the policy and click on `Add permissions`
+- You will get a success message that the policy was attached to the role
+
+
+
+
+
+
 
 
 

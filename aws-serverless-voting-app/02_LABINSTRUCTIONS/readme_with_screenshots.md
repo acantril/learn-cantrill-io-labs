@@ -148,6 +148,42 @@ By default the lambda functions will get a basic execution role to only send log
 
 ### **Part-4:** Attach the IAM policies to the Lambda execution role.
 
+#### For lambda function `voting-app-store-vote`
+
+- Move to the Lambda console and click on the function `voting-app-store-vote`
+
+![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/1.png)
+
+- Under Configuration, click on the Execution role name to open the IAM role in a new table
+
+![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/2.png)
+![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/3.png)
+
+- Under `Add permissions` click on `Attach Policies`
+
+![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/4.png)
+
+- Search for the policy `voting-app-dynamodb-update-policy` and press enter
+
+![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/5.png)
+
+- Select the policy and click on `Add permissions`
+
+![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/6.png)
+
+- You will get a success message that the policy was attached to the role
+
+![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/7.png)
+
+#### For lambda function `voting-app-fetch-results`
+
+- Repeat the same steps for the lambda function `voting-app-fetch-results`
+- Move to the Lambda console and click on the function `voting-app-fetch-results`
+- Under Configuration, click on the Execution role name to open the IAM role in a new table
+- Under `Add permissions` click on `Attach Policies`
+- Search for the policy `voting-app-scan-dynamodb-policy` and press enter
+- Select the policy and click on `Add permissions`
+- You will get a success message that the policy was attached to the role
 
 
 
