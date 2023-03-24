@@ -17,7 +17,7 @@ In this mini project you will create a completely serverless voting application 
 - Leave all the other options as default and click on **Create Table**
 - After the DynamoDB table is created you will get a success message
 
-## Step 2 - Create Lambda Functions
+## Step 2 - Create Lambda Functions and attach required permissions.
 
 ### **Part-1: Create a Lambda function to get the users vote from frontend and store it in DynamoDB table.**
 
@@ -98,7 +98,7 @@ By default the lambda functions will get a basic execution role to only send log
 #### For lambda function `voting-app-store-vote`
 
 - Move to the Lambda console and click on the function `voting-app-store-vote`
-- Under Configuration, click on the Execution role name to open the IAM role in a new table
+- Under Configuration, click on the Execution role name to open the IAM role in a new tab
 - Under `Add permissions` click on `Attach Policies`
 - Search for the policy `voting-app-dynamodb-update-policy` and press enter
 - Select the policy and click on `Add permissions`
@@ -108,13 +108,24 @@ By default the lambda functions will get a basic execution role to only send log
 
 - Repeat the same steps for the lambda function `voting-app-fetch-results`
 - Move to the Lambda console and click on the function `voting-app-fetch-results`
-- Under Configuration, click on the Execution role name to open the IAM role in a new table
+- Under Configuration, click on the Execution role name to open the IAM role in a new tab
 - Under `Add permissions` click on `Attach Policies`
 - Search for the policy `voting-app-scan-dynamodb-policy` and press enter
 - Select the policy and click on `Add permissions`
 - You will get a success message that the policy was attached to the role
 
+## Step 3 - Create API Gateway
 
+- Move to the API Gateway console
+- Select REST API and click on build
+- Select the radio button for `REST` and `New API`
+- For **API Name** enter `Voting-App-Api-Gateway` and click on **Create API**
+- Under **Actions** click on **Create Resource**.
+- For **Resource Name** enter `vote` and click on **Create Resource**.
+- Create another resource with **Resource Name** as `results`
+- Create a resource `results` and create a GET method.
+
+ and a POST method inside `vote` as shown in the screenshots.
 
 
 

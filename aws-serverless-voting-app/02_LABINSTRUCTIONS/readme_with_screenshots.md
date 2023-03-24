@@ -22,7 +22,7 @@ In this mini project you will create a completely serverless voting application 
 
 ![Screenshots2](./Screenshots/Stage_1/Step_1/2.png)
 
-## Step 2 - Create Lambda Functions
+## Step 2 - Create Lambda Functions and attach required permissions.
 
 ### **Part-1: Create a Lambda function to get the users vote from frontend and store it in DynamoDB table.**
 
@@ -154,7 +154,7 @@ By default the lambda functions will get a basic execution role to only send log
 
 ![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/1.png)
 
-- Under Configuration, click on the Execution role name to open the IAM role in a new table
+- Under Configuration, click on the Execution role name to open the IAM role in a new tab
 
 ![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/2.png)
 ![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/3.png)
@@ -179,7 +179,7 @@ By default the lambda functions will get a basic execution role to only send log
 
 - Repeat the same steps for the lambda function `voting-app-fetch-results`
 - Move to the Lambda console and click on the function `voting-app-fetch-results`
-- Under Configuration, click on the Execution role name to open the IAM role in a new table
+- Under Configuration, click on the Execution role name to open the IAM role in a new tab
 - Under `Add permissions` click on `Attach Policies`
 - Search for the policy `voting-app-scan-dynamodb-policy` and press enter
 - Select the policy and click on `Add permissions`
