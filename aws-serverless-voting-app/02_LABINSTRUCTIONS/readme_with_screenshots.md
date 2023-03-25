@@ -185,5 +185,93 @@ By default the lambda functions will get a basic execution role to only send log
 - Select the policy and click on `Add permissions`
 - You will get a success message that the policy was attached to the role
 
+## Step 3 - Create API Gateway
+
+- Move to the API Gateway console.
+- Select REST API and click on build.
+
+![Screenshots](./Screenshots/Stage_1/Step_3/1.png)
+
+- Select the radio button for `REST` and `New API`
+- For **API Name** enter `Voting-App-Api-Gateway` and click on **Create API**
+
+![Screenshots](./Screenshots/Stage_1/Step_3/2.png)
+
+- Under **Actions** click on **Create Resource**
+
+![Screenshots](./Screenshots/Stage_1/Step_3/3.png)
+
+- For **Resource Name** enter `vote` and click on **Create Resource**.
+
+![Screenshots](./Screenshots/Stage_1/Step_3/4.png)
+
+- Similarily create another resource with **Resource Name** as `results`
+
+![Screenshots](./Screenshots/Stage_1/Step_3/5.png)
+
+- Now there are two resources in the api gateway
+
+![Screenshots](./Screenshots/Stage_1/Step_3/6.png)
+
+#### Create resource and methods
+
+- Under the `results` resource create a GET method. Select the `results` resource and click on **Actions** and create a GET method.
+
+![Screenshots](./Screenshots/Stage_1/Step_3/7.png)
+![Screenshots](./Screenshots/Stage_1/Step_3/8.png)
+![Screenshots](./Screenshots/Stage_1/Step_3/9.png)
+
+- For **Integration Type** select `Lambda Function`
+- Select `Use lambda proxy integration` and select the region where the lambda is created.
+- For **Lambda Function** name, use `voting-app-fetch-results` which was created in earlier steps.
+
+![Screenshots](./Screenshots/Stage_1/Step_3/10.png)
+
+- Click on Save and select OK when a prompt asks for giving api gateway the permissions to invoke lambda function.
+
+![Screenshots](./Screenshots/Stage_1/Step_3/11.png)
+
+- Repeat the above 5 steps for creating a POST method under the `vote` resource.
+- Under the `vote` resource create a POST method. Select the `vote` resource and click on **Actions** and create a POST method.
+- For **Integration Type** select `Lambda Function`
+- Select `Use lambda proxy integration` and select the region where the lambda is created.
+- For **Lambda Function** name, use `voting-app-store-vote` which was created in earlier steps.
+- Click on Save and select OK when a prompt asks for giving api gateway the permissions to invoke lambda function.
+
+#### Create deployment
+
+- Click on **Action** and then on **Deploy API**
+
+![Screenshots](./Screenshots/Stage_1/Step_3/18.png)
+
+- Create a new deployment stage and enter a stage name `dev` and click on **Deploy**
+
+![Screenshots](./Screenshots/Stage_1/Step_3/19.png)
+![Screenshots](./Screenshots/Stage_1/Step_3/20.png)
+
+- The stages section will be opened.
+
+![Screenshots](./Screenshots/Stage_1/Step_3/21.png)
+
+- Click on the stage name `dev` under which you can see both `vote` and `results` resources.
+- Click on each resource to view the api gateway endpoint or the invoke URL for that resource.
+- These two URL's will be used in the React frontend to call the api gateway and the backend lambda functions.
+
+![Screenshots](./Screenshots/Stage_1/Step_3/22.png)
+![Screenshots](./Screenshots/Stage_1/Step_3/23.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
