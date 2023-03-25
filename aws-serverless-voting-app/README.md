@@ -161,16 +161,40 @@ By default the lambda functions will get a basic execution role to only send log
 
 
 
+sudo yum install -y nodejs
+node -v
+wget https://github.com/ashish3121990/learn-cantrill-io-labs/raw/67c637eb01f752a260a9e246b1a62df5d76b3a14/aws-serverless-voting-app/01_LABSETUP/voting-app-frontend.zip
+unzip voting-app-frontend.zip
+cd voting-app-frontend
+
+
+make changes to Vote.js file.
 
 
 
+npm update
+npm run build
+
+cd build
+
+aws s3 cp . 's3://serverless-voting-app-demo' --recursive
 
 
+bucket policy
 
 
-
-
-
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::serverless-voting-app-demo/*"
+        }
+    ]
+}
 
 
 
