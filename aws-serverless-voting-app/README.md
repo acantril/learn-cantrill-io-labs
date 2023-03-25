@@ -154,7 +154,7 @@ By default the lambda functions will get a basic execution role to only send log
 
 
 
-
+[Download Zip file](https://github.com/ashish3121990/learn-cantrill-io-labs/raw/67c637eb01f752a260a9e246b1a62df5d76b3a14/aws-serverless-voting-app/01_LABSETUP/voting-app-frontend.zip)
 
 
 
