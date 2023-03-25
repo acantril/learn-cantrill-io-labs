@@ -244,7 +244,7 @@ By default the lambda functions will get a basic execution role to only send log
 
 #### Create deployment
 
-- Click on **Action** and then on **Deploy API**
+- Click on **Actions** and then on **Deploy API**
 
 ![Screenshots](./Screenshots/Stage_1/Step_3/18.png)
 

@@ -141,12 +141,34 @@ By default the lambda functions will get a basic execution role to only send log
 
 #### Create deployment
 
-- Click on **Action** and then on **Deploy API**
+- Click on **Actions** and then on **Deploy API**
 - Create a new deployment stage and enter a stage name `dev` and click on **Deploy**
 - The stages section will be opened.
 - Click on the stage name `dev` under which you can see both `vote` and `results` resources.
 - Click on each resource to view the api gateway endpoint or the invoke URL for that resource.
 - These two URL's will be used in the React frontend to call the api gateway and the backend lambda functions.
+
+# Stage 2 - Frontend
+
+- Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
