@@ -123,7 +123,7 @@ By default the lambda functions will get a basic execution role to only send log
 - Under **Actions** click on **Create Resource**.
 - For **Resource Name** enter `vote` and click on **Create Resource**.
 - Similarily create another resource with **Resource Name** as `results`
-- Now there are two resources in the api gateway
+- Now there are two resources in the api gateway `vote` and `results`
 
 #### Create resource and methods
 
@@ -132,7 +132,6 @@ By default the lambda functions will get a basic execution role to only send log
 - Select `Use lambda proxy integration` and select the region where the lambda is created.
 - For **Lambda Function** name, use `voting-app-fetch-results` which was created in earlier steps.
 - Click on Save and select OK when a prompt asks for giving api gateway the permissions to invoke lambda function.
-
 - Repeat the above 5 steps for creating a POST method under the `vote` resource.
 - Under the `vote` resource create a POST method. Select the `vote` resource and click on **Actions** and create a POST method.
 - For **Integration Type** select `Lambda Function`
