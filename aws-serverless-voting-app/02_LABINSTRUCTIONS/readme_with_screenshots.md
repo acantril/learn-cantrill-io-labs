@@ -238,6 +238,10 @@ By default the lambda functions will get a basic execution role to only send log
 - For **Lambda Function** name, use `voting-app-store-vote` which was created in earlier steps.
 - Click on Save and select OK when a prompt asks for giving api gateway the permissions to invoke lambda function.
 
+![Screenshots](./Screenshots/Stage_1/Step_3/15.png)
+![Screenshots](./Screenshots/Stage_1/Step_3/16.png)
+![Screenshots](./Screenshots/Stage_1/Step_3/17.png)
+
 #### Create deployment
 
 - Click on **Action** and then on **Deploy API**
