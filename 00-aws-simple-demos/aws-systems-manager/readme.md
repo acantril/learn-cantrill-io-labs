@@ -184,13 +184,17 @@ Enter `n` and press <kbd>Enter</kbd>. We don’t want to upgrade any packages us
 
 Keep this shell window open, and in a new tab or window, head to the Systems Manager console: https://ap-southeast-4.console.aws.amazon.com/systems-manager
 
-Go to *Patch Manager* and click <kbd>Patch Now</kbd>
+Go to *Patch Manager* and click <kbd>Start with an overview</kbd>, we don’t want to create a patch policy for this demo.
 
 ![Untitled](images/Untitled%2027.png)
 
-On the next page, change *Patching operation* to “Scan and install”, and change *Patching log storage* to “Do not store logs” (for this demo, we don’t need any additional logging)
+On the next page, click <kbd>Patch now</kbd>
 
 ![Untitled](images/Untitled%2028.png)
+
+On the next page, change *Patching operation* to “Scan and install”, and change *Patching log storage* to “Do not store logs” (for this demo, we don’t need any additional logging)
+
+![Untitled](images/Untitled%2029.png)
 
 Click <kbd>Patch now</kbd>
 
@@ -206,25 +210,25 @@ You should see the list of packages to be upgraded either much smaller, or there
 
 Head back to the Patch Manager tab, and click on the “Association ID”
 
-![Untitled](images/Untitled%2029.png)
+![Untitled](images/Untitled%2030.png)
 
 Go to the *Versions* tab, and take note of the Document Name
 
-![Untitled](images/Untitled%2030.png)
+![Untitled](images/Untitled%2031.png)
 
 This is the Systems Manager document that is used (by default) to patch instances, let’s go and see what’s in the document. 
 
 Click on *Documents* and search for “AWS-RunPatchBaseline”
 
-![Untitled](images/Untitled%2031.png)
+![Untitled](images/Untitled%2032.png)
 
 Click on the document name
 
-![Untitled](images/Untitled%2032.png)
+![Untitled](images/Untitled%2033.png)
 
 Go to the *Content* tab
 
-![Untitled](images/Untitled%2033.png)
+![Untitled](images/Untitled%2034.png)
 
 Documents are JSON or YAML files that contain instructions on what to run on an instance. Amazon provides dozens of managed documents to do things such as patching an instance (running updates), running custom shell scripts, setting tags on an instance, start port forwarding, etc.
 
@@ -232,39 +236,39 @@ In the “AWS-RunPatchBaseline”, you can see that the script checks for the op
 
 Windows:
 
-![Untitled](images/Untitled%2034.png)
+![Untitled](images/Untitled%2035.png)
 
 Linux
 
-![Untitled](images/Untitled%2035.png)
+![Untitled](images/Untitled%2036.png)
 
 MacOS
 
-![Untitled](images/Untitled%2036.png)
+![Untitled](images/Untitled%2037.png)
 
 Head back to the Patch Manager summary window, click on the Execution ID
 
-![Untitled](images/Untitled%2037.png)
+![Untitled](images/Untitled%2038.png)
 
 Then on the next page, click on “Output” next to either of the instances we updated
 
-![Untitled](images/Untitled%2038.png)
+![Untitled](images/Untitled%2039.png)
 
 On the Output page, you can see the output *and errors* of the document(s) that ran. For example, when the “AWS-RunPatchBaseline” document runs, there are three steps, `PatchWindows`, `PatchLinux`, and `PatchMacOS`
 
-![Untitled](images/Untitled%2039.png)
+![Untitled](images/Untitled%2040.png)
 
 All of these steps have a status of “Success”, despite the instances running Linux instances. This is because if any step in the document fails, Systems Manager will stop the entire execution. The `PatchWindows` and `PatchMacOS` steps show that they were skipped (which counts as a success) in the Output window
 
-![Untitled](images/Untitled%2040.png)
+![Untitled](images/Untitled%2041.png)
 
 If we go to the `PatchLinux` step, and expand the Output pane, you can see the shell output that was returned as the document was executed
 
-![Untitled](images/Untitled%2041.png)
+![Untitled](images/Untitled%2042.png)
 
 If you expand the Error pane, you can see any errors that occurred during the execution. In this case there were a few warnings, but no errors that were enough to cancel the execution.
 
-![Untitled](images/Untitled%2042.png)
+![Untitled](images/Untitled%2043.png)
 
 ## Stage 6 - Running commands using Run Command
 
@@ -272,13 +276,13 @@ Head to the Systems Manager console: https://ap-southeast-4.console.aws.amazon.c
 
 Go to *Run Command* and click <kbd>Run command</kbd>
 
-![Untitled](images/Untitled%2043.png)
+![Untitled](images/Untitled%2044.png)
 
 On the next page, you will see a list of command documents, as mentioned in the last stage, these documents contain instructions on what actions to perform on an instance.
 
 In the search bar, search for “AWS-RunShellScript”
 
-![Untitled](images/Untitled%2044.png)
+![Untitled](images/Untitled%2045.png)
 
 This document is provided by and managed by Amazon, and allows you to run custom shell commands on multiple instances at once. You can imagine at a large organisation with hundreds of instances, this could save quite a bit of time.
 
@@ -293,17 +297,17 @@ This will create a file in the `/` directory called `hello_from_systems_manager`
 
 Under *Target selection*, select “Choose instances manually”, and select all (both) instances. In a production environment we could run this document on only specific instances based on their tag(s), or instances in a resource group (dev instances vs production instances for example)
 
-![Untitled](images/Untitled%2045.png)
+![Untitled](images/Untitled%2046.png)
 
 Under *Output options*, deselect “Enable an S3 bucket”. We don’t need to store our output for this command.
 
-![Untitled](images/Untitled%2046.png)
+![Untitled](images/Untitled%2047.png)
 
 Leave all other options as is, and click <kbd>Run</kbd>
 
 The command shouldn’t take very long to run, on the next page you will see the status
 
-![Untitled](images/Untitled%2047.png)
+![Untitled](images/Untitled%2048.png)
 
 Head to the EC2 console: [https://ap-southeast-4.console.aws.amazon.com/ec2/home](https://ap-southeast-4.console.aws.amazon.com/ec2/home)
 
@@ -325,7 +329,7 @@ ls -l /
 
 There’s the file we created
 
-![Untitled](images/Untitled%2048.png)
+![Untitled](images/Untitled%2049.png)
 
 And now we’ll make sure our user was created, run:
 
@@ -333,7 +337,7 @@ And now we’ll make sure our user was created, run:
 sudo tail /etc/passwd
 ```
 
-![Untitled](images/Untitled%2049.png)
+![Untitled](images/Untitled%2050.png)
 
 ## Stage 7 - Viewing aggregate instance data using Inventory
 
@@ -341,27 +345,27 @@ Head to the Systems Manager console: https://ap-southeast-4.console.aws.amazon.c
 
 Go to Inventory and click “Click here to enable inventory on all instances”
 
-![Untitled](images/Untitled%2050.png)
+![Untitled](images/Untitled%2051.png)
 
 This will give you a summary view of the OS versions and applications, among other things, on all of the managed instances in Systems Manager.
 
 If you scroll down and click on one of the instances we created
 
-![Untitled](images/Untitled%2051.png)
+![Untitled](images/Untitled%2052.png)
 
 And go to the *Inventory* tab
 
 You can view the applications installed on that instance
 
-![Untitled](images/Untitled%2052.png)
+![Untitled](images/Untitled%2053.png)
 
 Networking information
 
-![Untitled](images/Untitled%2053.png)
+![Untitled](images/Untitled%2054.png)
 
 Hardware information
 
-![Untitled](images/Untitled%2054.png)
+![Untitled](images/Untitled%2055.png)
 
 And multiple other bits of information
 
@@ -373,11 +377,11 @@ Go to *Instances*, and select both the “al2” and “ubuntu” instances, the
 
 Be careful to only delete instances created in this demo
 
-![Untitled](images/Untitled%2055.png)
+![Untitled](images/Untitled%2056.png)
 
 Go to *Security Groups* and select “launch-wizard-1” (or whatever the name of the security group that was created in stage 2 was), then click <kbd>Actions</kbd> then <kbd>Delete security groups</kbd>
 
-![Untitled](images/Untitled%2056.png)
+![Untitled](images/Untitled%2057.png)
 
 Click <kbd>Delete</kbd> in the confirmation window
 
@@ -385,7 +389,7 @@ Head to the IAM console: [https://us-east-1.console.aws.amazon.com/iamv2/home](h
 
 Go to *Roles*, and search for “Demo-SSM-Role”. Select the role we created in stage 1, and click <kbd>Delete</kbd>
 
-![Untitled](images/Untitled%2057.png)
+![Untitled](images/Untitled%2058.png)
 
 Enter “Demo-SSM-Role” in the confirmation box, and click <kbd>Delete</kbd>
 
