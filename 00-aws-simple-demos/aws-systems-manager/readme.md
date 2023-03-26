@@ -10,6 +10,10 @@ We will be creating this environment in the ap-southeast-4 (Melbourne) region, s
 
 [https://repost.aws/questions/QU6nU4pjL9Tq2G8UVh6ytmiw/unable-to-perform-patch-scan-on-ubuntu-instances](https://repost.aws/questions/QU6nU4pjL9Tq2G8UVh6ytmiw/unable-to-perform-patch-scan-on-ubuntu-instances)
 
+# Video Guide
+
+[HERE](https://youtu.be/B2MecqC5nJA)
+
 # Instructions
 
 ## Stage 1 - Creating IAM roles
