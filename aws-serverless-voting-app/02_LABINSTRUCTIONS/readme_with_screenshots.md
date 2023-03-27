@@ -275,5 +275,5 @@ By default the lambda functions will get a basic execution role to only send log
 ![Screenshots](./Screenshots/Stage_1/Step_3/23.png)
 
 
-[#Stage 2 - Frontend](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
+#Stage 2 - Frontend [Go to Stage-2](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
 
