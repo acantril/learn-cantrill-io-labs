@@ -415,7 +415,7 @@ And we can see the ICMP packets were rejected
 
 Unfortunately there’s no way to tell based on these logs whether it’s the security group, or the network ACL that is rejecting the traffic, but this at least gives you an idea on where to look.
 
-## Stage 7 - Clean up
+## Stage 10 - Clean up
 
 Head to the EC2 console: https://ap-northeast-1.console.aws.amazon.com/ec2/v2/home
 
