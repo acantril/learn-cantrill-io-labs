@@ -1,11 +1,12 @@
 # Stage 2 - Frontend
 
-### **Part-1:** Create S3 bucket for website hosting [View Step by Step Screenshots](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
+### **Part-1:** Create S3 bucket for website hosting
 
 - Move to the S3 bucket console and create a new S3 bucket with name `serverless-voting-app-demo`
 - Choose a region where you have created the backend resources in stage-1
 
 ![Screenshots](./Screenshots/Stage_2/1.png)
+
 ![Screenshots](./Screenshots/Stage_2/2.png)
 
 - Under **Block public access settings** uncheck all ticks and select the acknowledge option.
