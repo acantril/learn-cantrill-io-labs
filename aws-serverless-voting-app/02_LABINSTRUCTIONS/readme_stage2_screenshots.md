@@ -26,7 +26,9 @@
 - Click edit and select the options as shown below.
 
 ![Screenshots](./Screenshots/Stage_2/7.png)
+
 ![Screenshots](./Screenshots/Stage_2/8.png)
+
 ![Screenshots](./Screenshots/Stage_2/9.png)
 
 - After the changes are saved, you will be able to see the **Bucket website endpoint**
@@ -51,8 +53,11 @@
 ```
 
 ![Screenshots](./Screenshots/Stage_2/11.png)
+
 ![Screenshots](./Screenshots/Stage_2/12.png)
+
 ![Screenshots](./Screenshots/Stage_2/13.png)
+
 ![Screenshots](./Screenshots/Stage_2/14.png)
 
 
@@ -61,17 +66,21 @@
 - Open the Cloud9 IDE and create a new environment.
 
 ![Screenshots](./Screenshots/Stage_2/15.png)
+
 ![Screenshots](./Screenshots/Stage_2/16.png)
 
 - Enter any name for the IDE and leave all the other default options and click on create
 
 ![Screenshots](./Screenshots/Stage_2/17.png)
+
 ![Screenshots](./Screenshots/Stage_2/18.png)
+
 ![Screenshots](./Screenshots/Stage_2/19.png)
 
 - The IDE will be available in few minutes.
 
 ![Screenshots](./Screenshots/Stage_2/20.png)
+
 ![Screenshots](./Screenshots/Stage_2/21.png)
 
 - Once it is ready, open the IDE and you will see a terminal where you can run linux commands.
@@ -106,7 +115,9 @@ npm run build
 ```
 
 ![Screenshots](./Screenshots/Stage_2/25.png)
+
 ![Screenshots](./Screenshots/Stage_2/26.png)
+
 ![Screenshots](./Screenshots/Stage_2/27.png)
 
 - Now you can run the below commands to copy the contents of the build folder to the s3 bucket
