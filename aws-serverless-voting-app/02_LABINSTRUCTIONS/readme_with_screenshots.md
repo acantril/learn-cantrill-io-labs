@@ -60,6 +60,7 @@ In this mini project you will create a completely serverless voting application 
 - Leave all the other options as default and click on **Create Function**
 
 ![Screenshots2](./Screenshots/Stage_1/Step_2/Part_2/2.png)
+
 ![Screenshots3](./Screenshots/Stage_1/Step_2/Part_2/3.png)
 
 - After the function is created, replace the function code with the code from [voting-app-fetch-results.js](/aws-serverless-voting-app/01_LABSETUP/voting-app-fetch-results.js)
@@ -114,6 +115,7 @@ By default the lambda functions will get a basic execution role to only send log
 - Click on **Create Policy**. After the Policy is created you will get a success message
 
 ![Screenshots5](./Screenshots/Stage_1/Step_2/Part_3/5.png)
+
 ![Screenshots6](./Screenshots/Stage_1/Step_2/Part_3/6.png)
 
 #### Permissions policy for lambda function `voting-app-fetch-results`
@@ -144,6 +146,7 @@ By default the lambda functions will get a basic execution role to only send log
 - Click on **Create Policy**. After the Policy is created you will get a success message
 
 ![Screenshots10](./Screenshots/Stage_1/Step_2/Part_3/10.png)
+
 ![Screenshots11](./Screenshots/Stage_1/Step_2/Part_3/11.png)
 
 ### **Part-4:** Attach the IAM policies to the Lambda execution role.
@@ -157,6 +160,7 @@ By default the lambda functions will get a basic execution role to only send log
 - Under Configuration, click on the Execution role name to open the IAM role in a new tab
 
 ![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/2.png)
+
 ![Screenshots](./Screenshots/Stage_1/Step_2/Part_4/3.png)
 
 - Under `Add permissions` click on `Attach Policies`
@@ -218,7 +222,9 @@ By default the lambda functions will get a basic execution role to only send log
 - Under the `results` resource create a GET method. Select the `results` resource and click on **Actions** and create a GET method.
 
 ![Screenshots](./Screenshots/Stage_1/Step_3/7.png)
+
 ![Screenshots](./Screenshots/Stage_1/Step_3/8.png)
+
 ![Screenshots](./Screenshots/Stage_1/Step_3/9.png)
 
 - For **Integration Type** select `Lambda Function`
@@ -239,7 +245,9 @@ By default the lambda functions will get a basic execution role to only send log
 - Click on Save and select OK when a prompt asks for giving api gateway the permissions to invoke lambda function.
 
 ![Screenshots](./Screenshots/Stage_1/Step_3/15.png)
+
 ![Screenshots](./Screenshots/Stage_1/Step_3/16.png)
+
 ![Screenshots](./Screenshots/Stage_1/Step_3/17.png)
 
 #### Create deployment
@@ -251,6 +259,7 @@ By default the lambda functions will get a basic execution role to only send log
 - Create a new deployment stage and enter a stage name `dev` and click on **Deploy**
 
 ![Screenshots](./Screenshots/Stage_1/Step_3/19.png)
+
 ![Screenshots](./Screenshots/Stage_1/Step_3/20.png)
 
 - The stages section will be opened.
@@ -262,8 +271,9 @@ By default the lambda functions will get a basic execution role to only send log
 - These two URL's will be used in the React frontend to call the api gateway and the backend lambda functions.
 
 ![Screenshots](./Screenshots/Stage_1/Step_3/22.png)
+
 ![Screenshots](./Screenshots/Stage_1/Step_3/23.png)
 
 
-#[Stage 2 - Frontend](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
+[#Stage 2 - Frontend](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
 

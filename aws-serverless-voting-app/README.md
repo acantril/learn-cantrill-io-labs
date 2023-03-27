@@ -215,12 +215,3 @@ aws s3 cp . 's3://serverless-voting-app-demo' --recursive
 - Try to access the webpage with the **Bucket website endpoint**
 
 
-
-
-
-
-
-
-
-
-
