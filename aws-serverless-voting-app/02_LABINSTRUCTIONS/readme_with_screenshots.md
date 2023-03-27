@@ -264,18 +264,3 @@ By default the lambda functions will get a basic execution role to only send log
 ![Screenshots](./Screenshots/Stage_1/Step_3/22.png)
 ![Screenshots](./Screenshots/Stage_1/Step_3/23.png)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
