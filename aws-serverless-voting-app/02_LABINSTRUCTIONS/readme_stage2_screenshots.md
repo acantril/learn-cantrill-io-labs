@@ -20,6 +20,7 @@
 - Under **Properties** scroll down to the **Static Website Hosting**
 
 ![Screenshots](./Screenshots/Stage_2/5.png)
+
 ![Screenshots](./Screenshots/Stage_2/6.png)
 
 - Click edit and select the options as shown below.
