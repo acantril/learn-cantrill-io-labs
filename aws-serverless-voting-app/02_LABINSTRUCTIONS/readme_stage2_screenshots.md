@@ -61,7 +61,7 @@
 ![Screenshots](./Screenshots/Stage_2/14.png)
 
 
-### **Part-2:** Create a Cloud9 IDE to edit the Frontend Javascript code and build the React application. Deploy to S3 bucket. [View Step by Step Screenshots](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
+### **Part-2:** Create a Cloud9 IDE to edit the Frontend Javascript code, build the React application and deploy to S3 bucket.
 
 - Open the Cloud9 IDE and create a new environment.
 

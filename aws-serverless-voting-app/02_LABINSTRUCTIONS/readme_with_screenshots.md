@@ -130,8 +130,11 @@ By default the lambda functions will get a basic execution role to only send log
         {
             "Sid": "DynamoDBScanPermissions",
             "Effect": "Allow",
-            "Action": "dynamodb:Scan",
-            "Resource": "arn:aws:dynamodb:<REGION>:<YOUR_AWS_ACCOUNTID>:table/Voting_Table"
+            "Action": [
+                "dynamodb:Scan",
+                "dynamodb:PutItem"
+            ],
+            "Resource": "arn:aws:dynamodb:ap-south-1:483787893531:table/Voting_Table"
         }
     ]
 }
@@ -275,5 +278,5 @@ By default the lambda functions will get a basic execution role to only send log
 ![Screenshots](./Screenshots/Stage_1/Step_3/23.png)
 
 
-# Stage 2 - Frontend [Go to Stage-2](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
+# [Go to Stage 2 - Frontend](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
 

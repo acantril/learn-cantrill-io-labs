@@ -82,8 +82,11 @@ By default the lambda functions will get a basic execution role to only send log
         {
             "Sid": "DynamoDBScanPermissions",
             "Effect": "Allow",
-            "Action": "dynamodb:Scan",
-            "Resource": "arn:aws:dynamodb:<REGION>:<YOUR_AWS_ACCOUNTID>:table/Voting_Table"
+            "Action": [
+                "dynamodb:Scan",
+                "dynamodb:PutItem"
+            ],
+            "Resource": "arn:aws:dynamodb:ap-south-1:483787893531:table/Voting_Table"
         }
     ]
 }
@@ -176,7 +179,7 @@ By default the lambda functions will get a basic execution role to only send log
 }
 ```
 
-### **Part-2:** Create a Cloud9 IDE to edit the Frontend Javascript code and build the React application. Deploy to S3 bucket. [View Step by Step Screenshots](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
+### **Part-2:** Create a Cloud9 IDE to edit the Frontend Javascript code, build the React application and deploy to S3 bucket. [View Step by Step Screenshots](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md)
 
 - Open the Cloud9 IDE and create a new environment.
 - Enter any name for the IDE and leave all the other default options and click on create

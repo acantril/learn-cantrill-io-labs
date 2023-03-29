@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
+const ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 exports.handler = async (event) => {
 
@@ -18,11 +19,67 @@ do {
     params.ExclusiveStartKey  = items.LastEvaluatedKey;
 } while(typeof items.LastEvaluatedKey != "undefined");
 
-if (scanResults.length == 0) {
-console.log('No Items were found - ',scanResults.length);
-scanResults = [{ votecount: 0, vote_id: 'Cat-1'},{ votecount: 0, vote_id: 'Cat-2'},{ votecount: 0, vote_id: 'Cat-3'}];
+if (scanResults.length != 3) 
+{
+    console.log('No Items were found - ',scanResults.length);
+    scanResults = [{ votecount: 0, vote_id: 'Cat-1'},{ votecount: 0, vote_id: 'Cat-2'},{ votecount: 0, vote_id: 'Cat-3'}];
+
+    // Inserting Dummy Records
+    console.log('Inserting Dummy Records');
+    var obj1 = {
+        'TableName': 'Voting_Table',
+        'Item': {
+          'vote_id': {
+            S: 'Cat-1'
+          },
+          'votecount': {
+            S: '0'
+          }
+        },
+        'ReturnConsumedCapacity': "TOTAL"
+    };
+    var obj2 = {
+        'TableName': 'Voting_Table',
+        'Item': {
+          'vote_id': {
+            S: 'Cat-2'
+          },
+          'votecount': {
+            S: '0'
+          }
+        },
+        'ReturnConsumedCapacity': "TOTAL"
+    };
+    var obj3 = {
+        'TableName': 'Voting_Table',
+        'Item': {
+          'vote_id': {
+            S: 'Cat-3'
+          },
+          'votecount': {
+            S: '0'
+          }
+        },
+        'ReturnConsumedCapacity': "TOTAL"
+    };
+    
+    try
+    {
+        var result1 = await ddb.putItem(obj1).promise();
+        var result2 = await ddb.putItem(obj2).promise();
+        var result3 = await ddb.putItem(obj3).promise();
+        console.log(result1);
+        console.log(result2);
+        console.log(result3);
+        console.log('Dummy Records added successfully');
+    }
+    catch(err)
+    {
+        console.log('ERROR while adding Dummy Records');
+        console.log(err);
+    }
 }
-			
+
 /*
 Access-Control-Allow-Origin
 
