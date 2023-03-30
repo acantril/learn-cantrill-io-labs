@@ -25,6 +25,16 @@ In the **Outputs** section of the cloudformation stack, note that the S3 bucket 
 ### Get API Gateway Endpoints
 
 - Open the API Gateway console and click on the `Voting-App-Api-Gateway` 
+- Under `results` click on `GET` and then `Integration Request`
+
+![Screenshots](./Screenshots/1click/apigateway/b1.png)
+
+- Click on the edit icon for `voting-app-fetch-results` and then click on the tick icon.
+
+![Screenshots](./Screenshots/1click/apigateway/b2.png)
+![Screenshots](./Screenshots/1click/apigateway/b3.png)
+
+- Click **Ok** to proceed.
 - Click on **Actions** and then on **Deploy API**
 
 ![Screenshots](./Screenshots/1click/apigateway/18.png)
