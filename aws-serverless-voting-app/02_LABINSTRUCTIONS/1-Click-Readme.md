@@ -35,6 +35,9 @@ In the **Outputs** section of the cloudformation stack, note that the S3 bucket 
 ![Screenshots](./Screenshots/1click/apigateway/b3.png)
 
 - Click **Ok** to proceed.
+
+![Screenshots](./Screenshots/1click/apigateway/b4.png)
+
 - Click on **Actions** and then on **Deploy API**
 
 ![Screenshots](./Screenshots/1click/apigateway/18.png)
