@@ -99,7 +99,7 @@ cd voting-app-frontend
 
 ![Screenshots](./Screenshots/Stage_2/23.png)
 
-- As shown in the [screenshots](/aws-serverless-voting-app/02_LABINSTRUCTIONS/readme_stage2_screenshots.md), expand the folder `voting-app-frontend` from the left side file explorer of the IDE.
+- As shown in the below screenshot, expand the folder `voting-app-frontend` from the left side file explorer of the IDE.
 - Inside src, there is a `Vote.js` file. Open the file.
 - You will see that, there are two urls configured in the code `vote_url` for `vote` and `results_fetchurl` for `fetch results`
 - Replace these two URL's with the two urls that you received at the end of stage-1 after creating the API Gateway deployment.
