@@ -4,6 +4,9 @@ In this mini project you will create a completely serverless voting application 
 
 ![Architecture](Architecture-ServerlessVotingApp.png)
 
+
+# [1-Click Install](/aws-serverless-voting-app/02_LABINSTRUCTIONS/1-Click-Readme.md)
+
 # Stage 1 - Backend
 
 - Choose a region where you want to deploy the application and use the same region for creating all the resources in below stages.
