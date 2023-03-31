@@ -128,7 +128,8 @@ aws s3 cp . 's3://<REPLACE_BUCKET_NAME_FROM_STACK_OUTPUT>' --recursive
 
 ![Screenshots](./Screenshots/1click/cloudfront.png)
 
-- In the **Outputs** section of cloudformation stack, you will get the Cloudfront endpoint. Open it in a new tab to see the webpage.
+- The stack will take approx 5-10 minutes to deploy the Cloufront distribution.
+- After completion, in the **Outputs** section of cloudformation stack, you will get the Cloudfront endpoint. Open it in a new tab to see the webpage.
 
 ![Screenshots](./Screenshots/1click/cloudfront2.png)
 
