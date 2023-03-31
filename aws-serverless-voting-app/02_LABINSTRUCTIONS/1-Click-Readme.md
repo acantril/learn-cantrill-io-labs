@@ -120,12 +120,16 @@ aws s3 cp . 's3://<REPLACE_BUCKET_NAME_FROM_STACK_OUTPUT>' --recursive
 
 ![Screenshots](./Screenshots/1click/cloud9/30.png)
 
+### Creating a Cloudfront distribution for this application (Optional)
 
+- Deploy this [Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?templateURL=https://learn-cantrill-labs.s3.amazonaws.com/aws-serverless-voting-app/cloudfront.yaml&stackName=CDN-Serverless-Voting-App-Demo) to create a Cloudfront distribution.
 
+- In the **Parameters** section, for S3BucketURL enter the **Bucket website endpoint** without the `http://` and proceed and deploy the Stack.
 
+![Screenshots](./Screenshots/1click/cloudfront.png)
 
+- In the **Outputs** section of cloudformation stack, you will get the Cloudfront endpoint. Open it in a new tab to see the webpage.
 
-
-
+![Screenshots](./Screenshots/1click/cloudfront2.png)
 
 
