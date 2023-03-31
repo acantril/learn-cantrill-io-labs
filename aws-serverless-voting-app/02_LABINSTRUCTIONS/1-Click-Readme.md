@@ -133,4 +133,4 @@ aws s3 cp . 's3://<REPLACE_BUCKET_NAME_FROM_STACK_OUTPUT>' --recursive
 
 ![Screenshots](./Screenshots/1click/cloudfront2.png)
 
-
+![Screenshots](./Screenshots/1click/cloudfront3.png)
