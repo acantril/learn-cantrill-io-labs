@@ -1,5 +1,7 @@
 # Stage 2 - Frontend
 
+# [1-Click Install](/aws-serverless-voting-app/02_LABINSTRUCTIONS/1-Click-Readme.md)
+
 ### **Part-1:** Create S3 bucket for website hosting
 
 - Move to the S3 bucket console and create a new S3 bucket with name `serverless-voting-app-demo`
