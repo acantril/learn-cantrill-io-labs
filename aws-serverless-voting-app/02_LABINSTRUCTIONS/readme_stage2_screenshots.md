@@ -136,3 +136,28 @@ aws s3 cp . 's3://serverless-voting-app-demo' --recursive
 - Try to access the webpage with the **Bucket website endpoint**
 
 ![Screenshots](./Screenshots/Stage_2/30.png)
+
+### **Part-3:** Creating a Cloudfront distribution for this application (Optional)
+
+- Open the Cloudfront page and create a distribution.
+
+![Screenshots](./Screenshots/cloudfront/1.png)
+
+- In **Origin domain** enter the bucket name and select the auto populated option.
+
+![Screenshots](./Screenshots/cloudfront/2.png)
+
+- Click on **Use website endpoint** 
+
+![Screenshots](./Screenshots/cloudfront/3.png)
+
+- Keep all other default options and click on **Create Distribution**
+
+![Screenshots](./Screenshots/cloudfront/4.png)
+
+- Wait for the deployment to be `Available`. It will take 5-10 minutes.
+- Note the **Distribution domain name**. This can be used to access the voting application.
+
+![Screenshots](./Screenshots/cloudfront/5.png)
+
+![Screenshots](./Screenshots/cloudfront/cloudfront3.png)
