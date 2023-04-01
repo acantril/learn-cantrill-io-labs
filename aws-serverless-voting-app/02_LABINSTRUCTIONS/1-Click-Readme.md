@@ -134,3 +134,10 @@ aws s3 cp . 's3://<REPLACE_BUCKET_NAME_FROM_STACK_OUTPUT>' --recursive
 ![Screenshots](./Screenshots/1click/cloudfront2.png)
 
 ![Screenshots](./Screenshots/1click/cloudfront3.png)
+
+# Clean Up Resources
+
+- Delete both the cloudformation stacks that were deployed as part of this mini project.
+- The S3 bucket will not be deleted and hence need to be deleted manually.
+- First empty the S3 bucket and then delete the bucket.
+

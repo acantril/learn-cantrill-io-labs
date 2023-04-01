@@ -163,3 +163,7 @@ aws s3 cp . 's3://serverless-voting-app-demo' --recursive
 ![Screenshots](./Screenshots/cloudfront/5.png)
 
 ![Screenshots](./Screenshots/cloudfront/cloudfront3.png)
+
+# Clean Up Resources
+
+- Delete all the resources created as part of this mini project.

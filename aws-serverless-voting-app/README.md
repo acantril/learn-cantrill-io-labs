@@ -219,4 +219,15 @@ aws s3 cp . 's3://serverless-voting-app-demo' --recursive
 - In the S3 bucket refresh to see the newly copied files.
 - Try to access the webpage with the **Bucket website endpoint**
 
+### **Part-3:** Creating a Cloudfront distribution for this application (Optional)
 
+- Open the Cloudfront page and create a distribution.
+- In **Origin domain** enter the bucket name and select the auto populated option.
+- Click on **Use website endpoint** 
+- Keep all other default options and click on **Create Distribution**
+- Wait for the deployment to be `Available`. It will take 5-10 minutes.
+- Note the **Distribution domain name**. This can be used to access the voting application.
+
+# Clean Up Resources
+
+- Delete all the resources created as part of this mini project.
