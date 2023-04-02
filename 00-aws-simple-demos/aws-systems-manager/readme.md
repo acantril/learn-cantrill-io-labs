@@ -6,9 +6,9 @@ We’re going to launch two instances, one with Amazon Linux 2, and one with Ubu
 
 We will be creating this environment in the ap-southeast-4 (Melbourne) region, so all links to the console will be there. Make sure you change region if you’re deploying elsewhere.
 
-*Note:* At the time of writing this demo, Amazon Linux 2023 and Ubuntu 22.04 returned errors when patching with Patch Manager, so we’re using slightly older AMIs in this demo. You’re welcome to try using newer AMIs, however if you get an error when running patch manager, try switching to the OS versions I use in this demo.
+*Note:* At the time of writing this demo, Amazon Linux 2023 and Ubuntu 22.04 returned errors when patching with Patch Manager, so we’re using slightly older AMIs in this demo. 
 
-[https://repost.aws/questions/QU6nU4pjL9Tq2G8UVh6ytmiw/unable-to-perform-patch-scan-on-ubuntu-instances](https://repost.aws/questions/QU6nU4pjL9Tq2G8UVh6ytmiw/unable-to-perform-patch-scan-on-ubuntu-instances)
+*Update:* As of the 23rd of March, Amazon Linux 2023 is supported, but Ubuntu 22.04 is not. [See here for a list of supported OS's](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-prerequisites.html#supported-os).
 
 # Video Guide
 
