@@ -90,8 +90,8 @@ Set Description to `Wordpress DB Password`
 Set Tier to `Standard`  
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
-Leave `KMS Key ID` as default
-Set `Value` to `4n1m4l54L1f3`
+Leave `KMS Key ID` as default  
+Set `Value` to `4n1m4l54L1f3`  
 Click `Create parameter`  
 
 ## Create Parameter - DBRootPassword (the password for the database root user, used for self-managed admin)  
@@ -101,8 +101,8 @@ Set Description to `Wordpress DBRoot Password`
 Set Tier to `Standard`  
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
-Leave `KMS Key ID` as default
-Set `Value` to `4n1m4l54L1f3`
+Leave `KMS Key ID` as default  
+Set `Value` to `4n1m4l54L1f3`  
 Click `Create parameter`  
 
 # STAGE 1C - Connect to the instance and install a database and wordpress
