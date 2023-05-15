@@ -14,7 +14,7 @@ We're going to step through the full configuration options, so click on `Customi
 For `Name` type `A4L-WORDPRESS-CONTENT`  
 This is critical data so for `Storage Class` leave this set to `Standard` and ensure `Enable Automatic Backups` is enabled.  
 for `LifeCycle management` leave as the default of `30 days since last access`  
-You have two `performance modes` to pick, choose `General Purpose` as MAX I/O is for very spefific high performance scenarios.  
+You have two `performance modes` to pick, choose `General Purpose` as MAX I/O is for very specific high performance scenarios.  
 for `Throughput mode` pick `bursting` which links performance to how much space you consume. The more consumed, the higher performance. The other option Provisioned allows for performance to be specified independant of consumption.  
 Untick `Enable encryption of data at rest` .. in production you would leave this on, but for this demo which focusses on architecture it simplifies the implementation.  
 Click `Next`
