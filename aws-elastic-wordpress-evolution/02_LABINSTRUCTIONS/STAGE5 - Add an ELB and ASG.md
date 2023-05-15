@@ -128,7 +128,7 @@ Check the `Attach to an existing Load balancer` box
 Ensure `Choose from your load balancer target groups` is selected.  
 for `existing load balancer targer groups` select `A4LWORDPRESSALBTG`  
 Under `health Checks - Optional` choose `ELB`  
-check `enable group metris collection within CloudWatch`  
+check `enable group metrics collection within CloudWatch`  
 
 Scroll down and click `Next`  
 
