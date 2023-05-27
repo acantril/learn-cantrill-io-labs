@@ -26,7 +26,7 @@ Scroll down and under `Security Groups` remove `default` and select the `A4LVPC-
 Under `Listener and Routing` 
 Ensure `Protocol` is set to `HTTP` and `Port` is set to `80`.  
 Click `Create target group` which will open a new tab  
-for `Target Type` choose `Instance` 
+for `Target Type` choose `Instances` 
 for Name choose `A4LWORDPRESSALBTG`  
 For `Protocol` choose `HTTP`  
 For `Port` choose `80`  
@@ -127,8 +127,11 @@ Its here where we integrate the ASG with the Load Balancer. Load balancers actua
 Check the `Attach to an existing Load balancer` box  
 Ensure `Choose from your load balancer target groups` is selected.  
 for `existing load balancer targer groups` select `A4LWORDPRESSALBTG`  
-Under `health Checks - Optional` choose `ELB`  
-check `enable group metrics collection within CloudWatch`  
+don't make any changes to `VPC Lattice integration options`  
+
+Under `health Checks` check `Turn on Elastic Load Balancing health checks`  
+Under `Additional Settings` check `Enable group metrics collection within CloudWatch`  
+
 
 Scroll down and click `Next`  
 
@@ -166,8 +169,8 @@ for `Scaling Policy name` enter `HIGHCPU`
 Click `Create a CloudWatch Alarm`  
 Click `Select Metric`  
 Click `EC2`  
-Click `By Auto Scaling Group`
-Check `A4LWORDPRESSASG CPU Utilization`  
+Click `By Auto Scaling Group` (if this doesn't show in your list, wait a while and refresh)  
+Check `A4LWORDPRESSASG CPU Utilization`  (if this doesn't show in your list, wait a while and refresh)  
 Click `Select Metric`  
 Scroll Down... select `Threashhold style` `static`, select `Greater` and enter `40` in the `than` box and click `Next`
 Click `Remove` next to notification if you see anything listed here
@@ -206,7 +209,7 @@ Click `Create`
 ## ADJUST ASG Values
 
 Click `Details Tab`  
-Click `Edit`  
+Under `Group Details` click `Edit`  
 Set `Desired 1`, Minimum `1` and Maximum `3`  
 Click `Update`  
 
@@ -247,7 +250,7 @@ This configuration has several limitations :-
 - ~~The IP of the instance is hardcoded into the database ....~~ FIXED
 
 
-You can now optionally move onto STAGE6
+You can now move onto STAGE6 which is the cleanup step.  
 
 
 
