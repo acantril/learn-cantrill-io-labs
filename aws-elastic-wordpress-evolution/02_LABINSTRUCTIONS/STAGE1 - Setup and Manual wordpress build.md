@@ -24,7 +24,7 @@ Click `Launch Instance`
 
 For `name` use `Wordpress-Manual`  
 Select `Amazon Linux`  
-From the dropdown make sure `Amazon Linux 2 AMI (HVM), SSD Volume Type` AMI is selected  
+From the dropdown make sure `Amazon Linux 2023` AMI is selected  
 ensure `64-bit (x86)` is selected in the architecture dropdown.  
 Under `instance type`  
 Select whatever instance shows as `Free tier eligible` (probably t2 or t3.micro)  
@@ -37,7 +37,7 @@ Check `Select an existing security group`
 Select `A4LVPC-SGWordpress` it will have randomness after it, thats ok :)  
 We will leave storage as default so make no changes here  
 Expand `Advanced Details`  
-For `IAM instance profile role` select `A4LVPC-WordpressInstanceProfile`  
+For `IAM instance profile role` select `A4LVPC-WordpressInstanceProfile`  **THIS BIT IS IMPORTANT**  
 Find the `Credit Specification Dropdown` and choose `Standard` (some accounts aren't enabled for Unlimited)
 Click `Launch Instance`    
 Click `View All instances`  
@@ -52,6 +52,8 @@ In this sub-section you are going to create parameters to store the important co
 
 Open a new tab to https://console.aws.amazon.com/systems-manager/home?region=us-east-1  
 Click on `Parameter Store` on the menu on the left
+
+**MAKE SURE WITH THE BELOW ... NO WHITESPACE BEFORE OR AFTER .. MAKE SURE THE UPPER/LOWER CASE IS CORRECT**
 
 ## Create Parameter - DBUser (the login for the specific wordpress DB)  
 Click `Create Parameter`
@@ -90,7 +92,7 @@ Set Description to `Wordpress DB Password`
 Set Tier to `Standard`  
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
-Leave `KMS Key ID` as default  
+Leave `KMS Key ID` as default (should be `alias/aws/ssm`).  
 Set `Value` to `4n1m4l54L1f3`  
 Click `Create parameter`  
 
@@ -101,7 +103,7 @@ Set Description to `Wordpress DBRoot Password`
 Set Tier to `Standard`  
 Set Type to `SecureString`  
 Set `KMS Key Source` to `My Current Account`  
-Leave `KMS Key ID` as default  
+Leave `KMS Key ID` as default (should be `alias/aws/ssm`).   
 Set `Value` to `4n1m4l54L1f3`  
 Click `Create parameter`  
 
@@ -109,14 +111,16 @@ Click `Create parameter`
 
 Right click on `Wordpress-Manual` choose `Connect`
 Choose `Session Manager`  
-Click `Connect`  
+Click `Connect`  (if connect isn't highlighted then just wait a few minutes and try again).
+*if after 5-10 minutes this still doesn't let you connect, it's possible you didn't add the `A4LVPC-WordpressInstanceProfile` instance role. You need to right click on the instance, security, modify IAM role and then add `A4LVPC-WordpressInstanceProfile`.  Once done, reboot the instance*   
 type `sudo bash` and press enter  
 type `cd` and press enter  
 type `clear` and press enter
 
 ## Bring in the parameter values from SSM
 
-Run the commands below to bring the parameter store values into ENV variables to make the manual build easier.  
+Run the commands below to bring the parameter store values into ENV variables to make the manual build easier. 
+**IF AT ANY POINT YOU ARE DISCONNECTED, RERUN THE BLOCK BELOW, THEN CONTINUE FROM WHERE YOU DISCONNECTED FROM**
 
 ```
 DBPassword=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
@@ -139,18 +143,14 @@ DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 ## Install updates
 
 ```
-sudo yum -y update
-sudo yum -y upgrade
+sudo dnf -y update
 
 ```
 
 ## Install Pre-Reqs and Web Server
 
 ```
-sudo yum install -y mariadb-server httpd wget
-sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
-sudo amazon-linux-extras install epel -y
-sudo yum install stress -y
+dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel stress -y
 
 ```
 
@@ -222,7 +222,7 @@ You should see the wordpress welcome page
 
 in `Site Title` enter `Catagram`  
 in `Username` enter `admin`
-in `Password` it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own - regardless, write it down somewhere safe.  
+in `Password` enter `4n1m4l54L1f3`  
 in `Your Email` enter your email address  
 Click `Install WordPress`
 Click `Log In`  
@@ -260,13 +260,13 @@ This configuration has several limitations which you will resolve one by one wit
 - Customer Connections are to an instance directly ... no health checks/auto healing
 - The IP of the instance is hardcoded into the database ....
 - Go to https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name
-- Right click `Wordpress-Manual` , `Instance State`, `Stop`, `Yes, Stop`
-- Right click `Wordpress-Manual` , `Instance State`, `Start`, `Yes, Start`
+- Right click `Wordpress-Manual` , `Stop Instance`, `Stop`  
+- Right click `Wordpress-Manual` , `Start Instance`, `Start`  
 - the IP address has changed ... which is bad
 - Try browsing to it ...
 - What about the images....?
 - The images are pointing at the old IP address...
-- Right click `Wordpress-Manual` , `Instance State`, `Terminate`, `Yes, Terminate`
+- Right click `Wordpress-Manual` , `Terminate Instance`, `Terminate`  
 
 You can now move onto STAGE2
 
