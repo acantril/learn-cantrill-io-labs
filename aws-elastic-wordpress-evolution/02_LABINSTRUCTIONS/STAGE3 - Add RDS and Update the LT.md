@@ -37,23 +37,28 @@ Click `Databases`
 Click `Create Database`  
 Click `Standard Create`  
 Click `MySql`  
-Under `Version` select `MySQL 8.0.28` (best aurora compatibility for snapshot migrations)  
+Under `Version` select `MySQL 8.0.32`   
 
 Scroll down and select `Free Tier` under templates
 _this ensures there will be no costs for the database but it will be single AZ only_
 
 under `Db instance identifier` enter `a4lWordPress`
-under `Master Username` enter enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBUser/description?region=us-east-1&tab=Table  
-under `Master Password` and `Confirm Password` enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBPassword/description?region=us-east-1&tab=Table  
+under `Master Username` enter `a4lwordpressuser`  
+under `Master Password` and `Confirm Password` enter `4n1m4l54L1f3`   
 
-Under `DB Instance size`, then `DB instance class`, then `Burstable classes (includes t classes)` make sure db.t3.micro or db.t2.micro is selected  
-Scroll down, under `Connectivity`, `Virtual private cloud (VPC)` select `A4LVPC`  
-Ensure under `Subnet group` that `wordpressrdssubnetgroup` is selected  
+Under `DB Instance size`, then `DB instance class`, then `Burstable classes (includes t classes)` make sure db.t3.micro or db.t2.micro or db.t4g.micro is selected  
+
+Scroll down, under `Connectivity`, `Compute resource` select `Don’t connect to an EC2 compute resource`  
+under `Connectivity`, `Network type` select `IPv4`  
+under `Connectivity`, `Virtual private cloud (VPC)` select `A4LVPC`  
+under `Subnet group` that `wordpressrdssubnetgroup` is selected  
 Make sure `Public Access` is set to `No`  
 Under `VPC security groups` make sure `choose existing` is selected, remove `default` and add `A4LVPC-SG-Database`  
 Under `Availability Zone` set `us-east-1a`  
-Scroll down and expand `Additional configuration`  
-in the `Initial database name` box enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBName/description?region=us-east-1&tab=Table  
+
+**IMPORTANT .. DON'T MISS THIS STEP**
+Scroll down past `Database Authentication` & `Monitoring` and expand `Additional configuration`  
+in the `Initial database name` box enter `a4lwordpressdb`  
 Scroll to the bottom and click `create Database`  
 
 ** this will take anywhere up to 30 minutes to create ... it will need to be fully ready before you move to the next step - coffee time !!!! **
@@ -109,7 +114,7 @@ Check the box next to `/A4L/Wordpress/DBEndpoint` and click `Delete` (please do 
 Click `Create Parameter`  
 
 Under `Name` enter `/A4L/Wordpress/DBEndpoint`  
-Under `Descripton` enter `WordPress Endpoint Name`  
+Under `Descripton` enter `WordPress DB Endpoint Name`  
 Under `Tier` select `Standard`    
 Under `Type` select `String`  
 Under `Data Type` select `text`  
@@ -162,7 +167,7 @@ Under `Instances` click `Launch Templates`
 Select the `WordPress` launch Template (select, dont click)
 Click `Actions` and `Modify Template (Create new version)`  
 This template version will be based on the existing version ... so many of the values will be populated already  
-Under `Template version description` enter `Single server App Only`
+Under `Template version description` enter `Single server App Only - RDS DB`
 
 Scroll down to `Advanced details` and expand it  
 Scroll down to `User Data` and expand the text box as much as possible
@@ -183,6 +188,17 @@ echo "FLUSH PRIVILEGES;" >> /tmp/db.setup
 mysql -u root --password=$DBRootPassword < /tmp/db.setup
 rm /tmp/db.setup
 
+```
+
+Replace this
+
+```
+dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel stress -y
+```
+with this
+
+```
+dnf install wget php-mysqlnd httpd php-fpm php-mysqli php-json php php-devel stress -y
 ```
 
 Click `Create Template Version`  

@@ -13,10 +13,14 @@ Click on `Create file System`
 We're going to step through the full configuration options, so click on `Customize`  
 For `Name` type `A4L-WORDPRESS-CONTENT`  
 This is critical data so for `Storage Class` leave this set to `Standard` and ensure `Enable Automatic Backups` is enabled.  
-for `LifeCycle management` leave as the default of `30 days since last access`  
-You have two `performance modes` to pick, choose `General Purpose` as MAX I/O is for very specific high performance scenarios.  
-for `Throughput mode` pick `bursting` which links performance to how much space you consume. The more consumed, the higher performance. The other option Provisioned allows for performance to be specified independant of consumption.  
-Untick `Enable encryption of data at rest` .. in production you would leave this on, but for this demo which focusses on architecture it simplifies the implementation.  
+for `LifeCycle management` ...  
+for `Transition into IA` set to `30 days since last access`  
+for `Transition out of IA` set to `None`  
+Untick `Enable encryption of data at rest` .. in production you would leave this on, but for this demo which focusses on architecture it simplifies the implementation. 
+
+Scroll down...  
+For `throughput modes` choose `Basic`   
+Expand `Additional Settings` and ensure `Performance Mode` is set to `General Purpose`  
 Click `Next`
 
 ## Network Settings
@@ -38,7 +42,7 @@ The file system will start in the `Creating` State and then move to `Available` 
 Click on the file system to enter it and click `Network`  
 Scroll down and all the mount points will show as `creating` keep hitting refresh and wait for all 3 to show as available before moving on.  
 
-Note down the `fs-XXXXXXXX` file system ID once visible at the top of this screen, you will need it in the next step.  
+Note down the `fs-XXXXXXXX` or `DNS name` (either will work) once visible at the top of this screen, you will need it in the next step.  
 
 
 # STAGE 4B - Add an fsid to parameter store
@@ -68,7 +72,7 @@ type `clear` and press enter
 First we need to install the amazon EFS utilities to allow the instance to connect to EFS. EFS is based on NFS which is standard but the EFS tooling makes things easier.  
 
 ```
-sudo yum -y install amazon-efs-utils
+sudo dnf -y install amazon-efs-utils
 ```
 
 next you need to migrate the existing media content from wp-content into EFS, and this is a multi step process.
@@ -132,9 +136,9 @@ EFSFSID=`echo $EFSFSID | sed -e 's/^"//' -e 's/"$//'`
 
 ```
 
-Find the line which says `yum install -y mariadb-server httpd wget`
-after `wget` add a space and paste in `amazon-efs-utils`  
-it should now look like `yum install -y mariadb-server httpd wget amazon-efs-utils`  
+Find the line which says `dnf install wget php-mysqlnd httpd php-fpm php-mysqli php-json php php-devel stress -y`
+after `stress` add a space and paste in `amazon-efs-utils`  
+it should now look like `dnf install wget php-mysqlnd httpd php-fpm php-mysqli php-json php php-devel stress amazon-efs-utils -y`  
 
 locate `systemctl start httpd` position cursor at the end & press enter twice to add new lines  
 

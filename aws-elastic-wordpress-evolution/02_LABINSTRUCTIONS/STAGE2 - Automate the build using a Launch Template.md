@@ -21,7 +21,7 @@ Check the `Provide guidance to help me set up a template that I can use with EC2
 
 Under `Application and OS Images (Amazon Machine Image)` click `Quick Start`  
 Click `Amazon Linux`  
-in the `Amqzon Machine Image` dropdown, locate `Amazon Linux 2 AMI (HVM), SSD Volume TYpe` and set the Architecture to `64-bit (x86)`  
+in the `Amazon Machine Image` dropdown, locate `Amazon Linux 2023 AMI` and set the Architecture to `64-bit (x86)`  
 Under `Instance Type` select whichever instance is free tier eligible from either `t3.micro` and `t2.micro`    
 Under `Key pair (login)` select `Don't include in launch template`  
 Under `networking Settings` `select existing security group` and choose `A4LVPC-SGWordpress`
@@ -54,13 +54,9 @@ DBName=`echo $DBName | sed -e 's/^"//' -e 's/"$//'`
 DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBEndpoint --query Parameters[0].Value)
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 
-yum -y update
-yum -y upgrade
+dnf -y update
 
-yum install -y mariadb-server httpd wget
-amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
-amazon-linux-extras install epel -y
-yum install stress -y
+dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel stress -y
 
 systemctl enable httpd
 systemctl enable mariadb
@@ -100,8 +96,7 @@ rm /tmp/db.setup
 
 Ensure to leave a blank line at the end  
 Click `Create Launch Template`  
-Click  `Launch Templates` towards the top of the screen
-
+Click `View launch templates`  
 
 # STAGE 2C - Launch an instance using it
 
@@ -115,6 +110,7 @@ Scroll to the bottom and click `Launch Instance`
 Click the instance id in the `Success` box
 
 # STAGE 2D - Test
+*you will need to wait until the instance is running with 2/2 status checks before contuining*  
 
 Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
 Select the `Wordpress-LT` instance  
@@ -126,7 +122,7 @@ You should see the WordPress welcome page
 
 in `Site Title` enter `Catagram`  
 in `Username` enter `admin`
-in `Password` it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own - regardless, write it down somewhere safe. 
+in `Password` enter `4n1m4l54L1f3`  
 in `Your Email` enter your email address  
 Click `Install WordPress`
 Click `Log In`  
