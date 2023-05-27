@@ -42,8 +42,12 @@ Delete all of the parameters that you created while doing this demo, anything `A
 # STAGE 6H - Wait for RDS
 
 Move to the RDS console, click on `Databases` & wait for all RDS instances to be removed before continuing.  
+
+# STAGE 6I - Delete DB Subnet Group
+
+in the RDS console click `Subnet Groups`, select `wordpressrdssubnetgroup`, clikck `Delete` and `Delete` again.
  
-# STAGE 6I - Cloud Formation
+# STAGE 6J - Cloud Formation
 
 Move to the cloudformation console.  
 Select the `A4LVPC` stack, click `Delete` and confirm by clicking on `Delete Stack`
