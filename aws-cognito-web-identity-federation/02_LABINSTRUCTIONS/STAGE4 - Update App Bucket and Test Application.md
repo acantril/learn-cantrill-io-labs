@@ -74,6 +74,19 @@ Click on each of them, notice the URL which is used? it's a presignedURL generat
 
 All of this is done with no self-managed compute.
 
+## Caching Issue
+If you're having issues signing in, check that:
+  - you have uploaded the `index.html` and `scripts.js` with correct credentials
+  - your CloudFront distribution has finished deploying
+
+If you're still having issues signing in after that, the CloudFront distribution is caching the old `index.html` and `scripts.js` files. To fix this, you can invalidate the cache by following these steps:
+  - Go to the CloudFront console
+  - Select the CloudFront distribution that you created
+  - Click on the `Invalidations` tab
+  - Click on `Create invalidation`
+  - Enter `/index.html` and `/scripts.js` in the `Object Paths` field
+  - Click on `Create invalidation`
+
 # STAGE 4 - FINISH  
 
 At this point you have a fully functional simple serverless application, complete with :-
