@@ -190,16 +190,6 @@ rm /tmp/db.setup
 
 ```
 
-Replace this
-
-```
-dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel stress -y
-```
-with this
-
-```
-dnf install wget php-mysqlnd httpd php-fpm php-mysqli php-json php php-devel stress -y
-```
 
 Click `Create Template Version`  
 Click `View Launch Template`  
