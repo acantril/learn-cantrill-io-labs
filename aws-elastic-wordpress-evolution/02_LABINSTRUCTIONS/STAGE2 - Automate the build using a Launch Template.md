@@ -118,7 +118,7 @@ copy the `IPv4 Public IP` into your clipboard, don't click the link to open, thi
 Open that IP in a new tab  
 You should see the WordPress welcome page  
 
-## Perform Initial COnfiguration and make a post
+## Perform Initial Configuration and make a post
 
 in `Site Title` enter `Catagram`  
 in `Username` enter `admin`
