@@ -96,6 +96,9 @@ Next .. add a line to /etc/fstab to configure the EFS file system to mount as /v
 
 ```
 echo -e "$EFSFSID:/ /var/www/html/wp-content efs _netdev,tls,iam 0 0" >> /etc/fstab
+```
+
+```
 mount -a -t efs defaults
 ```
 
@@ -103,6 +106,9 @@ now we need to copy the origin content data back in and fix permissions
 
 ```
 mv /tmp/wp-content/* /var/www/html/wp-content/
+```
+
+```
 chown -R ec2-user:apache /var/www/
 
 ```
