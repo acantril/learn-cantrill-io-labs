@@ -23,6 +23,8 @@
 - add a profile
 - load the profile you downloaded (client configuration) - use `A4L` for Displayname  
 
+## Client Configuration Issue
+If you encounter the following error when loading your configuation: `aws vpn client error: The line "verify-x509-name server name" in the OpenVPN config contains directives that are not supported. Remove it from the OpenVPN config`, open the client configuration file and delete that line. Save the file and try again.
 # Connect
 
 - Connect to A4L VPN
@@ -41,6 +43,4 @@ Notice it doesn't work ? once more step, and thats authorizations
 - open a terminal and `ping DIRECTORY_SERVICE_IP_ADDRESS' (you can get this from the DS Console)
 - notice how this works? you are now connected.
 - Browse to the Private IP Address of `CATWEB` instance using `http` (not https) this also should work.
-
-
 
