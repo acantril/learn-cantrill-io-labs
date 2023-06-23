@@ -137,7 +137,7 @@ Click `Save`.
 
 # initially connect the VPN Tunnels and IPSec  
 
-Click `Apple Changes`.   
+Click `Apply Changes`.   
 Click `Status` => `IPSec`.   
 Click `Connect P1 and P2s` next to both lines.   
 
