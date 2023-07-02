@@ -117,11 +117,16 @@ Click `Running Instances`
 Select `A4L-ONPREM-DNSA` and note down its PrivateIP  
 Select `A4L-ONPREM-DNSB` and note down its PrivateIP  
 Select `A4L-ONPREM-APP`, right click, select `Connect`, choose `session manager` click `Connect`
-Type `sudo nano /etc/sysconfig/network-scripts/ifcfg-eth0` press enter  
-You are going to add some explicit DNS servers to use for this app server  
-Go to the bottom of this file  
-Add `DNS1=THE_PRIVATE_IP_OF_ONPREM_DNS_A`  
-Add `DNS2=THE_PRIVATE_IP_OF_ONPREM_DNS_B`  
+
+Type `sudo nano /etc/systemd/resolved.conf` press enter  
+Scroll to the bottom of this file  
+Add the following  
+```
+DNS=
+Domains=~.
+```
+
+Onto the end of `DNS=` add `THE_PRIVATE_IP_OF_ONPREM_DNS_A` and then a space and then `THE_PRIVATE_IP_OF_ONPREM_DNS_B` (be sure to use the actual IPs not these place holders)  
 Press `ctrl+o` to save  
 Press `ctrl+x` to exit  
 type `sudo reboot` press enter  
