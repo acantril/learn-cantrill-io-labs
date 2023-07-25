@@ -48,7 +48,7 @@ then run the clone command, which should look something like `ssh://git-codecomm
 
 Download this file https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/01_LABSETUP/container.zip  
 Copy the ZIP into the repo folder you created in the previous step.  
-Extract the zipped files into that folder.  
+Extract the zipped files directly into that folder. This ensures the buildspec.yml file created in STAGE2 is located within the same folder location. 
 Delete the zip file  
 
 then from the terminal move into that folder  
