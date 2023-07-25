@@ -11,6 +11,8 @@ The demo consists of 5 stages, each implementing additional components of the ar
 - Stage 4 - BGP Routing and Testing
 - Stage 5 - Cleanup
 
+N.B. Costs will be incurred for creation of the VPN, Transit Gateway, and VPC Endpoints for the VPN, as well as usage of Global Accelerator and t3.small EC2 instance. All are deployed as part of the 1-click install step.
+
 ![end state architecture](https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-hybrid-bgpvpn/02_INSTRUCTIONS/STAGE4%20-%20FINAL%20BGP%20Architecture.png)
 
 ## Instructions
