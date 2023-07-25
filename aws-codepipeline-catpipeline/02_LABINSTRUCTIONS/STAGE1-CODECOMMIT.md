@@ -48,7 +48,7 @@ then run the clone command, which should look something like `ssh://git-codecomm
 
 Download this file https://github.com/acantril/learn-cantrill-io-labs/raw/master/aws-codepipeline-catpipeline/01_LABSETUP/container.zip  
 Copy the ZIP into the repo folder you created in the previous step.  
-Extract the zip file into that folder.  
+Extract the zipped files into that folder.  
 Delete the zip file  
 
 then from the terminal move into that folder  
