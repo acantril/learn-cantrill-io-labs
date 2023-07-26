@@ -19,7 +19,7 @@ for `Transition out of IA` set to `None`
 Untick `Enable encryption of data at rest` .. in production you would leave this on, but for this demo which focusses on architecture it simplifies the implementation. 
 
 Scroll down...  
-For `throughput modes` choose `Basic`   
+For `throughput modes` choose `Bursting`   
 Expand `Additional Settings` and ensure `Performance Mode` is set to `General Purpose`  
 Click `Next`
 
