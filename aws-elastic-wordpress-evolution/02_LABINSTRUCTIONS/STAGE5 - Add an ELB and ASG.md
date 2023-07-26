@@ -27,7 +27,7 @@ Under `Listener and Routing`
 Ensure `Protocol` is set to `HTTP` and `Port` is set to `80`.  
 Click `Create target group` which will open a new tab  
 for `Target Type` choose `Instances` 
-for Name choose `A4LWORDPRESSALBTG`  
+for Target group name choose `A4LWORDPRESSALBTG`  
 For `Protocol` choose `HTTP`  
 For `Port` choose `80`  
 Make sure the `VPC` is set to `A4LVPC`  
