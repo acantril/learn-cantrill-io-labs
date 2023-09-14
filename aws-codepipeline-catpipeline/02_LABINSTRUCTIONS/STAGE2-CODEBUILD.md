@@ -189,6 +189,10 @@ Click `Instances` and get the public IPv4 address for the A4L-PublicEC2 instance
 open that IP in a new tab, ensuring it's http://IP not https://IP  
 You should see the docker container running, with cats in containers... if so, this means your automated build process is working.  
 
+##TROUBLESHOOTING  => ###buildspec.yaml file does not exist
+
+1. Ensure that you did not copy the files in a folder when pushing to codecommit. Upload files alone and not folder
+2. Ensure that the indentation in your yaml file is correct. Use a good text editor like vscode to validate the buildspec.yml file
 
 
 
