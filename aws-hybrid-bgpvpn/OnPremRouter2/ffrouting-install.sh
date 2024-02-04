@@ -14,7 +14,7 @@ sudo apt-get install -y \
 cd /tmp
 git clone https://github.com/CESNET/libyang.git
 cd libyang
-git checkout v2.0.0
+git checkout v2.1.128
 mkdir build; cd build
 cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr \
       -DCMAKE_BUILD_TYPE:String="Release" ..
