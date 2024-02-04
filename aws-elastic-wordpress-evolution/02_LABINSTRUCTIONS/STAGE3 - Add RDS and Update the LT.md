@@ -53,7 +53,7 @@ under `Connectivity`, `Network type` select `IPv4`
 under `Connectivity`, `Virtual private cloud (VPC)` select `A4LVPC`  
 under `Subnet group` that `wordpressrdssubnetgroup` is selected  
 Make sure `Public Access` is set to `No`  
-Under `VPC security groups` make sure `choose existing` is selected, remove `default` and add `A4LVPC-SG-Database`  
+Under `VPC security groups` make sure `choose existing` is selected, remove `default` and add `A4LVPC-SGDatabase`  
 Under `Availability Zone` set `us-east-1a`  
 
 **IMPORTANT .. DON'T MISS THIS STEP**
