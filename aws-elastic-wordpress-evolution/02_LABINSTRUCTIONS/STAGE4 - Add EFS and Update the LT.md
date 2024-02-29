@@ -142,9 +142,9 @@ EFSFSID=`echo $EFSFSID | sed -e 's/^"//' -e 's/"$//'`
 
 ```
 
-Find the line which says `dnf install wget php-mysqlnd httpd php-fpm php-mysqli php-json php php-devel stress -y`
+Find the line which says `dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel stress -y`
 after `stress` add a space and paste in `amazon-efs-utils`  
-it should now look like `dnf install wget php-mysqlnd httpd php-fpm php-mysqli php-json php php-devel stress amazon-efs-utils -y`  
+it should now look like `dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel stress amazon-efs-utils -y`  
 
 locate `systemctl start httpd` position cursor at the end & press enter twice to add new lines  
 
