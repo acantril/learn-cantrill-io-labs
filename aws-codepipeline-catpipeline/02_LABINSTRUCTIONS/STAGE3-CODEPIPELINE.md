@@ -74,6 +74,16 @@ artifacts:
   files: imagedefinitions.json
 ```
 
+### YAML Formatting in VSCode
+If you are using VSCode, go to your command pallete and run the `Convert Identation to Spaces` command. Afterwards, you will still have to manually indent the `commands` section of each building phase:
+
+```yaml
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+```
+
 ## TEST A COMMIT
 
 run
