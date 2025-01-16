@@ -47,7 +47,7 @@ Scroll to the bottom and click `Next`
 
 and for `operating system family` put `Linux/X86_64`   
 Pick `0.5vCPU` for task CPU and `1GB` for task memory.   
-Select `ecsTaskExecutionRole` under task role and task execution role.  
+Select `ecsTaskExecutionRole` under task role and task execution role. You may need to create this role first (see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html). 
 Click `Next` and then `Create`.  
 
 

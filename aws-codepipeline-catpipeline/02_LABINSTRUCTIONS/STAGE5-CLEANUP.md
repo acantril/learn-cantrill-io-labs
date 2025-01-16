@@ -10,6 +10,7 @@ Remove Cluster
 ## EC2  
 Remove LB  
 Remove TG's  
+Remove EC2 running Docker (created during STAGE3) 
 
 ## CODE*  
 Remove Pipeline  
