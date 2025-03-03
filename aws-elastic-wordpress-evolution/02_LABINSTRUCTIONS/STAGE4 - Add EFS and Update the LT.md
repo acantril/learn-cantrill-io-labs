@@ -42,7 +42,7 @@ The file system will start in the `Creating` State and then move to `Available` 
 Click on the file system to enter it and click `Network`  
 Scroll down and all the mount points will show as `creating` keep hitting refresh and wait for all 3 to show as available before moving on.  
 
-Note down the `fs-XXXXXXXX` or `DNS name` (either will work) once visible at the top of this screen, you will need it in the next step.  
+Note down the `DNS name` (either will work) once visible at the top of this screen, you will need it in the next step.  
 
 
 # STAGE 4B - Add an fsid to parameter store
@@ -57,7 +57,7 @@ Under `Description` enter `File System ID for Wordpress Content (wp-content)`
 for `Tier` set `Standard`  
 For `Type` set `String`  
 for `Data Type` set `text`  
-for `Value` set the file system ID `fs-XXXXXXX` which you just noted down (use your own file system ID)  
+for `Value` set the DNS NAME which you just noted down.
 Click `Create Parameter`  
 
 
