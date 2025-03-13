@@ -69,13 +69,13 @@ Click <kbd>Create function</kbd>
 In the *Code* tab, enter the following code:
 
 ```python
-def lambda_handler(event, context):   
+def lambda_handler(event, context):
     return {
-        'statusCode': 200,
-        'headers': {},
-        'body': event['requestContext']['identity']['sourceIp'],
-        'isBase64Encoded': False
-        }
+        "statusCode": 200,
+        "headers": {},
+        "body": event["requestContext"]["identity"]["sourceIp"],
+        "isBase64Encoded": False
+    }
 ```
 
 This is an extremely basic function that *just* returns the source IP of the requester (you).
