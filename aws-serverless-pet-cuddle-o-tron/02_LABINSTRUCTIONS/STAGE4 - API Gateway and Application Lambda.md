@@ -27,7 +27,7 @@ First you will create the supporting `API_LAMBDA` and then the `API Gateway`
 Move to the Lambda console https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions  
 Click on `Create Function`  
 for `Function Name` use `api_lambda`  
-for `Runtime` use `Python 3.9`  
+for `Runtime` use `Python 3.10`  
 Expand `Change default execution role`  
 Select `Use an existing role`  
 Choose the `LambdaRole` from the dropdown  
