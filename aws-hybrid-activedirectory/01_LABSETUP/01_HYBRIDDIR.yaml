@@ -186,9 +186,6 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
     Type: String
-  KeyPairName:
-    Description: KeyPair for INSTANCES
-    Type: AWS::EC2::KeyPair::KeyName
 Resources:
   ONPREMVPC:
     Type: AWS::CloudFormation::Stack
@@ -224,7 +221,6 @@ Resources:
         QSS3BucketName: !Ref 'QSS3BucketName'
         QSS3BucketRegion: !Ref 'QSS3BucketRegion'
         QSS3KeyPrefix: !Ref 'QSS3KeyPrefix'
-        KeyPairName: !Ref KeyPairName
   ONPREMCOMPUTE:
     Type: AWS::CloudFormation::Stack
     DependsOn: ONPREMAD
