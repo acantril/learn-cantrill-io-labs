@@ -50,6 +50,9 @@ Pick `0.5vCPU` for task CPU and `1GB` for task memory.
 Select `ecsTaskExecutionRole` under task role and task execution role.  
 Click `Next` and then `Create`.  
 
+### Create an ecsTaskExecutionRole
+If you don't have this role, you will need to create it.
+You can find detailed instructions in aws docs [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html) - scroll down to the section titled `Creating the task execution (ecsTaskExecutionRole) role section` and follow the instructions there.
 
 ## DEPLOY TO ECS - CREATE A SERVICE
 Click Deploy then `Create Service`.
