@@ -47,6 +47,9 @@ This past of the demo involves downloading easy-rsa and using this to create cer
 - Type `ACM` or `Certificate Manager` into the search box at the top of the screen then right click and open in a new tab.
 - Verify that your certificate exists in the `us-east-1` region.  
 
+## AWS CLI Profile
+
+If you've been following the course you might already have a profile called `iamadmin-general` if not, go to your terminal and run: `aws configure --profile iamadmin-general`. Entering the details for the IAM user of your aws account. Make sure to use the same region as the one you're using for the demo (`us-east-1`).
 
 
 `END OF STAGE2`
